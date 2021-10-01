@@ -1,7 +1,18 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { db } from "./firebase";
 
 function App() {
+  const handleClick = async () => {
+    const ref = db.collection("test").doc("fTsqmwDUuL3RpEGyyxdO");
+    const doc = await ref.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      console.log("Document data:", doc.data());
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +28,9 @@ function App() {
         >
           Learn React
         </a>
+        <button type="button" onClick={handleClick}>
+          test query
+        </button>
       </header>
     </div>
   );
