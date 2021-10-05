@@ -1,6 +1,7 @@
   import React from "react";
   import { Link } from "react-router-dom";
   import PropTypes from "prop-types";
+  import Header from "../components/sections/Header";
   import {
     Box,
     Button,
@@ -23,32 +24,15 @@ import Logo from "../components/ui/Logo";
   }) {
     return (
       <Flex
-        align = "flex-start"
-        ml = "5"
-        mt = "2.5"
-        minH = "30vh"
-        {...rest}
+        direction="column"
+        align="center"
+        maxW={{ xl: "1200px" }}
+        m="0 auto"
       >
-      <Link to = "./">
-        <Button
-          color = "primary.150"
-          fontWeight = "bold"
-          lineHeight ="1"
-          size = "sm"
-          bgColor = "transparent"
-          variant = "link"
-        >
-          <Logo
-            w = "100px"
-            color = "primary.2400"
-          /> 
-       </Button>
-      </Link>
-      <Spacer/>
+        <Header />
       <Stack 
-        spacing = {10}
+        spacing = {8}
         w = {{ base: "10%", md: "120%"}}
-        mt = "20"
         align ="center">
         <Heading
           as = "h1"

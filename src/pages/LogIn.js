@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+ import Header from "../components/sections/Header";
 import {Box, Button, Flex, Heading, Stack, HStack, Input, Spacer} from "@chakra-ui/react";
 import Logo from "../components/ui/Logo";
 
@@ -15,34 +16,16 @@ export default function LogIn({
 }) {
   return (
     <Flex
-      align = "flex-start"
-      ml = "5"
-      mt = "2"
-      pt = "2"
-      pr = "2"
-      minH = "30vh"
-      {...rest}
-    >
-      <Link to = "./">
-          <Button
-            color = "primary.150"
-            fontWeight = "bold"
-            lineHeight = "1"
-            size = "sm"
-            bgColor = "transparent"
-            variant ="link"
-          >
-            <Logo
-            w = "100px"
-            color = "primary.2400"
-            />
-          </Button>
-        </Link>
-      <Spacer/>
+      direction="column"
+      align="center"
+      maxW={{ xl: "1200px" }}
+      m="0 auto"
+    >  
+      <Header />
       <Stack 
         spacing = {10}
         w = {{ base: "10%", md: "120%"}}
-        mt = "20"
+        mt = "10"
         align = "center">
         <Heading
           as = "h1"
