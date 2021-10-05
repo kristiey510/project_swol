@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
@@ -12,6 +12,7 @@ import {
   Input,
   Spacer,
 } from "@chakra-ui/react";
+import { auth, logIn } from "../firebase";
 
 export default function LogIn({
   title,
@@ -22,6 +23,14 @@ export default function LogIn({
   ctaForgotUser,
   ...rest
 }) {
+  const [input, setInput] = useState({ email: "", password: "" });
+  const handleChange = (name, value) => {
+    setInput((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleLogin = () => {
+    logIn(auth, input.email, input.password);
+  };
+
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
       <Header />
@@ -53,8 +62,18 @@ export default function LogIn({
         </Heading>
         <Box w="300px" h="300px" align="center">
           <Stack spacing={5} align="center">
-            <Input placeholder="Username" size="sm" />
-            <Input placeholder="Password" size="sm" />
+            <Input
+              value={input.email}
+              onChange={(event) => handleChange("email", event.target.value)}
+              placeholder="Email"
+              size="sm"
+            />
+            <Input
+              value={input.password}
+              onChange={(event) => handleChange("password", event.target.value)}
+              placeholder="Password"
+              size="sm"
+            />
             <Spacer />
             <Spacer />
           </Stack>
@@ -64,6 +83,7 @@ export default function LogIn({
                 color="primary.150"
                 borderRadius="8px"
                 fontWeight="bold"
+                onClick={handleLogin}
                 py="4"
                 px="7"
                 lineHeight="1"

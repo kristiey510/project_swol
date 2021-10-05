@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
@@ -11,6 +11,7 @@ import {
   Input,
   Spacer,
 } from "@chakra-ui/react";
+import { auth, createUser } from "../firebase";
 
 export default function CreateAccount({
   title,
@@ -21,6 +22,14 @@ export default function CreateAccount({
   ctaTextLogIn,
   ...rest
 }) {
+  const [input, setInput] = useState({ email: "", password: "" });
+  const handleChange = (name, value) => {
+    setInput((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleCreateUser = () => {
+    createUser(auth, input.email, input.password);
+  };
+
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
       <Header />
@@ -50,9 +59,19 @@ export default function CreateAccount({
             <Input placeholder="First Name" size="sm" />
             <Input placeholder="Last Name" size="sm" />
             <Input placeholder="Date of Birth" size="sm" />
-            <Input placeholder="Email address" size="sm" />
+            <Input
+              placeholder="Email address"
+              value={input.email}
+              onChange={(event) => handleChange("email", event.target.value)}
+              size="sm"
+            />
             <Input placeholder="Username" size="sm" />
-            <Input placeholder="Password" size="sm" />
+            <Input
+              placeholder="Password"
+              value={input.password}
+              onChange={(event) => handleChange("password", event.target.value)}
+              size="sm"
+            />
             <Spacer />
             <Spacer />
           </Stack>
@@ -62,6 +81,7 @@ export default function CreateAccount({
                 color="primary.150"
                 fontWeight="bold"
                 borderRadius="8px"
+                onClick={handleCreateUser}
                 py=""
                 px="7"
                 bg="primary.3200"

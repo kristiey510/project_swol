@@ -1,7 +1,12 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
-let config = {
+initializeApp({
   apiKey: "AIzaSyA1kmErQO5yLK1KAyFBHZwKecayDHhbPNc",
   authDomain: "project-swol.firebaseapp.com",
   projectId: "project-swol",
@@ -9,9 +14,14 @@ let config = {
   messagingSenderId: "287215503",
   appId: "1:287215503:web:455e7e1a965d14e2e6c5fa",
   measurementId: "G-BV23BWHS9E",
+});
+
+const db = getFirestore();
+const auth = getAuth();
+
+export {
+  db,
+  auth,
+  createUserWithEmailAndPassword as createUser,
+  signInWithEmailAndPassword as logIn,
 };
-firebase.initializeApp(config);
-
-const db = firebase.firestore();
-
-export { db };
