@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
 import {
+  Text,
   Box,
   Button,
   Flex,
@@ -11,7 +12,8 @@ import {
   Input,
   Spacer,
 } from "@chakra-ui/react";
-import { auth, createUser } from "../firebase";
+import { auth, createUser } from "../firebase/firebase";
+import errors from "../firebase/errors";
 
 export default function CreateAccount({
   title,
@@ -23,11 +25,16 @@ export default function CreateAccount({
   ...rest
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
+  const [errs, setErrs] = useState({ email: "", password: "" });
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
-  const handleCreateUser = () => {
-    createUser(auth, input.email, input.password);
+  const handleCreateUser = async () => {
+    try {
+      await createUser(auth, input.email, input.password);
+    } catch ({ code }) {
+      setErrs({ email: "", password: "", ...errors[code] });
+    }
   };
 
   return (
@@ -65,32 +72,35 @@ export default function CreateAccount({
               onChange={(event) => handleChange("email", event.target.value)}
               size="sm"
             />
+            {errs?.email && <Text color="red">{errs?.email}</Text>}
             <Input placeholder="Username" size="sm" />
             <Input
               placeholder="Password"
+              type="password"
               value={input.password}
               onChange={(event) => handleChange("password", event.target.value)}
               size="sm"
             />
+            {errs?.password && <Text color="red">{errs?.password}</Text>}
             <Spacer />
             <Spacer />
           </Stack>
           <Stack spacing={5} align="center">
-            <Link to={ctaLinkCreate}>
-              <Button
-                color="primary.150"
-                fontWeight="bold"
-                borderRadius="8px"
-                onClick={handleCreateUser}
-                py=""
-                px="7"
-                bg="primary.3200"
-                lineHeight="1"
-                size="md"
-              >
-                {ctaTextCreate}
-              </Button>
-            </Link>
+            {/* <Link to={ctaLinkCreate}> */}
+            <Button
+              color="primary.150"
+              fontWeight="bold"
+              borderRadius="8px"
+              onClick={handleCreateUser}
+              py=""
+              px="7"
+              bg="primary.3200"
+              lineHeight="1"
+              size="md"
+            >
+              {ctaTextCreate}
+            </Button>
+            {/* </Link> */}
             <Link to={ctaLinkLogIn}>
               <Button
                 color="primary.150"

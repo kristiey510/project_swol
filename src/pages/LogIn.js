@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
 import {
+  Text,
   Box,
   Button,
   Flex,
@@ -12,7 +13,8 @@ import {
   Input,
   Spacer,
 } from "@chakra-ui/react";
-import { auth, logIn } from "../firebase";
+import { auth, logIn } from "../firebase/firebase";
+import errors from "../firebase/errors";
 
 export default function LogIn({
   title,
@@ -24,11 +26,18 @@ export default function LogIn({
   ...rest
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
+  const [errs, setErrs] = useState({ email: "", password: "" });
+
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
-  const handleLogin = () => {
-    logIn(auth, input.email, input.password);
+
+  const handleLogin = async () => {
+    try {
+      await logIn(auth, input.email, input.password);
+    } catch ({ code }) {
+      setErrs({ email: "", password: "", ...errors[code] });
+    }
   };
 
   return (
@@ -68,31 +77,34 @@ export default function LogIn({
               placeholder="Email"
               size="sm"
             />
+            {errs?.email && <Text color="red">{errs?.email}</Text>}
             <Input
               value={input.password}
               onChange={(event) => handleChange("password", event.target.value)}
               placeholder="Password"
+              type="password"
               size="sm"
             />
+            {errs?.password && <Text color="red">{errs?.password}</Text>}
             <Spacer />
             <Spacer />
           </Stack>
           <Stack spacing={5} align="center">
-            <Link to={ctaLinkLogIn}>
-              <Button
-                color="primary.150"
-                borderRadius="8px"
-                fontWeight="bold"
-                onClick={handleLogin}
-                py="4"
-                px="7"
-                lineHeight="1"
-                size="md"
-                bg="primary.3200"
-              >
-                {ctaTextLogIn}
-              </Button>
-            </Link>
+            {/* <Link to={ctaLinkLogIn}> */}
+            <Button
+              color="primary.150"
+              borderRadius="8px"
+              fontWeight="bold"
+              onClick={handleLogin}
+              py="4"
+              px="7"
+              lineHeight="1"
+              size="md"
+              bg="primary.3200"
+            >
+              {ctaTextLogIn}
+            </Button>
+            {/* </Link> */}
             <Spacer />
           </Stack>
           <HStack align="center">
