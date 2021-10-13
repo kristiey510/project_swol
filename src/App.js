@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
 import LogIn from "./pages/LogIn";
-import AboutUs from "./pages/AboutUs";
+import AboutUs from "./pages/aboutUs";
 import Dashboard from "./pages/Dashboard";
+import TestPost from "./pages/TestPost";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route path="/About_us">
           <AboutUs />
+        </Route>
+        <Route path="/TestPost">
+          <TestPost />
         </Route>
       </Switch>
     </Router>
