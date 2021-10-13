@@ -1,28 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Stack,
-  Input,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Heading, Stack } from "@chakra-ui/react";
 
 //function name needs to be capitalized
-export default function AboutUs({
-  title,
-  subtitle,
-  subtitle2,
-  ...rest
-}) {
-    return (
-      //<Text fontSize="6xl">(6xl) Hello World</Text>
-      <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
+export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
+  return (
+    //<Text fontSize="6xl">(6xl) Hello World</Text>
+    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
       <Header />
       <Stack
         spacing={10}
@@ -52,19 +37,20 @@ export default function AboutUs({
           <br></br>
           {subtitle2}
         </Heading>
-        </Stack>
-        </Flex>
-    );
-  }
+      </Stack>
+    </Flex>
+  );
+}
 
-  AboutUs.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    subtitle2: PropTypes.string
-  };
+AboutUs.propTypes = {
+  title: PropTypes.string,
+  subtitle: PropTypes.string,
+  subtitle2: PropTypes.string,
+};
 
-  AboutUs.defaultProps = {
-    title: "About Us",
-    subtitle: "SWOL is a project created by 7 Emory students, with the goal of encouraging our users to devote time to staying fit and healthy",
-    subtitle2: "You can reach us at <placeholder>@<placeholder.com>"
-  };
+AboutUs.defaultProps = {
+  title: "About Us",
+  subtitle:
+    "SWOL is a project created by 7 Emory students, with the goal of encouraging our users to devote time to staying fit and healthy",
+  subtitle2: "You can reach us at <placeholder>@<placeholder.com>",
+};
