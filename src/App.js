@@ -5,6 +5,7 @@ import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
 import LogIn from "./pages/LogIn";
 import AboutUs from "./pages/aboutUs";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         </Route>
         <Route path="/login">
           <LogIn />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
         </Route>
         <Route path="/About_us">
           <AboutUs />
