@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
 import LogIn from "./pages/LogIn";
-import Dashboard from "./pages/Dashboard";
-
-
+import AboutUs from "./pages/aboutUs";
 
 function App() {
   return (
@@ -21,8 +19,8 @@ function App() {
         <Route path="/login">
           <LogIn />
         </Route>
-        <Route path="/dashboard">
-          <Dashboard />
+        <Route path="/About_us">
+          <AboutUs />
         </Route>
       </Switch>
     </Router>
