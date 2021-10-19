@@ -12,9 +12,13 @@ import {
   HStack,
   Input,
   Spacer,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
-import errors from "../firebase/errors";
+import { useForm } from "react-hook-form";
 
 export default function LogIn({
   title,
@@ -22,7 +26,7 @@ export default function LogIn({
   ctaLinkLogIn,
   ctaTextLogIn,
   ctaForgotPass,
-  ctaForgotUser,
+  ctaCreateAccount,
   ...rest
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
@@ -39,6 +43,17 @@ export default function LogIn({
       setErrs({ email: "", password: "", ...errors[code] });
     }
   };
+
+  const {
+    handleSubmit,
+    register,
+    formState: {errors}
+  } = useForm();
+
+  const onSubmit = data => {
+    console.log(data);
+    window.location = "/dashboard";
+  }
 
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
@@ -70,71 +85,86 @@ export default function LogIn({
           {subtitle}
         </Heading>
         <Box w="300px" h="300px" align="center">
-          <Stack spacing={5} align="center">
-            <Input
-              value={input.email}
-              onChange={(event) => handleChange("email", event.target.value)}
-              placeholder="Email"
-              size="sm"
-            />
-            {errs?.email && <Text color="red">{errs?.email}</Text>}
-            <Input
-              value={input.password}
-              onChange={(event) => handleChange("password", event.target.value)}
-              placeholder="Password"
-              type="password"
-              size="sm"
-            />
-            {errs?.password && <Text color="red">{errs?.password}</Text>}
-            <Spacer />
-            <Spacer />
-          </Stack>
-          <Stack spacing={5} align="center">
-            {/* <Link to={ctaLinkLogIn}> */}
-            <Button
-              color="primary.150"
-              borderRadius="8px"
-              fontWeight="bold"
-              onClick={handleLogin}
-              py="4"
-              px="7"
-              lineHeight="1"
-              size="md"
-              bg="primary.3200"
-            >
-              {ctaTextLogIn}
-            </Button>
-            {/* </Link> */}
-            <Spacer />
-          </Stack>
-          <HStack align="center">
-            <Link to={ctaForgotPass}>
-              <Button
-                color="primary.150"
-                borderRadius="8px"
-                fontWeight="bold"
-                py="2"
-                px="4"
-                size="sm"
-                bg="primary.3200"
-              >
-                Forgot Password
-              </Button>
-            </Link>
-            <Link to={ctaForgotUser}>
+          <form onSubmit = {handleSubmit(onSubmit)} >
+            <FormControl isInvalid = {errors}>
+              <Stack spacing={3} align="center">
+                <Input
+                  id = "email"
+                  value={input.email}
+                  placeholder="Email"
+                  size="sm"
+                  {...register("email", {
+                  required: "Field is required",
+                  })}
+                  onChange={(event) => handleChange("email", event.target.value)}
+                />
+                <FormErrorMessage mb = "3" fontSize = "12px">
+                  {errors.email && errors.email.message}
+                </FormErrorMessage >
+                <Input
+                  type = "password"
+                  id = "password"
+                  value={input.password}
+                  placeholder="Password"
+                  size="sm"
+                  {...register("password", {
+                  required: "Field is required",
+                  })}
+                  onChange={(event) => handleChange("password", event.target.value)}
+                />
+                <FormErrorMessage mb = "3" fontSize = "12px">
+                  {errors.password && errors.password.message}
+                </FormErrorMessage >
+                <Spacer/>
+                <Spacer/>
+              </Stack>
+            <Stack spacing={5} align="center">
               <Button
                 color="primary.3100"
                 borderRadius="8px"
                 fontWeight="bold"
-                py="2"
-                px="4"
-                size="sm"
+                type = "submit"
+                onClick={handleLogin}
+                py="4"
+                px="7"
+                lineHeight="1"
+                size="md"
                 bg="primary.3200"
               >
-                Forgot Username
+                {ctaTextLogIn}
               </Button>
-            </Link>
-          </HStack>
+              <Spacer />
+            </Stack>
+            </FormControl>
+            <HStack align="center">
+              <Link to={ctaForgotPass}>
+                <Button
+                  color="primary.150"
+                  borderRadius="8px"
+                  fontWeight="bold"
+                  py="2"
+                  px="4"
+                  size="sm"
+                  bg="primary.3200"
+                >
+                  Forgot Password
+                </Button>
+              </Link>
+              <Link to={ctaCreateAccount}>
+                <Button
+                  color="primary.150"
+                  borderRadius="8px"
+                  fontWeight="bold"
+                  py="2"
+                  px="4"
+                  size="sm"
+                  bg="primary.3200"
+                >
+                  Create Account
+                </Button>
+              </Link>
+            </HStack>
+          </form>
         </Box>
       </Stack>
     </Flex>
@@ -147,7 +177,7 @@ LogIn.propTypes = {
   ctaTextLogIn: PropTypes.string,
   ctaLinkLogIn: PropTypes.string,
   ctaForgotPass: PropTypes.string,
-  ctaForgotUser: PropTypes.string,
+  ctaCreateAccount: PropTypes.string,
 };
 
 LogIn.defaultProps = {
@@ -156,5 +186,5 @@ LogIn.defaultProps = {
   ctaTextLogIn: "Log in",
   ctaLinkLogIn: "/homepage",
   ctaForgotPass: "/forgot_pass",
-  ctaForgotUser: "/forgot_user",
+  ctaCreateAccount: "/signup"
 };
