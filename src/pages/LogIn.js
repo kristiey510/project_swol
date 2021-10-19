@@ -123,7 +123,7 @@ export default function LogIn({
             </Link>
             <Link to={ctaForgotUser}>
               <Button
-                color="primary.150"
+                color="primary.3100"
                 borderRadius="8px"
                 fontWeight="bold"
                 py="2"

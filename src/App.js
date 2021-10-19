@@ -7,6 +7,7 @@ import LogIn from "./pages/LogIn";
 import AboutUs from "./pages/aboutUs";
 import Dashboard from "./pages/Dashboard";
 import TestPost from "./pages/TestPost";
+import ForgotPass from "./pages/forgotPassword";
 
 function App() {
   return (
@@ -29,6 +30,12 @@ function App() {
         </Route>
         <Route path="/TestPost">
           <TestPost />
+        </Route>
+        <Route path="/About_us">
+          <AboutUs />
+        </Route>
+        <Route path={"/forgot_pass"}>
+          <ForgotPass />
         </Route>
       </Switch>
     </Router>
