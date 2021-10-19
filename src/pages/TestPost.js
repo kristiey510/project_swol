@@ -14,7 +14,8 @@ import {
   Textarea,
   Select
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, serverTimestamp } from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes } from "../firebase/firebase";
+import { file } from "@babel/types";
 
 //function name needs to be capitalized
 export default function TestPost({
@@ -25,15 +26,33 @@ export default function TestPost({
   ...rest
 }) {
     const [input, setInput] = useState({ title: "", type: "" , desc: ""});
+    const [image , setImage] = useState(null);
     const handleChange = (name, value) => {
         setInput((prev) => ({ ...prev, [name]: value }));
     };
     const handleMakePost = () => {
+        //need to hash filenames somehow to get unique id
+        var filename = 'none'
+        if(image != null){
+            
+            filename = image.name
+        }
         addDoc(collection(db, "test"),{
             title: input.title,
             type: input.type,
             desc: input.desc,
+            img: filename,
             timestamp: serverTimestamp()
+        });
+        //upload
+        //console.log(image)
+        //console.log(typeof image);
+        if(image == null)
+          return;
+        const storage = getStorage();
+        const imageRef = ref(storage, filename);
+        uploadBytes(imageRef, image).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
         });
     };
 
@@ -81,7 +100,9 @@ export default function TestPost({
         />
 
         {/* still working on changing to dropdown */}
-        {/* <Select placeholder="Select option">
+        {/* <Select placeholder="Select option" 
+            onChange={(event) => handleChange("desc", event.target.value)} >
+            value={input.type}
             <option value="option1">Run</option>
             <option value="option2">Bike</option>
             <option value="option3">Lift</option>   
@@ -94,6 +115,12 @@ export default function TestPost({
             size="sm"/>
         <Spacer />
         <Spacer />
+
+        {/* Input image */}
+        <input 
+            type="file" 
+            onChange={(event)=>{setImage(event.target.files[0])}}/>
+
         <Button
                 color="primary.150"
                 fontWeight="bold"

@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -28,5 +29,9 @@ export {
   setDoc,
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  getStorage,
+  ref,
+  uploadBytes,
+
 };
