@@ -54,9 +54,10 @@ const handleMakeUser = () => {
       Height_In: input.Height_In,
       Gender: input.Gender,
       Weight: input.Weight
-    });
-    alert("User information added to database");
-    window.location = "./dashboard";
+    }).then(
+    alert("User information added to database")
+    );
+    window.setTimeout(function() {window.location.href = './dashboard';}, 2000);
 }};
 
   return (
