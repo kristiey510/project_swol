@@ -1,10 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
 } from "firebase/auth";
 
 initializeApp({
@@ -25,6 +33,7 @@ export {
   auth,
   createUserWithEmailAndPassword as createUser,
   signInWithEmailAndPassword as logIn,
+  sendEmailVerification,
   doc,
   setDoc,
   collection,
@@ -33,5 +42,4 @@ export {
   getStorage,
   ref,
   uploadBytes,
-
 };

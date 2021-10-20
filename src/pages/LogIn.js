@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
 import {
-  Text,
   Box,
   Button,
   Flex,
@@ -13,9 +12,7 @@ import {
   Input,
   Spacer,
   FormControl,
-  FormLabel,
   FormErrorMessage,
-  FormHelperText,
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
@@ -47,13 +44,13 @@ export default function LogIn({
   const {
     handleSubmit,
     register,
-    formState: {errors}
+    formState: { errors },
   } = useForm();
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     console.log(data);
     window.location = "/dashboard";
-  }
+  };
 
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
@@ -85,56 +82,60 @@ export default function LogIn({
           {subtitle}
         </Heading>
         <Box w="300px" h="300px" align="center">
-          <form onSubmit = {handleSubmit(onSubmit)} >
-            <FormControl isInvalid = {errors}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl isInvalid={errors}>
               <Stack spacing={3} align="center">
                 <Input
-                  id = "email"
+                  id="email"
                   value={input.email}
                   placeholder="Email"
                   size="sm"
                   {...register("email", {
-                  required: "Field is required",
+                    required: "Field is required",
                   })}
-                  onChange={(event) => handleChange("email", event.target.value)}
+                  onChange={(event) =>
+                    handleChange("email", event.target.value)
+                  }
                 />
-                <FormErrorMessage mb = "3" fontSize = "12px">
+                <FormErrorMessage mb="3" fontSize="12px">
                   {errors.email && errors.email.message}
-                </FormErrorMessage >
+                </FormErrorMessage>
                 <Input
-                  type = "password"
-                  id = "password"
+                  type="password"
+                  id="password"
                   value={input.password}
                   placeholder="Password"
                   size="sm"
                   {...register("password", {
-                  required: "Field is required",
+                    required: "Field is required",
                   })}
-                  onChange={(event) => handleChange("password", event.target.value)}
+                  onChange={(event) =>
+                    handleChange("password", event.target.value)
+                  }
                 />
-                <FormErrorMessage mb = "3" fontSize = "12px">
+                <FormErrorMessage mb="3" fontSize="12px">
                   {errors.password && errors.password.message}
-                </FormErrorMessage >
-                <Spacer/>
-                <Spacer/>
+                </FormErrorMessage>
+                <Spacer />
+                <Spacer />
               </Stack>
-            <Stack spacing={5} align="center">
-              <Button
-                color="primary.3100"
-                borderRadius="8px"
-                fontWeight="bold"
-                type = "submit"
-                onClick={handleLogin}
-                py="4"
-                px="7"
-                lineHeight="1"
-                size="md"
-                bg="primary.3200"
-              >
-                {ctaTextLogIn}
-              </Button>
-              <Spacer />
-            </Stack>
+              <Stack spacing={5} align="center">
+                <Button
+                  color="primary.3100"
+                  borderRadius="8px"
+                  fontWeight="bold"
+                  type="submit"
+                  onClick={handleLogin}
+                  py="4"
+                  px="7"
+                  lineHeight="1"
+                  size="md"
+                  bg="primary.3200"
+                >
+                  {ctaTextLogIn}
+                </Button>
+                <Spacer />
+              </Stack>
             </FormControl>
             <HStack align="center">
               <Link to={ctaForgotPass}>
@@ -186,5 +187,5 @@ LogIn.defaultProps = {
   ctaTextLogIn: "Log in",
   ctaLinkLogIn: "/homepage",
   ctaForgotPass: "/forgot_pass",
-  ctaCreateAccount: "/signup"
+  ctaCreateAccount: "/signup",
 };
