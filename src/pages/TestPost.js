@@ -76,9 +76,9 @@ export default function TestPost({
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data());
           const data = docSnap.data();
-          setMyText(data.title);
-          setMyText2(data.desc);
-          setType(data.type);
+          setMyText("Title: " + data.title);
+          setMyText2("Description: " + data.desc);
+          setType("Type: " + data.type);
 
         } else {
           console.log("No such document!");
