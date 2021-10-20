@@ -14,7 +14,7 @@ import {
   Textarea,
   Select
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes } from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes, getDoc } from "../firebase/firebase";
 import { file } from "@babel/types";
 
 //function name needs to be capitalized
@@ -22,27 +22,36 @@ export default function TestPost({
   title,
   subtitle,
   subtitle2,
+  title2,
   ctaTextCreate,
+  showPostTest,
+  postTitle,
   ...rest
 }) {
     const [input, setInput] = useState({ title: "", type: "" , desc: ""});
     const [image , setImage] = useState(null);
+    const [display, setDisplay] = useState({id: ""});
+    const [realPostTitle, setMyText] = useState("");
+    const [postDesc, setMyText2] = useState("");
+    const [postType, setType] = useState("");
     const handleChange = (name, value) => {
         setInput((prev) => ({ ...prev, [name]: value }));
     };
+    const handleDisplay = (name, value) => {
+      setDisplay((prev) => ({ ...prev, [name]: value }));
+  };
     const handleMakePost = () => {
         //need to hash filenames somehow to get unique id
-        var filename = 'none'
+        var filename = 'no_image_provided'
         if(image != null){
-            
             filename = image.name
         }
         addDoc(collection(db, "test"),{
             title: input.title,
             type: input.type,
             desc: input.desc,
-            img: filename,
-            timestamp: serverTimestamp()
+            timestamp: serverTimestamp(),
+            img: filename
         });
         //upload
         //console.log(image)
@@ -55,6 +64,27 @@ export default function TestPost({
             console.log('Uploaded a blob or file!');
         });
     };
+
+    const handleDisplayPost = () => {
+      //console log for testing
+      console.log('Searching for post:');
+      console.log(display.id);
+
+      //check if doc exists
+      //https://stackoverflow.com/questions/69530622/firestore-unable-to-read-document-data-uncaught-typeerror-docsnap-exists-is-n
+      getDoc(doc(db, "test", display.id)).then(docSnap => {
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          const data = docSnap.data();
+          setMyText(data.title);
+          setMyText2(data.desc);
+          setType(data.type);
+
+        } else {
+          console.log("No such document!");
+        }
+      })
+    }
 
 
     return (
@@ -134,6 +164,61 @@ export default function TestPost({
               >
                 {ctaTextCreate}
               </Button>
+            
+        <br></br>
+        <Heading
+          as="h1"
+          size="2xl"
+          fontWeight="bold"
+          color="primary.2500"
+          textAlign="center"
+        >
+          {title2}
+        </Heading>
+
+        <Input
+            placeholder="Post ID"
+            value={display.id}
+            onChange={(event) => handleDisplay("id", event.target.value)}
+            size="sm"
+        />
+        <Button
+                color="primary.150"
+                fontWeight="bold"
+                borderRadius="8px"
+                onClick={handleDisplayPost}
+                py=""
+                px="7"
+                bg="primary.3200"
+                lineHeight="1"
+                size="md"
+              >
+                {showPostTest}
+            </Button>
+
+        <Heading
+          as="h6"
+          color="primary.3100"
+          textAlign="center"
+        >
+          {realPostTitle}
+        </Heading>
+        <Heading
+          as="h6"
+          color="primary.3100"
+          textAlign="center"
+        >
+          {postType}
+        </Heading>
+        <Heading
+          as="h6"
+          color="primary.3100"
+          textAlign="center"
+        >
+          {postDesc}
+        </Heading>
+        
+
 
         </Heading>
         </Stack>
@@ -143,10 +228,16 @@ export default function TestPost({
 
     TestPost.propTypes = {
     title: PropTypes.string,
-    ctaTextCreate: PropTypes.string
+    title2: PropTypes.string,
+    ctaTextCreate: PropTypes.string,
+    showPostTest: PropTypes.string,
+    postTitle: PropTypes.string
   };
 
   TestPost.defaultProps = {
     title: "Make Post",
-    ctaTextCreate: "Create Post"
+    ctaTextCreate: "Create Post",
+    title2: "Display Post",
+    showPostTest: "Display Post",
+    postTitle: "None"
   };
