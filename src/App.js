@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
 import LogIn from "./pages/LogIn";
-import AboutUs from "./pages/aboutUs";
+import AboutUs from "./pages/AboutUs";
 import Dashboard from "./pages/Dashboard";
 import TestPost from "./pages/TestPost";
 import ForgotPass from "./pages/forgotPassword";
+import ProfileCreate from "./pages/ProfileCreate";
 
 function App() {
   return (
@@ -36,6 +37,9 @@ function App() {
         </Route>
         <Route path={"/forgot_pass"}>
           <ForgotPass />
+        </Route>
+         <Route path="/profile_info">
+          <ProfileCreate />
         </Route>
       </Switch>
     </Router>

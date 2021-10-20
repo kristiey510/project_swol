@@ -28,6 +28,8 @@ const colors = {
     3100: "#BEE3F8",
     //blue 200
     3200: "#90CDF4",
+    //cornflower blue
+    3300: "#6495ED",
     //green 50
     450: "#F0FFF4", 
     //green 100
