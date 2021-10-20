@@ -6,6 +6,7 @@ import {
   collection,
   addDoc,
   serverTimestamp,
+  getDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
@@ -48,4 +49,5 @@ export {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  getDoc
 };
