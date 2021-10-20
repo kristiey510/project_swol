@@ -13,7 +13,13 @@ import {
   FormControl,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import { auth, createUser, sendEmailVerification } from "../firebase/firebase";
+import {
+  auth,
+  createUser,
+  sendEmailVerification,
+  onAuthStateChanged,
+  updateProfile,
+} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
 
 export default function CreateAccount({
@@ -23,6 +29,7 @@ export default function CreateAccount({
   ctaTextCreate,
   ctaLinkLogIn,
   ctaTextLogIn,
+  FullName,
   ...rest
 }) {
   const [input, setInput] = useState({
@@ -36,15 +43,10 @@ export default function CreateAccount({
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCreateUser = async () => {
-    const userCred = await createUser(auth, input.email, input.password).catch(
-      (error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      }
-    );
-
-    await sendEmailVerification(userCred.user);
+  const checkAuth = () => {
+    var user = auth.currentUser;
+    if (!user) {
+    }
   };
 
   const {
@@ -53,9 +55,24 @@ export default function CreateAccount({
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    window.location = "/profile_info";
+  const onSubmit = async () => {
+    const userCred = await createUser(auth, input.email, input.password).catch(
+      (error) => {
+        alert(error.message);
+        window.location = "/signup";
+      }
+    );
+    await sendEmailVerification(userCred.user);
+    auth.onAuthStateChanged((user) => {
+      var name = input.firstName.concat(" ", input.lastName);
+      FullName = name;
+      checkAuth();
+      updateProfile(auth.currentUser, { displayName: name }).then(() => {
+        checkAuth();
+        alert("User is created & updated");
+        window.location = "/profile_info";
+      });
+    });
   };
 
   return (
@@ -82,7 +99,6 @@ export default function CreateAccount({
         >
           {subtitle}
         </Heading>
-        <Spacer />
         <Box w="300px" h="300px" align="center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack align="center">
@@ -91,10 +107,14 @@ export default function CreateAccount({
                   mb="5"
                   id="firstName"
                   size="sm"
+                  // value = {input.firstName}
                   placeholder="First Name"
                   {...register("firstName", {
                     required: "Field is required",
                   })}
+                  onChange={(event) =>
+                    handleChange("firstName", event.target.value)
+                  }
                 />
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.firstName && errors.firstName.message}
@@ -103,10 +123,14 @@ export default function CreateAccount({
                   mb="5"
                   id="lastName"
                   size="sm"
+                  // value = {input.lastName}
                   placeholder="Last Name"
                   {...register("lastName", {
                     required: "Field is required",
                   })}
+                  onChange={(event) =>
+                    handleChange("lastName", event.target.value)
+                  }
                 />
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.lastName && errors.lastName.message}
@@ -115,10 +139,12 @@ export default function CreateAccount({
                   mb="5"
                   type="text"
                   placeholder="Date of Birth MM/DD/YY"
+                  // value = {input.dob}
                   size="sm"
                   {...register("dob", {
                     required: "Field is required",
                   })}
+                  onChange={(event) => handleChange("dob", event.target.value)}
                 />
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.dob && errors.dob.message}
@@ -183,11 +209,11 @@ export default function CreateAccount({
             </Stack>
             <Stack spacing={5} align="center">
               <Button
+                id="submit_button"
                 color="primary.150"
                 fontWeight="bold"
                 borderRadius="8px"
                 type="submit"
-                onClick={handleCreateUser}
                 py=""
                 px="7"
                 bg="primary.3200"
@@ -196,6 +222,9 @@ export default function CreateAccount({
               >
                 {ctaTextCreate}
               </Button>
+              <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
+                {errors.submit_button && errors.submit_button.message}
+              </FormErrorMessage>
               <Link to={ctaLinkLogIn}>
                 <Button
                   color="primary.150"

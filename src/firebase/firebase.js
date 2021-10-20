@@ -13,6 +13,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 
 initializeApp({
@@ -42,4 +45,7 @@ export {
   getStorage,
   ref,
   uploadBytes,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
 };

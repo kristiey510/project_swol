@@ -8,6 +8,7 @@ import AboutUs from "./pages/AboutUs";
 import Dashboard from "./pages/Dashboard";
 import TestPost from "./pages/TestPost";
 import ForgotPass from "./pages/forgotPassword";
+import ProfileCreate from "./pages/ProfileCreate";
 
 function App() {
   return (
@@ -36,6 +37,9 @@ function App() {
         </Route>
         <Route path={"/forgot_pass"}>
           <ForgotPass />
+        </Route>
+         <Route path="/profile_info">
+          <ProfileCreate />
         </Route>
       </Switch>
     </Router>

@@ -1,10 +1,8 @@
 import React from "react";
-import { getAuth, signOut } from "firebase/auth";
+import { auth, signOut } from "../../firebase/firebase";
 import { Link } from "react-router-dom";
 import { Box, Flex, Text, Button, Spacer, HStack } from "@chakra-ui/react";
 import Logo from "../ui/Logo";
-
-const auth = getAuth();
 
 // eslint-disable-next-line react/prop-types
 const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
@@ -18,6 +16,12 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
       <Link to={to}>{children}</Link>
     </Text>
   );
+};
+
+const exit = () => {
+  signOut(auth);
+  alert("You are signed out.");
+  window.location = "/";
 };
 
 const FeedHeader = (props) => {
@@ -98,7 +102,7 @@ const FeedHeader = (props) => {
               width="80px"
               color="primary.150"
               bg="primary.3200"
-              onclick={signOut(auth)}
+              onClick={exit}
             >
               Log Out
             </Button>
