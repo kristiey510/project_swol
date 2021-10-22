@@ -26,6 +26,7 @@ export default function LogIn({
   ctaCreateAccount,
   ...rest
 }) {
+  const next = "True";
   const [input, setInput] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState({ email: "", password: "" });
 
@@ -36,8 +37,10 @@ export default function LogIn({
   const handleLogin = async () => {
     try {
       await logIn(auth, input.email, input.password);
-    } catch ({ code }) {
+    } catch ({ code }){
       setErrs({ email: "", password: "", ...errors[code] });
+      alert(code);
+      next = "False";
     }
   };
 
@@ -48,8 +51,10 @@ export default function LogIn({
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    window.location = "/dashboard";
+    handleLogin();
+    if(next == "True"){
+    window.setTimeout(function() {window.location.href = './dashboard';}, 2000);
+    };
   };
 
   return (
@@ -125,7 +130,6 @@ export default function LogIn({
                   borderRadius="8px"
                   fontWeight="bold"
                   type="submit"
-                  onClick={handleLogin}
                   py="4"
                   px="7"
                   lineHeight="1"
