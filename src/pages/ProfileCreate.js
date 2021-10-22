@@ -41,20 +41,20 @@ const toDash = () => {
   window.location = '/dashboard';
 };
 
-const handleMakeUser = () => {
+const handleMakeUser = async () => {
   if(!input.Height_Ft || !input.Gender || !input.Weight || !input.Height_In ){
     alert("You forgot to upload information");
     window.location = "/profile_info";
   }else{
-      updateDoc(doc(db, "Profile", auth.currentUser.uid),{
+    await updateDoc(doc(db, "Profile", auth.currentUser.uid),{
       Height_Ft: input.Height_Ft,
       Height_In: input.Height_In,
       Gender: input.Gender,
-      Weight: input.Weight}).then(
-    alert("User information added to database")
-    );
-    window.setTimeout(function() {window.location.href = './dashboard';}, 2000);
-}};
+      Weight: input.Weight});
+    alert("User information added to database");
+    window.location = './dashboard';
+  }
+};
 
   return (
    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto"> 
@@ -119,7 +119,7 @@ const handleMakeUser = () => {
               </Box>
         </form>
         <Link to='/dashboard'>
-            <Button onclick = {toDash} size = 'xs' variant="link" color ="#89CFF0" borderRadius="4px" fontWeight="bold" bg="transparent" > 
+            <Button onClick = {toDash} size = 'xs' variant="link" color ="#89CFF0" borderRadius="4px" fontWeight="bold" bg="transparent" > 
               skip for now
             </Button>
         </Link>

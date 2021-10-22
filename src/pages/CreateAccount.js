@@ -43,17 +43,12 @@ export default function CreateAccount({
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const checkAuth = () => {
-    var user = auth.currentUser;
-    if (!user) {
-    }
-  };
-
-  const handleMakeUser = () => {
-    setDoc(doc(db, "Profile", auth.currentUser.uid),{
+  const handleMakeUser = async() => {
+    await setDoc(doc(db, "Profile", auth.currentUser.uid),{
       User_id: auth.currentUser.uid,
       Name: auth.currentUser.displayName,
       Email: auth.currentUser.email,
+      Dob: input.dob
     });
 };
 
@@ -64,23 +59,14 @@ export default function CreateAccount({
   } = useForm();
 
   const onSubmit = async () => {
-    const userCred = await createUser(auth, input.email, input.password).catch(
-      (error) => {
-        alert(error.message);
-        window.location = "/signup";
-      }
-    );
-    await sendEmailVerification(userCred.user);
-    auth.onAuthStateChanged((user) => {
-      var name = input.firstName.concat(" ", input.lastName);
-      checkAuth();
-      updateProfile(auth.currentUser, { displayName: name }).then(() => {
-        checkAuth();
-        alert("User is created & updated & added to database");
-        handleMakeUser();
-        window.setTimeout(function() {window.location.href = "/profile_info";}, 2000);
-      });
-    });
+    const userCred = await createUser(auth, input.email, input.password).then(async(userCred)=>{
+     var name = input.firstName.concat(" ", input.lastName);
+      await sendEmailVerification(userCred.user);
+      await updateProfile(auth.currentUser, { displayName: name });
+      await alert("User is created & updated & added to database");
+      await handleMakeUser();
+      window.location = '/profile_info';
+    }).catch((error) => {alert(error.message)});
   };
 
   return (
@@ -115,7 +101,6 @@ export default function CreateAccount({
                   mb="5"
                   id="firstName"
                   size="sm"
-                  // value = {input.firstName}
                   placeholder="First Name"
                   {...register("firstName", {
                     required: "Field is required",
@@ -131,7 +116,6 @@ export default function CreateAccount({
                   mb="5"
                   id="lastName"
                   size="sm"
-                  // value = {input.lastName}
                   placeholder="Last Name"
                   {...register("lastName", {
                     required: "Field is required",
@@ -147,7 +131,6 @@ export default function CreateAccount({
                   mb="5"
                   type="text"
                   placeholder="Date of Birth MM/DD/YY"
-                  // value = {input.dob}
                   size="sm"
                   {...register("dob", {
                     required: "Field is required",
