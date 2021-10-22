@@ -21,6 +21,7 @@ import {
   updateProfile,
 } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
+import { doc, setDoc, db, collection, addDoc, updateDoc} from "../firebase/firebase";
 
 export default function CreateAccount({
   title,
@@ -29,7 +30,6 @@ export default function CreateAccount({
   ctaTextCreate,
   ctaLinkLogIn,
   ctaTextLogIn,
-  FullName,
   ...rest
 }) {
   const [input, setInput] = useState({
@@ -49,6 +49,14 @@ export default function CreateAccount({
     }
   };
 
+  const handleMakeUser = () => {
+    setDoc(doc(db, "Profile", auth.currentUser.uid),{
+      User_id: auth.currentUser.uid,
+      Name: auth.currentUser.displayName,
+      Email: auth.currentUser.email,
+    });
+};
+
   const {
     handleSubmit,
     register,
@@ -65,12 +73,12 @@ export default function CreateAccount({
     await sendEmailVerification(userCred.user);
     auth.onAuthStateChanged((user) => {
       var name = input.firstName.concat(" ", input.lastName);
-      FullName = name;
       checkAuth();
       updateProfile(auth.currentUser, { displayName: name }).then(() => {
         checkAuth();
-        alert("User is created & updated");
-        window.location = "/profile_info";
+        alert("User is created & updated & added to database");
+        handleMakeUser();
+        window.setTimeout(function() {window.location.href = "/profile_info";}, 2000);
       });
     });
   };

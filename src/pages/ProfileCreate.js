@@ -19,7 +19,7 @@ import {
   Radio, 
   RadioGroup
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc} from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, updateDoc} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
 import {auth, signOut,onAuthStateChanged} from "../firebase/firebase";
 
@@ -46,15 +46,11 @@ const handleMakeUser = () => {
     alert("You forgot to upload information");
     window.location = "/profile_info";
   }else{
-    addDoc(collection(db, "Profile"),{
-      Userid: auth.currentUser.uid,
-      Name: auth.currentUser.displayName,
-      Email: auth.currentUser.email,
+      updateDoc(doc(db, "Profile", auth.currentUser.uid),{
       Height_Ft: input.Height_Ft,
       Height_In: input.Height_In,
       Gender: input.Gender,
-      Weight: input.Weight
-    }).then(
+      Weight: input.Weight}).then(
     alert("User information added to database")
     );
     window.setTimeout(function() {window.location.href = './dashboard';}, 2000);

@@ -7,6 +7,7 @@ import {
   addDoc,
   serverTimestamp,
   getDoc,
+  updateDoc
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import {
@@ -16,7 +17,7 @@ import {
   sendEmailVerification,
   signOut,
   onAuthStateChanged,
-  updateProfile,
+  updateProfile
 } from "firebase/auth";
 
 initializeApp({
@@ -49,5 +50,6 @@ export {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  getDoc
+  getDoc, 
+  updateDoc
 };
