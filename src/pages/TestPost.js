@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
+import { v4 as uuidv4 } from 'uuid';
 import {
   Box,
   Button,
@@ -12,9 +13,22 @@ import {
   Spacer,
   Text,
   Textarea,
-  Select
+  Select,
+  Image
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes, getDoc } from "../firebase/firebase";
+import { 
+  doc, 
+  setDoc, 
+  db, 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  getStorage, 
+  ref, 
+  uploadBytes, 
+  getDoc, 
+  getDownloadURL,
+  auth, } from "../firebase/firebase";
 import { file } from "@babel/types";
 
 //function name needs to be capitalized
@@ -34,6 +48,9 @@ export default function TestPost({
     const [realPostTitle, setMyText] = useState("");
     const [postDesc, setMyText2] = useState("");
     const [postType, setType] = useState("");
+    const [Error, setError] = useState("");
+
+
     const handleChange = (name, value) => {
         setInput((prev) => ({ ...prev, [name]: value }));
     };
@@ -41,23 +58,65 @@ export default function TestPost({
       setDisplay((prev) => ({ ...prev, [name]: value }));
   };
     const handleMakePost = () => {
-        //need to hash filenames somehow to get unique id
+        //check user
+        var user = auth.currentUser;
+        //if no user
+        if(!user){
+          return;
+        }
+
+        //validate image size
+        if(image != null){
+          console.log(image);
+          if(image.size > 5000000){
+            console.log("image too large")
+            setError("Error: File too large");
+            return;
+          }
+          //validate image filetype
+          const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+          if(!acceptedImageTypes.includes(image.type)){
+            console.log("wrong file type:",image.type);
+            setError("Error: Not a JPG or PNG");
+            return;
+          }
+
+        }
+        //reset error on success
+        setError("");
+
+        console.log("user: ", user.uid)
+        //default filename (sticks if empty)
         var filename = 'no_image_provided'
         if(image != null){
-            filename = image.name
+            //old way
+            //filename = image.name
+            //need to npm install uuid
+            filename = uuidv4()
         }
         addDoc(collection(db, "test"),{
             title: input.title,
             type: input.type,
             desc: input.desc,
             timestamp: serverTimestamp(),
-            img: filename
+            img: filename,
+            usr: user.uid,
+            //no likes for now
+            likes: 0
         });
-        //upload
-        //console.log(image)
-        //console.log(typeof image);
-        if(image == null)
+        //no image log
+        if(image == null){
+          console.log("no image provided")
           return;
+        }
+
+        //size in bytes
+        console.log("size:", image.size)
+
+        //image type
+        console.log("type:", image.type)
+
+        //upload file
         const storage = getStorage();
         const imageRef = ref(storage, filename);
         uploadBytes(imageRef, image).then((snapshot) => {
@@ -80,6 +139,27 @@ export default function TestPost({
           setMyText2("Description: " + data.desc);
           setType("Type: " + data.type);
 
+          //image handling
+
+          const img = document.getElementById('img');
+          //no image
+          if(data.img == 'no_image_provided'){
+            //sets to no image
+            img.setAttribute('src', "");
+            return;
+          }
+          console.log("image", data.img);
+
+          //get image ref
+          const storage = getStorage();
+          const pathReference = ref(storage, data.img);
+
+          //download, then set attribute to image tag in file
+          getDownloadURL(pathReference)
+          .then((url) => {
+            img.setAttribute('src', url);
+          })
+          
         } else {
           console.log("No such document!");
         }
@@ -164,6 +244,14 @@ export default function TestPost({
               >
                 {ctaTextCreate}
               </Button>
+
+        <Heading
+          as="h6"
+          color="red"
+          textAlign="center"
+        >
+          {Error}
+        </Heading>
             
         <br></br>
         <Heading
@@ -217,9 +305,17 @@ export default function TestPost({
         >
           {postDesc}
         </Heading>
+
+        <center>
+        <Image
+          boxSize="150px"
+          objectFit="cover"
+          id = 'img'
+          src=""
+          alt="no image"
+        />
+        </center>
         
-
-
         </Heading>
         </Stack>
         </Flex>
@@ -231,7 +327,8 @@ export default function TestPost({
     title2: PropTypes.string,
     ctaTextCreate: PropTypes.string,
     showPostTest: PropTypes.string,
-    postTitle: PropTypes.string
+    postTitle: PropTypes.string,
+    Error: PropTypes.string,
   };
 
   TestPost.defaultProps = {
@@ -239,5 +336,6 @@ export default function TestPost({
     ctaTextCreate: "Create Post",
     title2: "Display Post",
     showPostTest: "Display Post",
-    postTitle: "None"
+    postTitle: "None",
+    Error: ""
   };
