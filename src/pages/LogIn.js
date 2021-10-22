@@ -37,10 +37,9 @@ export default function LogIn({
   const handleLogin = async () => {
     try {
       await logIn(auth, input.email, input.password);
-    } catch ({ code }){
+    } catch ({ code }) {
       setErrs({ email: "", password: "", ...errors[code] });
       alert(code);
-      window.location = "/login";
     }
   };
 
@@ -50,9 +49,9 @@ export default function LogIn({
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async ()=> {
+  const onSubmit = async () => {
     await handleLogin();
-    window.location = "/dashboard";
+    if (auth.currentUser) window.location = "/dashboard";
   };
 
   return (
@@ -124,7 +123,7 @@ export default function LogIn({
               </Stack>
               <Stack spacing={5} align="center">
                 <Button
-                  color= "primary.150"
+                  color="primary.150"
                   borderRadius="8px"
                   fontWeight="bold"
                   type="submit"
@@ -151,7 +150,7 @@ export default function LogIn({
                   bg="primary.3200"
                 >
                   Forgot Password
-               </Button>
+                </Button>
               </Link>
               <Link to={ctaCreateAccount}>
                 <Button
