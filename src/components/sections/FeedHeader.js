@@ -21,7 +21,6 @@ const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
 const exit = () => {
   signOut(auth);
   alert("You are signed out.");
-  window.location = "/";
 };
 
 const FeedHeader = (props) => {
@@ -93,7 +92,7 @@ const FeedHeader = (props) => {
         flexBasis={{ base: "100%", md: "auto" }}
       >
         <Flex align="center" color="primary.2400" fontFamily="body">
-          <MenuItem to="/log_out">
+          <MenuItem to="/">
             <Button
               size="sm"
               fontWeight="bold"

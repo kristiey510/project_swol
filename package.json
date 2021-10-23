@@ -41,7 +41,7 @@
       "plugin:react/recommended"
     ],
     "rules": {
-      "react/prop-types": "ON"
+      "react/prop-types": 0
     }
   },
   "browserslist": {
