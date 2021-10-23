@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
 import {
   Box,
@@ -19,17 +18,13 @@ import {
   Radio, 
   RadioGroup
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, updateDoc} from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, updateDoc, auth} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
-import {auth, signOut,onAuthStateChanged} from "../firebase/firebase";
 
-export default function ProfileCreate({
-}){
-
+export default function ProfileCreate()
+{
 const [input, setInput] = useState({ Height_Ft: "", Height_In: "", Gender: "" , Weight: ""});
-const handleChange = (name, value) => {
-    setInput((prev) => ({ ...prev, [name]: value }));
-};
+const handleChange = (name, value) => { setInput((prev) => ({ ...prev, [name]: value }));};
 
 const {
 handleSubmit,
