@@ -17,7 +17,7 @@ import {
   useColorModeValue,
   Editable, EditableInput, EditablePreview, IconButton, ButtonGroup, InputGroup, InputLeftAddon
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, updateDoc, auth} from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, updateDoc, auth, getDoc} from "../firebase/firebase";
 import {EditIcon, CheckIcon, CloseIcon} from "@chakra-ui/icons"
 
 export default function ProfileEdit(){
