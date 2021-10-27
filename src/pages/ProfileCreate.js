@@ -18,7 +18,7 @@ import {
   Radio, 
   RadioGroup
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, updateDoc, auth, getDoc} from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, updateDoc, auth} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
 
 export default function ProfileCreate()
