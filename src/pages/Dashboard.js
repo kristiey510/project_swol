@@ -11,7 +11,6 @@ export default function Dashboard() {
       maxW={{ xl: "1200px" }}
       m="0 auto"
     >
-
     <FeedHeader/>
     
     </Flex>

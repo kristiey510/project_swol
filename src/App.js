@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import TestPost from "./pages/TestPost";
 import ForgotPass from "./pages/forgotPassword";
 import ProfileCreate from "./pages/ProfileCreate";
+import ProfileEdit from "./pages/ProfileEdit";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
         </Route>
          <Route path="/profile_info">
           <ProfileCreate />
+        </Route>
+         <Route path="/profile">
+          <ProfileEdit />
         </Route>
       </Switch>
     </Router>

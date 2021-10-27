@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import Header from "../components/sections/Header";
 import {
   Box,
@@ -19,17 +18,13 @@ import {
   Radio, 
   RadioGroup
 } from "@chakra-ui/react";
-import { doc, setDoc, db, collection, addDoc, updateDoc} from "../firebase/firebase";
+import { doc, setDoc, db, collection, addDoc, updateDoc, auth} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
-import {auth, signOut,onAuthStateChanged} from "../firebase/firebase";
 
-export default function ProfileCreate({
-}){
-
+export default function ProfileCreate()
+{
 const [input, setInput] = useState({ Height_Ft: "", Height_In: "", Gender: "" , Weight: ""});
-const handleChange = (name, value) => {
-    setInput((prev) => ({ ...prev, [name]: value }));
-};
+const handleChange = (name, value) => { setInput((prev) => ({ ...prev, [name]: value }));};
 
 const {
 handleSubmit,
@@ -41,20 +36,20 @@ const toDash = () => {
   window.location = '/dashboard';
 };
 
-const handleMakeUser = () => {
+const handleMakeUser = async () => {
   if(!input.Height_Ft || !input.Gender || !input.Weight || !input.Height_In ){
     alert("You forgot to upload information");
     window.location = "/profile_info";
   }else{
-      updateDoc(doc(db, "Profile", auth.currentUser.uid),{
+    await updateDoc(doc(db, "Profile", auth.currentUser.uid),{
       Height_Ft: input.Height_Ft,
       Height_In: input.Height_In,
       Gender: input.Gender,
-      Weight: input.Weight}).then(
-    alert("User information added to database")
-    );
-    window.setTimeout(function() {window.location.href = './dashboard';}, 2000);
-}};
+      Weight: input.Weight});
+    alert("User information added to database");
+    window.location = './dashboard';
+  }
+};
 
   return (
    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto"> 
@@ -119,7 +114,7 @@ const handleMakeUser = () => {
               </Box>
         </form>
         <Link to='/dashboard'>
-            <Button onclick = {toDash} size = 'xs' variant="link" color ="#89CFF0" borderRadius="4px" fontWeight="bold" bg="transparent" > 
+            <Button onClick = {toDash} size = 'xs' variant="link" color ="#89CFF0" borderRadius="4px" fontWeight="bold" bg="transparent" > 
               skip for now
             </Button>
         </Link>
