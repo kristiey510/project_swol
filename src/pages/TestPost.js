@@ -28,7 +28,14 @@ import {
   uploadBytes, 
   getDoc, 
   getDownloadURL,
-  auth, } from "../firebase/firebase";
+  auth, 
+  updateDoc,
+  arrayUnion,
+  query,
+  where,
+  increment,
+  arrayRemove,
+  } from "../firebase/firebase";
 import { file } from "@babel/types";
 
 //function name needs to be capitalized
@@ -40,6 +47,7 @@ export default function TestPost({
   ctaTextCreate,
   showPostTest,
   postTitle,
+  Like,
   ...rest
 }) {
     const [input, setInput] = useState({ title: "", type: "" , desc: ""});
@@ -49,6 +57,7 @@ export default function TestPost({
     const [postDesc, setMyText2] = useState("");
     const [postType, setType] = useState("");
     const [Error, setError] = useState("");
+    const [LikeNoti, setLN] = useState("");
 
 
     const handleChange = (name, value) => {
@@ -166,6 +175,62 @@ export default function TestPost({
       })
     }
 
+    const handleLike = () => {
+      setLN("");
+      var alreadyLiked = false;
+      var user = auth.currentUser;
+      //if no user
+      if(!user){
+        console.log("No user");
+        return;
+      }
+      console.log('Searching for post to like:');
+      console.log(display.id);
+
+
+      getDoc(doc(db, "test", display.id)).then(docSnap => {
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          const data = docSnap.data(); 
+          //loop through array 
+          for(let i = 0; i<data.likes;i++){
+            //if the user has already liked it
+            if(data.likers[i] == user.uid){
+              console.log("already liked")
+              alreadyLiked = true;
+            }
+          }   
+          const docRef = doc(db, "test", display.id)
+
+          console.log(alreadyLiked)
+          //like post
+          if(alreadyLiked == false){
+            console.log("like")
+            setLN("Liked Post");
+            updateDoc(docRef, {
+              likers: arrayUnion(user.uid),
+              likes: increment(1)
+            });
+          }
+          //unlike post
+          else{
+            console.log("unlike");
+            setLN("Unliked Post");
+            updateDoc(docRef, {
+              likers: arrayRemove(user.uid),
+              likes: increment(-1)
+            });
+          }
+          
+        } 
+        else {
+          console.log("No such document!");
+        }
+      })
+    
+
+
+    }
 
     return (
       <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
@@ -315,6 +380,26 @@ export default function TestPost({
           alt="no image"
         />
         </center>
+        <Button
+                color="primary.150"
+                fontWeight="bold"
+                borderRadius="8px"
+                onClick={handleLike}
+                py=""
+                px="7"
+                bg="primary.3200"
+                lineHeight="1"
+                size="md"
+              >
+                {Like}
+            </Button>
+            <Heading
+          as="h6"
+          color="red"
+          textAlign="center"
+        >
+          {LikeNoti}
+        </Heading>
         
         </Heading>
         </Stack>
@@ -329,6 +414,8 @@ export default function TestPost({
     showPostTest: PropTypes.string,
     postTitle: PropTypes.string,
     Error: PropTypes.string,
+    Like: PropTypes.string,
+    LikeNoti: PropTypes.string
   };
 
   TestPost.defaultProps = {
@@ -337,5 +424,7 @@ export default function TestPost({
     title2: "Display Post",
     showPostTest: "Display Post",
     postTitle: "None",
-    Error: ""
+    Error: "",
+    Like: "Like/Unlike",
+    LikeNoti: ""
   };

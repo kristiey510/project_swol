@@ -7,7 +7,12 @@ import {
   addDoc,
   serverTimestamp,
   getDoc,
-  updateDoc
+  updateDoc,
+  arrayUnion,
+  query,
+  where,
+  increment,
+  arrayRemove
 } from "firebase/firestore";
 import { 
   getStorage, 
@@ -57,5 +62,10 @@ export {
   updateProfile,
   getDoc, 
   updateDoc,
-  getDownloadURL
+  getDownloadURL,
+  arrayUnion,
+  query,
+  where,
+  increment,
+  arrayRemove
 };
