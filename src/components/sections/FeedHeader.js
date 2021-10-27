@@ -1,8 +1,9 @@
 import React from "react";
 import { auth, signOut } from "../../firebase/firebase";
 import { Link } from "react-router-dom";
-import { Box, Flex, Text, Button, Spacer, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Spacer, HStack, Input, InputLeftElement, InputGroup} from "@chakra-ui/react";
 import Logo from "../ui/Logo";
+import {SearchIcon} from "@chakra-ui/icons"
 
 // eslint-disable-next-line react/prop-types
 const MenuItem = ({ children, isLast, to = "/", ...rest }) => {
@@ -37,7 +38,7 @@ const FeedHeader = (props) => {
       color={["white", "white", "primary.700", "primary.700"]}
       {...props}
     >
-      <HStack align="center" ml="20">
+      <HStack align="center" ml="60">
         <Link to="./profile">
           <Button
             color="primary.2400"
@@ -86,6 +87,12 @@ const FeedHeader = (props) => {
             </Text>
           </Button>
         </Link>
+        <Box px = "100px">
+        <InputGroup>
+          <InputLeftElement>{<SearchIcon color = "primary.3200" />}</InputLeftElement>
+          <Input placeholder = "Search" w = "400px" />
+        </InputGroup>
+        </Box>
       </HStack>
       <Box
         display={{ base: show ? "block" : "none", md: "block" }}
