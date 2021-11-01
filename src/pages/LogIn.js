@@ -26,7 +26,7 @@ export default function LogIn({
   ctaCreateAccount,
   ...rest
 }) {
-  const next = "True";
+
   const [input, setInput] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState({ email: "", password: "" });
 
@@ -51,8 +51,15 @@ export default function LogIn({
 
   const onSubmit = async () => {
     await handleLogin();
-    if (auth.currentUser) window.location = "/dashboard";
+    var state = auth.onAuthStateChanged((user)=> {
+        if (state) state();
+        if (user){
+          window.location = "/dashboard"
+        }
+    });
+    // if (auth.currentUser) window.location = "/dashboard";
   };
+
 
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">

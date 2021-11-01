@@ -10,8 +10,12 @@ import TestPost from "./pages/TestPost";
 import ForgotPass from "./pages/forgotPassword";
 import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
+import {auth, onAuthStateChanged} from "./firebase/firebase";
 
 function App() {
+
+
+
   return (
     <Router>
       <Switch>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
 import { Link } from "react-router-dom";
 import FeedHeader from "../components/sections/FeedHeader";
 import { getDatabase, ref, onValue } from "firebase/database";
@@ -18,11 +18,25 @@ import {
   useColorModeValue,
   Editable, EditableInput, EditablePreview, IconButton, ButtonGroup, InputGroup, InputLeftAddon
 } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 import { doc, setDoc, db, collection, addDoc, updateDoc, auth, getDoc} from "../firebase/firebase";
 import {EditIcon, CheckIcon} from "@chakra-ui/icons"
 
+
 export default function ProfileEdit(){
 
+const [input, setInput] = useState({name: "", dob: "", gender: "" , weight: "", height_in: "" , height_ft: ""});
+
+
+useEffect(async () => {
+      await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(async(docSnap) => {
+        if (docSnap.exists()) {
+          const data = await docSnap.data();
+          await setInput({name: data.Name,height_in : data.Height_In, height_ft: data.Height_Ft, gender: data.Gender, weight: data.Weight});
+          console.log("Done with data update")
+        }
+       });
+    }, [])
 
 function EditableControls({ isEditing, onSubmit, onEdit}) {
 return isEditing ? (
@@ -32,11 +46,11 @@ return isEditing ? (
 ) : (
 	<Flex px = "15px" justify = "left">
     <IconButton colorScheme="myblue" aria-label="Edit" size="sm" icon={<EditIcon />} onClick={onEdit} />
-    </Flex>
+  </Flex>
 );
 };
 const handleChange = async(name, value) => { 
-  await setInput((prev) => ({ ...prev, [name]: value }));
+   await setInput((prev) => ({ ...prev, [name]: value }));
 };
 
 const handleSubmit = async() => {
@@ -45,43 +59,24 @@ const handleSubmit = async() => {
       Height_Ft: input.height_ft,
       Height_In: input.height_in,
       Gender: input.gender,
-      Weight: input.weight});
-}
-
-
-
-const [input, setInput] = useState({name: "", dob: "", gender: "" , weight: "", height_in: "", height_ft: ""});
-
-const docData = async () => {
-  await getDoc(doc(db, "Profile", "iu90wX9I0cfI7w1KNrMBVfWxFF82")).then(async (docSnap) => {
-  if (docSnap.exists()) {
-     await setInput((prev) => ({ ...prev, name: docSnap.data().Name}));
-     await setInput((prev) => ({ ...prev, gender: docSnap.data().Gender}));
-     await setInput((prev) => ({ ...prev, weight: docSnap.data().Weight}));
-     await setInput((prev) => ({ ...prev, height_in: docSnap.data().Height_In}));
-     await setInput((prev) => ({ ...prev, height_ft: docSnap.data().Height_Ft}));
-  } else {
-    console.log("No such document!");
-  }
-});
+      Weight: input.weight
+    });
 };
 
-window.onload = docData;
-
-return(
-	<Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="auto"> 
-
+return (
+	<Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="auto" > 
 		<FeedHeader/>
-		<Box rounded={'xl'} mt = "38" w = "680px" h = "600" bg={useColorModeValue('gray.50', 'gray.100')}> 
+		<Box rounded={'xl'} mt = "38" w = "680px" h = "600" > 
 			<Heading mt = "5" align = "center" color = "primary.2350"> Profile Update </Heading>
 			<InputGroup mt = "10" ml = "20px">
     			<InputLeftAddon color = "primary.150" fontSize = "md" fontWeight = "extrabold" w = "100px" bg= "primary.3200" ml = "5" mr = "2"> Name </InputLeftAddon>
     			<Editable	
-          fontSize = "md"
-     			value = {input.name}
-      		isPreviewFocusable={false}
-          onChange={(nextValue) => handleChange("name", nextValue)}
-          onSubmit = {handleSubmit}
+            id = "name"
+            fontSize = "md"
+            value = {input.name}
+        		isPreviewFocusable={false}
+            onChange={(nextValue) => handleChange("name", nextValue)}
+            onSubmit = {handleSubmit}
     			>	
 		      {props => (
 		        <HStack >
@@ -97,8 +92,7 @@ return(
           <InputLeftAddon align = "center" color = "primary.150" fontSize = "15" fontWeight = "extrabold" w = "100px"  bg= "primary.3200" ml = "5" mr = "2"> Height (Ft)</InputLeftAddon>
           <Editable  
           fontSize = "md"
-          defaultValue = "Height"
-          value= {input.height_ft}
+          value = {input.height_ft}
           isPreviewFocusable={false}
           onChange={(nextValue) => handleChange("height_ft", nextValue)}
           onSubmit = {handleSubmit}
@@ -167,7 +161,6 @@ return(
         </Link>
 		</Box> 
 	</Flex> 
-
 	);
-
 };
+

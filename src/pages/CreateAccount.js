@@ -65,7 +65,12 @@ export default function CreateAccount({
       await updateProfile(auth.currentUser, { displayName: name });
       await alert("User is created & updated & added to database");
       await handleMakeUser();
-      window.location = '/profile_info';
+      var state = auth.onAuthStateChanged((user)=> {
+        if (state) state();
+        if (user){
+          window.location = '/profile_info';
+        }
+    });
     }).catch((error) => {alert(error.message)});
   };
 
