@@ -89,7 +89,7 @@ const FeedHeader = (props) => {
         <Box px = "80px">
         <InputGroup>
           <InputLeftElement>{<SearchIcon color = "primary.3200" />}</InputLeftElement>
-          <Input placeholder = "Search" w = "450px" />
+          <Input placeholder = "Search" w = "450px" color = "primary.2400"/>
         </InputGroup>
         </Box>
       </HStack>
