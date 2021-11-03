@@ -13,6 +13,8 @@ import {
   Spacer,
   FormControl,
   FormErrorMessage,
+  InputRightElement,
+  InputGroup
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
@@ -29,6 +31,8 @@ export default function LogIn({
 
   const [input, setInput] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState({ email: "", password: "" });
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
 
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -108,19 +112,27 @@ export default function LogIn({
                 <FormErrorMessage mb="3" fontSize="12px">
                   {errors.email && errors.email.message}
                 </FormErrorMessage>
+                <InputGroup size="md">
                 <Input
-                  type="password"
+                  mb="5"
                   id="password"
-                  value={input.password}
+                  type={show ? "text" : "password"}
                   placeholder="Password"
-                  size="sm"
+                  value={input.password}
                   {...register("password", {
                     required: "Field is required",
                   })}
                   onChange={(event) =>
                     handleChange("password", event.target.value)
                   }
+                  size="sm"
                 />
+                <InputRightElement width="4.3rem">
+                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
                 <FormErrorMessage mb="3" fontSize="12px">
                   {errors.password && errors.password.message}
                 </FormErrorMessage>

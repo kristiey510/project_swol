@@ -12,6 +12,9 @@ import {
   Spacer,
   FormControl,
   FormErrorMessage,
+  HStack,
+  InputRightElement,
+  InputGroup
 } from "@chakra-ui/react";
 import {
   auth,
@@ -57,6 +60,10 @@ export default function CreateAccount({
     register,
     formState: { errors },
   } = useForm();
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+  const [showConfirm, setShowConfirm] = React.useState(false);
+  const handleClickConfirm = () => setShowConfirm(!showConfirm);
 
   const onSubmit = async () => {
     const userCred = await createUser(auth, input.email, input.password).then(async(userCred)=>{
@@ -161,10 +168,12 @@ export default function CreateAccount({
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.email && errors.email.message}
                 </FormErrorMessage>
+
+                <InputGroup size="md">
                 <Input
                   mb="5"
                   id="password"
-                  type="password"
+                  type={show ? "text" : "password"}
                   placeholder="Password"
                   value={input.password}
                   {...register("password", {
@@ -179,20 +188,37 @@ export default function CreateAccount({
                   }
                   size="sm"
                 />
+                <InputRightElement width="4.3rem">
+                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.password && errors.password.message}
                 </FormErrorMessage>
+                <InputGroup size="md">
                 <Input
                   mb="5"
-                  id="confirm"
-                  type="password"
-                  size="sm"
+                  id="password"
+                  type={showConfirm ? "text" : "password"}
                   placeholder="Confirm Password"
+               
                   {...register("confirm", {
                     required: "Field is required",
                     validate: (value) => value === input.password,
                   })}
+                  onChange={(event) =>
+                    handleChange("password", event.target.value)
+                  }
+                  size="sm"
                 />
+                <InputRightElement width="4.3rem">
+                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClickConfirm}>
+                    {showConfirm ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.confirm && errors.confirm.type === "validate" && (
                     <div className="error">Password must match</div>
