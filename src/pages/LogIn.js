@@ -57,7 +57,6 @@ export default function LogIn({
           window.location = "/dashboard"
         }
     });
-    // if (auth.currentUser) window.location = "/dashboard";
   };
 
 

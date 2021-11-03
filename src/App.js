@@ -11,6 +11,7 @@ import ForgotPass from "./pages/forgotPassword";
 import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
 import {auth, onAuthStateChanged} from "./firebase/firebase";
+import AddFriend from "./pages/AddFriend";
 
 function App() {
 
@@ -48,6 +49,9 @@ function App() {
         </Route>
          <Route path="/profile">
           <ProfileEdit />
+        </Route>
+        <Route path="/personal_log">
+          <AddFriend />
         </Route>
       </Switch>
     </Router>
