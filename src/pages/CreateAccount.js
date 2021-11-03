@@ -82,9 +82,9 @@ export default function CreateAccount({
   };
 
   return (
-    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
+    <Flex direction="column" m="0 auto">
       <Header />
-      <Stack spacing={6} w={{ base: "10%", md: "120%" }} align="center">
+      <Stack spacing={6} align = "center">
         <Heading
           as="h1"
           size="2xl"
@@ -105,7 +105,7 @@ export default function CreateAccount({
         >
           {subtitle}
         </Heading>
-        <Box w="300px" h="300px" align="center">
+        <Box w="300px" h="300px" align="center" >
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack align="center">
               <FormControl isInvalid={errors}>

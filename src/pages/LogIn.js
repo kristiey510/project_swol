@@ -65,11 +65,10 @@ export default function LogIn({
 
 
   return (
-    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
+    <Flex direction="column" m="0 auto">
       <Header />
       <Stack
         spacing={10}
-        w={{ base: "10%", md: "120%" }}
         mt="10"
         align="center"
       >

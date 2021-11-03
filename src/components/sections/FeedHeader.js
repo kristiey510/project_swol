@@ -28,17 +28,16 @@ const FeedHeader = (props) => {
   const show = React.useState(false);
   return (
     <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="115%"
-      mt="3"
       pt="2"
       color={["white", "white", "primary.700", "primary.700"]}
       {...props}
     >
-      <HStack align="center" ml="60">
+       <Logo
+         w = "300px"
+         color = "primary.2400"
+         h = "80px"
+       />
+      <HStack align="center" ml="0" mt = "30px">
         <Link to="./profile">
           <Button
             color="primary.2400"
@@ -87,10 +86,10 @@ const FeedHeader = (props) => {
             </Text>
           </Button>
         </Link>
-        <Box px = "100px">
+        <Box px = "80px">
         <InputGroup>
           <InputLeftElement>{<SearchIcon color = "primary.3200" />}</InputLeftElement>
-          <Input placeholder = "Search" w = "400px" />
+          <Input placeholder = "Search" w = "450px" />
         </InputGroup>
         </Box>
       </HStack>
@@ -101,6 +100,7 @@ const FeedHeader = (props) => {
         <Flex align="center" color="primary.2400" fontFamily="body">
           <MenuItem to="/">
             <Button
+              mt = "43px"
               size="sm"
               fontWeight="bold"
               rounded="lg"
