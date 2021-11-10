@@ -1,14 +1,13 @@
-import React from 'react'
-import "./Rightbar.css"
+import React from 'react';
+import "./Rightbar.css";
+
 
 export default function Rightbar() {
-    return (
-        <div className="Rightbar">
-            <div className="rightbarWrapper">
-                <div>
-                  
-                </div>
-            </div>
-        </div>
-    )
+  return (
+    <div className="rightbar">
+      <div className="rightbarWrapper">
+        <h4 className="rightbarTitle">Exercise Suggestions</h4>
+      </div>
+    </div>
+  );
 }

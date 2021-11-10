@@ -38,6 +38,7 @@ const FeedHeader = (props) => {
       color={["white", "white", "primary.700", "primary.700"]}
       {...props}
     >
+    {/*
       <HStack align="center" ml="60">
         <Link to="./profile">
           <Button
@@ -48,6 +49,9 @@ const FeedHeader = (props) => {
             bgColor="transparent"
             variant="link"
           >
+      */}
+
+        {/* 
             <Text fontSize="lg" color="primary.2400">
               Profile
             </Text>
@@ -64,7 +68,10 @@ const FeedHeader = (props) => {
             size="3xl"
             bgColor="transparent"
             variant="link"
-          >
+            > 
+        */}
+
+        {/*  
             <Text fontSize="lg" color="primary.2400">
               Dashboard
             </Text>
@@ -81,9 +88,12 @@ const FeedHeader = (props) => {
             size="3xl"
             bgColor="transparent"
             variant="link"
-          >
-            <Text fontSize="lg" color="primary.2400">
-              Personal Log
+             > 
+          */}
+
+      {/*}
+        <Text fontSize="lg" color="primary.2400">
+              Personal log
             </Text>
           </Button>
         </Link>
@@ -93,11 +103,14 @@ const FeedHeader = (props) => {
           <Input placeholder = "Search" w = "400px" />
         </InputGroup>
         </Box>
-      </HStack>
+        </HStack>
+      */}
+
       <Box
         display={{ base: show ? "block" : "none", md: "block" }}
         flexBasis={{ base: "100%", md: "auto" }}
-      >
+      > 
+
         <Flex align="center" color="primary.2400" fontFamily="body">
           <MenuItem to="/">
             <Button
