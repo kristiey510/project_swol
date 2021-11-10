@@ -1,0 +1,141 @@
+const Users = [
+  {
+    id:1,
+    profilePicture: "assets/user/girl_1.png",
+    username: "Safak Kocaoglu",
+  },
+  {
+    id:2,
+    profilePicture: "assets/user/girl_2.png",
+    username: "Janell Shrum",
+  },
+  {
+    id:3,
+    profilePicture: "assets/user/girl_3.png",
+    username: "Alex Durden",
+  },
+  {
+    id:4,
+    profilePicture: "assets/user/girl_4.png",
+    username: "Dora Hawks",
+  },
+  {
+    id:5,
+    profilePicture: "assets/user/guy_1.png",
+    username: "Thomas Holden",
+  },
+  {
+    id:6,
+    profilePicture: "assets/user/guy_2.png",
+    username: "Shirley Beauchamp",
+  },
+  {
+    id:7,
+    profilePicture: "assets/user/guy_3.png",
+    username: "Travis Bennett",
+  },
+  {
+    id:8,
+    profilePicture: "assets/user/guy_4.png",
+    username: "Kristen Thomas",
+  },
+  {
+    id:9,
+    profilePicture: "assets/user/guy_1.png",
+    username: "Gary Duty",
+  },
+  {
+    id:10,
+    profilePicture: "assets/user/girl_1.png",
+    username: "Safak Kocaoglu",
+  },
+];
+
+const Posts = [
+  {
+    id: 1,
+    desc: "Love For All, Hatred For None.",
+    photo: "assets/landing_page/running.png",
+    date: "5 mins ago",
+    userId: 1,
+    like: 32,
+    comment: 9,
+  },
+  {
+    id: 2,
+    photo: "assets/landing_page/weights.png",
+    date: "15 mins ago",
+    userId: 2,
+    like: 2,
+    comment: 1,
+  },
+  {
+    id: 3,
+    desc: "Every moment is a fresh beginning.",
+    photo: "assets/landing_page/running.png",
+    date: "1 hour ago",
+    userId: 3,
+    like: 61,
+    comment: 2,
+  },
+  {
+    id: 4,
+    photo: "assets/landing_page/weights.png",
+    date: "4 hours ago",
+    userId: 4,
+    like: 7,
+    comment: 3,
+  },
+  {
+    id: 5,
+    photo: "assets/landing_page/running.png",
+    date: "5 hours ago",
+    userId: 5,
+    like: 23,
+    comment: 5,
+  },
+  {
+    id: 6,
+    photo: "assets/landing_page/weights.png",
+    date: "1 day ago",
+    userId: 6,
+    like: 44,
+    comment: 6,
+  },
+  {
+    id: 7,
+    desc: "Never regret anything that made you smile.",
+    photo: "assets/landing_page/running.png",
+    date: "2 days ago",
+    userId: 7,
+    like: 52,
+    comment: 3,
+  },
+  {
+    id: 8,
+    photo: "assets/landing_page/weights.png",
+    date: "3 days ago",
+    userId: 8,
+    like: 15,
+    comment: 1,
+  },
+  {
+    id: 9,
+    desc: "Change the world by being yourself.",
+    photo: "assets/landing_page/running.png",
+    date: "5 days ago",
+    userId: 9,
+    like: 11,
+    comment: 2,
+  },
+  {
+    id: 10,
+    photo: "assets/landing_page/weights.png",
+    date: "1 week ago",
+    userId: 10,
+    like: 104,
+    comment: 12,
+  },
+];
+
+export { Users, Posts };

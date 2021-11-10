@@ -1,19 +1,19 @@
 import React from "react";
-import { Flex } from "@chakra-ui/react";
-import FeedHeader from "../components/sections/FeedHeader"
+import Feed from "../components/sections/Feed/Feed"
+import Rightbar from "../components/sections/Rightbar/Rightbar"
+import Sidebar from "../components/sections/Sidebar/Sidebar"
+import Topbar from "../components/sections/Topbar/Topbar"
+import "./Dashboard.css"
 
 export default function Dashboard() {
   return (
-
-    <Flex
-      direction="column"
-      align="center"
-      maxW={{ xl: "1200px" }}
-      m="0 auto"
-    >
-    <FeedHeader/>
-    
-    </Flex>
-   
+    <>
+    <Topbar/>
+    <div className="homeContainer">
+      <Sidebar/>
+      <Feed/>
+      <Rightbar/>
+    </div>
+    </>
   );
 }
