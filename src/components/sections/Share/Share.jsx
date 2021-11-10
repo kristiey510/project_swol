@@ -1,9 +1,9 @@
 import React from 'react'
 import "./Share.css"
 import {
-    PermMedia, 
-    Label,Room, 
-    EmojiEmotions
+    PermMedia,  
+    EmojiEmotions,
+    AddCircleOutline
 } from "@material-ui/icons"
 
 export default function Share() {
@@ -22,19 +22,15 @@ export default function Share() {
               <div className="shareOptions">
                   <div className="shareOption">
                       <PermMedia htmlColor="tomato" className="shareIcon"/>
-                      <span className="shareOptionText">Photo or Video</span>
+                      <span className="shareOptio nText">Add photos</span>
                   </div>
                   <div className="shareOption">
-                      <Label htmlColor="blue" className="shareIcon"/>
-                      <span className="shareOptionText">Tag</span>
-                  </div>
-                  <div className="shareOption">
-                      <Room htmlColor="green" className="shareIcon"/>
-                      <span className="shareOptionText">Location</span>
+                      <AddCircleOutline htmlColor="goldenrod" className="shareIcon"/>
+                      <span className="shareOptionText">Add activities</span>
                   </div>
                   <div className="shareOption">
                       <EmojiEmotions htmlColor="goldenrod" className="shareIcon"/>
-                      <span className="shareOptionText">Feelings</span>
+                      <span className="shareOptionText">Share feelings</span>
                   </div>
               </div>
               <button className="shareButton">Share</button>

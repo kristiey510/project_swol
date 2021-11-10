@@ -2,10 +2,11 @@ import React from 'react'
 import "./Sidebar.css"
 import {
     RssFeed,
-    Chat,
     PlayCircleFilledOutlined,
+    PostAddOutlined,
     ScheduleOutlined,
-    HelpOutline
+    HelpOutline,
+    Person
 } from "@material-ui/icons"
 
 export default function Sidebar() {
@@ -18,12 +19,16 @@ export default function Sidebar() {
                         <span className="sidebarListItemNext">Feed</span>
                     </li>
                     <li className="sidebarListsItems">
-                        <Chat className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Chats</span>
+                        <Person className="sidebarIcon"/>
+                        <span className="sidebarListItemNext">Followers</span>
                     </li>
                     <li className="sidebarListsItems">
                         <PlayCircleFilledOutlined className="sidebarIcon"/>
                         <span className="sidebarListItemNext">Videos</span>
+                    </li>
+                    <li className="sidebarListsItems">
+                        <PostAddOutlined className="sidebarIcon"/>
+                        <span className="sidebarListItemNext">Personal log</span>
                     </li>
                     <li className="sidebarListsItems">
                         <ScheduleOutlined className="sidebarIcon"/>
@@ -34,7 +39,6 @@ export default function Sidebar() {
                         <span className="sidebarListItemNext">Questions</span>
                     </li>
                 </ul>
-                <button className="sidebarButton">Show More</button>
                 <hr className="sidebarHr" />
                 <ul className="sidebarFriendList">
                     <li className="sidebarFriend">
