@@ -8,6 +8,7 @@ import {
     HelpOutline,
     Person
 } from "@material-ui/icons"
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
     return (
@@ -16,19 +17,21 @@ export default function Sidebar() {
                 <ul className="sidebarLists">
                     <li className="sidebarListsItems">
                         <RssFeed className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Feed</span>
+                        <Link to="./dashboard">
+                            <span className="sidebarListItemNext">Feed</span>
+                        </Link>
                     </li>
                     <li className="sidebarListsItems">
                         <Person className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Followers</span>
-                    </li>
-                    <li className="sidebarListsItems">
-                        <PlayCircleFilledOutlined className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Videos</span>
+                        <Link to="./personal_log">
+                            <span className="sidebarListItemNext">Followers</span>
+                        </Link>
                     </li>
                     <li className="sidebarListsItems">
                         <PostAddOutlined className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Personal log</span>
+                        <Link to="./personal_log">
+                            <span className="sidebarListItemNext">Personal log</span>
+                        </Link>
                     </li>
                     <li className="sidebarListsItems">
                         <ScheduleOutlined className="sidebarIcon"/>
@@ -36,7 +39,9 @@ export default function Sidebar() {
                     </li>
                     <li className="sidebarListsItems">
                         <HelpOutline className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Questions</span>
+                        <Link to="./faq">
+                            <span className="sidebarListItemNext">Questions</span>
+                        </Link>
                     </li>
                 </ul>
                 <hr className="sidebarHr" />
