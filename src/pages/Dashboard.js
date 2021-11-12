@@ -3,6 +3,7 @@ import Feed from "../components/sections/Feed/Feed"
 import Rightbar from "../components/sections/Rightbar/Rightbar"
 import Sidebar from "../components/sections/Sidebar/Sidebar"
 import Topbar from "../components/sections/Topbar/Topbar"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./Dashboard.css"
 
 export default function Dashboard() {

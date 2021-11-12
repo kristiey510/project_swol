@@ -23,10 +23,6 @@ export default function Sidebar() {
                         <span className="sidebarListItemNext">Followers</span>
                     </li>
                     <li className="sidebarListsItems">
-                        <PlayCircleFilledOutlined className="sidebarIcon"/>
-                        <span className="sidebarListItemNext">Videos</span>
-                    </li>
-                    <li className="sidebarListsItems">
                         <PostAddOutlined className="sidebarIcon"/>
                         <span className="sidebarListItemNext">Personal log</span>
                     </li>
