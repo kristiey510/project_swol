@@ -56,7 +56,7 @@ export default function Feed({user}) {
       const user = docSnap.data();
       //loop through follows
 
-      user.following.forEach((u) => {
+      user.following?.forEach((u) => {
         const postQuery = query(collection(db, "test"), where("usr", "==", u));
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
