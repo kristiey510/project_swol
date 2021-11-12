@@ -6,13 +6,13 @@ import Topbar from "../components/sections/Topbar/Topbar"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./Dashboard.css"
 
-export default function Dashboard() {
+export default function Dashboard({user}) {
   return (
     <>
     <Topbar/>
     <div className="homeContainer">
       <Sidebar/>
-      <Feed/>
+      <Feed user = {user}/>
       <Rightbar/>
     </div>
     </>

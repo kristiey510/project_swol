@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
@@ -12,21 +12,29 @@ import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
 import {auth, onAuthStateChanged} from "./firebase/firebase";
 import AddFriend from "./pages/AddFriend";
-import SignedIn from "./SignedIn";
-import NotSignedIn from "./NotSignedIn";
 
-function App() {
-  const [user, setUser] = useState(null);
-  auth.onAuthStateChanged((u) => {
-    if (u) {
-      setUser(u);
-      //console.log("user",user)
-      //window.location = "/dashboard";
-    } else setUser(null)
-  })
+function NotSignedIn() {
 
 
-  return user ? <SignedIn user = {user}/> : <NotSignedIn />;
+
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Landing />
+        </Route>
+        <Route path="/signup">
+          <CreateAccount />
+        </Route>
+        <Route path="/login">
+          <LogIn />
+        </Route>
+        <Route path={"/forgot_pass"}>
+          <ForgotPass />
+        </Route>
+      </Switch>
+    </Router>
+  );
 }
 
-export default App;
+export default NotSignedIn;

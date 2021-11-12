@@ -23,6 +23,7 @@ import {
  InputRightAddon,
  FormHelperText, EditableInput, EditablePreview, IconButton, ButtonGroup, InputGroup, InputLeftAddon,VisuallyHidden
 } from "@chakra-ui/react";
+import Topbar from "../components/sections/Topbar/Topbar"
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from "prop-types";
 import { doc, setDoc, db, collection, addDoc, updateDoc, auth, getDoc, getStorage, uploadBytes, ref, getDownloadURL } from "../firebase/firebase";
@@ -104,8 +105,8 @@ const handleImage = async(event) => {
 }
 
 return (
-	<Flex direction="column" align = "center" maxW={{ xl: "1200px" }} m="auto"> 
-		<FeedHeader />
+	<Flex direction="column" align = "center"  m="auto"> 
+		<Topbar/>
     <Flex mt = "30px" ml = "-230px" >
      <Image id = "myimg" h = "200px" w = "200px" bg = "transparent" mt = "80px" mr = "80px" borderRadius="full"/>
 		<Box rounded={'xl'} mt = "38" w = "680px" h = "600"> 

@@ -26,18 +26,18 @@ import {
   orderBy
   } from "../../../firebase/firebase";
 
-export default function Feed() {
-
+export default function Feed({user}) {
   const [posts, setPosts] = useState([]);
   const [images, setImages] = useState([]);
 
 
-  //console.log("og",posts);
 
 
-  //var postDict = ["Morning run in lullwater","Cool bike ride on the beltline","Swam at the SAAC"]
   //var currentUser = auth.currentUser;
-  var currentUser = "Y5sAEElg7cUOAdrswinf8Swrs443"
+  //var currentUser = "Y5sAEElg7cUOAdrswinf8Swrs443"
+  //console.log("user1",user1)
+  var currentUser = user
+  // console.log("current user",currentUser)
   //how to make sure user is validated?
 
   //console.log(currentUser);
@@ -46,7 +46,8 @@ export default function Feed() {
   //console.log("user",auth.currentUser);
 
   useEffect(async() => {
-    await getDoc(doc(db, "Profile", currentUser)).then(async(docSnap) => {
+    
+    await getDoc(doc(db, "Profile", currentUser.uid)).then(async(docSnap) => {
     if (docSnap.exists()) {
       var postDict = [];
       var count = 0;
@@ -59,7 +60,6 @@ export default function Feed() {
         const postQuery = query(collection(db, "test"), where("usr", "==", u));
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
-            console.log()
             var new_obj = {}
             if(doc.data().img != 'no_image_provided'){
             
@@ -80,17 +80,24 @@ export default function Feed() {
               new_obj = { ...doc.data(), imgUrl: null }
               setPosts(prev => [...prev, new_obj]);
             }
-
-
+            
             // setPosts(prev => [...prev, doc.data()]);
           });
         })
+        // const profileQuery = query(collection(db, "Profile"), where("User_id", "==", u));
+        // getDocs(profileQuery).then(querySnapshot => {
+        //   querySnapshot.forEach((doc) => {
+        //     console.log("user",doc.data())
+        //   });
+        // })
       })
 
       // console.log("before", posts);
       // setPosts(postDict);
       // console.log("this2",posts);
       // //return postDict;
+      //get display name and profile picture
+
     } else {
       console.log("No such document!");
       return [{desc:'no posts'}];
@@ -98,9 +105,6 @@ export default function Feed() {
     })
     
   }, [])
-
-
-  console.log("posts",posts)
 
   return (
     <div className="Feed">
