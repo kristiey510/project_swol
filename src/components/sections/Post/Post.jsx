@@ -24,6 +24,9 @@ import {
   getDocs,
   orderBy
   } from "../../../firebase/firebase";
+  import { 
+    Text
+  } from "@chakra-ui/react";
 
 export default function Post({ post }) {
   const [like,setLike] = useState(post.like)
@@ -120,7 +123,11 @@ export default function Post({ post }) {
           <div className="postBottomLeft">
             <img className="likeIcon" src="assets/like.png" onClick={handleLike} alt="" />
             <img className="likeIcon" src="assets/heart.png" onClick={handleLike} alt="" />
-            <span className="postLikeCounter">{post?.likes} people like it</span>
+            <span className="postLikeCounter"> {post?.likes == 1 ?
+                            <Text>{post?.likes} person likes it</Text>
+                            :
+                            <Text> {post?.likes} people like it </Text>}
+                            </span>
           </div>
           <div className="postBottomRight">
             <span className="postCommentText">{post?.comment} comments</span>

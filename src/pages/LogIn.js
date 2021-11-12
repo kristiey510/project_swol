@@ -41,6 +41,7 @@ export default function LogIn({
   const handleLogin = async () => {
     try {
       await logIn(auth, input.email, input.password);
+      window.location = "/dashboard"
     } catch ({ code }) {
       setErrs({ email: "", password: "", ...errors[code] });
       alert(code);
@@ -55,12 +56,12 @@ export default function LogIn({
 
   const onSubmit = async () => {
     await handleLogin();
-    var state = auth.onAuthStateChanged((user)=> {
-        if (state) state();
-        if (user){
-          window.location = "/dashboard"
-        }
-    });
+    // var state = auth.onAuthStateChanged((user)=> {
+    //     if (state) state();
+    //     if (user){
+    //       window.location = "/dashboard"
+    //     }
+    // });
   };
 
 

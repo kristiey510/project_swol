@@ -5,13 +5,13 @@ import Sidebar from "../components/sections/Sidebar/Sidebar"
 import Topbar from "../components/sections/Topbar/Topbar"
 import "./Dashboard.css"
 
-export default function Dashboard() {
+export default function Dashboard({user}) {
   return (
     <>
     <Topbar/>
     <div className="homeContainer">
       <Sidebar/>
-      <Feed/>
+      <Feed user = {user}/>
       <Rightbar/>
     </div>
     </>
