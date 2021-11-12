@@ -8,10 +8,14 @@ import {Menu, MenuButton, IconButton, MenuList, MenuItem, Button, MenuDivider} f
 
 
 
-const exit = () => {
-  signOut(auth);
-  alert("You are signed out.");
-  window.location = "/"
+const exit = async() => {
+  try {
+    await auth.signOut();
+    alert("You are signed out.");
+    window.location = "/"
+  } catch (err) {
+    console.log("err", err);
+  }
 };
 
 export default function Topbar() {
