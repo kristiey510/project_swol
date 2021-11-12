@@ -102,10 +102,11 @@ export default function Post({ post }) {
               src={Users.filter((u) => u.id === post?.userId)[0].profilePicture}
               alt=""
             /> */}
-            {/* <span className="postUsername">
-              {Users.filter((u) => u.id === post?.userId)[0].username}
-            </span> */}
-            <span className="postDate">{post?.date}</span>
+            <span className="postUsername">
+              {post?.usr}
+            </span>
+            <span className="postDate">{new Date(post?.timestamp.seconds*1000).toISOString().substring(0,10) + '\xa0' + "@" + '\xa0'}</span>
+            <span className="postDate">{new Date(post?.timestamp.seconds*1000).toISOString().substring(11,19)}</span>
           </div>
           <div className="postTopRight">
             <MoreVert />
@@ -113,7 +114,7 @@ export default function Post({ post }) {
         </div>
         <div className="postCenter">
           <span className="postText">{post?.desc}</span>
-          <img className="postImg" src={post?.photo} alt="" />
+          <img className="postImg" src={post?.imgUrl} alt="" />
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box, Flex, Text, Button, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, Button } from "@chakra-ui/react";
 import Logo from "../ui/Logo";
 
 // eslint-disable-next-line react/prop-types
@@ -21,14 +21,17 @@ const Header = (props) => {
   const show = React.useState(false);
   return (
     <Flex
-      mt = "13px"
+      as = "nav"
+      align = "center"
+      justify = "space-between"
+      wrap = "wrap"
+      w = "115%"
+      mt = "2"
       pt = "2"
-      mb = "25px"
       color = {["white", "white", "primary.700", "primary.700"]}
       {...props}
-
     >
-      <HStack ml ="5 px" w = "1400px">
+      <Flex align = "center">
         <Link to = "./">
           <Button
             color = "primary.150"
@@ -39,25 +42,23 @@ const Header = (props) => {
             variant ="link"
           >
           <Logo
-           w = "300px"
-           color = "primary.2400"
-           h = "80px"
-         />
+            w = "200px"
+            color = "primary.2400"
+          />
          </Button>
         </Link>
-      </HStack>
-     <Box
+      </Flex>
+      <Box
         display = {{ base: show ? "block" : "none", md: "block" }}
         flexBasis = {{ base: "100%", md: "auto" }}
       >
-     <Flex
-        align = "center"
-        color = "primary.2400"
-        fontFamily = "body"
+        <Flex
+          align = "center"
+          color = "primary.2400"
+          fontFamily = "body"
         >
           <MenuItem to = "/About_us">
             <Button
-              mt = "20px"
               size = "100px"
               fontWeight = "bold"
               rounded = "lg"
@@ -69,9 +70,8 @@ const Header = (props) => {
               About Us
             </Button>
           </MenuItem>
-     </Flex>
-    </Box>
-     
+        </Flex>
+      </Box>
     </Flex>
   );
 };

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "./Share.css"
 import {
-    PermMedia, 
-    Label,Room, 
-    EmojiEmotions
+    PermMedia,  
+    EmojiEmotions,
+    AddCircleOutline
 } from "@material-ui/icons"
 import { v4 as uuidv4 } from 'uuid';
 import { 
@@ -98,6 +98,12 @@ export default function Share() {
     //     //no likes for now
     //     likes: 0
     // });
+
+
+    //clear field
+    const descInput = document.getElementById('mainInput');
+    descInput.value = "";
+
     //no image log
     if(image == null){
       console.log("no image provided")
@@ -115,44 +121,43 @@ export default function Share() {
     const imageRef = ref(storage, filename);
     uploadBytes(imageRef, image).then((snapshot) => {
         console.log('Uploaded a blob or file!');
+    //clear field?
+    
     });
 };
 
-    return (
-      <div className="Share">
-        <div className="shareWrapper">
-          <div className="shareTop">
-            <img className="shareProfileImg" src="/assets/user/guy_1.png" alt="" />
-            <input
-              placeholder="What's in your mind?"
-              className="shareInput"
-              value={input.desc} 
-              onChange={(event) => handleChange("desc", event.target.value)} 
-            />
-          </div>
-          <hr className="shareHr"/>
-          <div className="shareBottom">
-              <div className="shareOptions">
-                  <div className="shareOption">
-                      <PermMedia htmlColor="tomato" className="shareIcon"/>
-                      <span className="shareOptionText">Photo or Video</span>
-                  </div>
-                  <div className="shareOption">
-                      <Label htmlColor="blue" className="shareIcon"/>
-                      <span className="shareOptionText">Tag</span>
-                  </div>
-                  <div className="shareOption">
-                      <Room htmlColor="green" className="shareIcon"/>
-                      <span className="shareOptionText">Location</span>
-                  </div>
-                  <div className="shareOption">
-                      <EmojiEmotions htmlColor="goldenrod" className="shareIcon"/>
-                      <span className="shareOptionText">Feelings</span>
-                  </div>
-              </div>
-              <button className="shareButton" onClick={handleMakePost} >Share</button>
-          </div>
-        </div>
+return (
+  <div className="Share">
+    <div className="shareWrapper">
+      <div className="shareTop">
+        <img className="shareProfileImg" src="/assets/user/guy_1.png" alt="" />
+        <input
+          id = "mainInput"
+          placeholder="What's in your mind?"
+          className="shareInput"
+          value={input.desc} 
+          onChange={(event) => handleChange("desc", event.target.value)} 
+        />
       </div>
-    );
-  }
+      <hr className="shareHr"/>
+      <div className="shareBottom">
+          <div className="shareOptions">
+              <div className="shareOption">
+                  <PermMedia htmlColor="tomato" className="shareIcon"/>
+                  <span className="shareOptio nText">Add photos</span>
+              </div>
+              <div className="shareOption">
+                  <AddCircleOutline htmlColor="goldenrod" className="shareIcon"/>
+                  <span className="shareOptionText">Add activities</span>
+              </div>
+              <div className="shareOption">
+                  <EmojiEmotions htmlColor="goldenrod" className="shareIcon"/>
+                  <span className="shareOptionText">Share feelings</span>
+              </div>
+          </div>
+          <button className="shareButton" onClick={handleMakePost} >Share</button>
+      </div>
+    </div>
+  </div>
+);
+}

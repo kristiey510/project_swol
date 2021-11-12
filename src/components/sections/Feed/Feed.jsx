@@ -60,6 +60,7 @@ export default function Feed() {
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
             console.log()
+            var new_obj = {}
             if(doc.data().img != 'no_image_provided'){
             
               //console.log("image", doc.data().img);
@@ -71,15 +72,17 @@ export default function Feed() {
               //download, then set attribute to image tag in file
               getDownloadURL(pathReference).then((url) => {
                 //console.log("url",url)
-                setImages(prev => [...prev, url]);
+                new_obj = { ...doc.data(), imgUrl: url }
+                setPosts(prev => [...prev, new_obj]);
               })
             }
             else{
-              setImages(prev => [...prev, null]);
+              new_obj = { ...doc.data(), imgUrl: null }
+              setPosts(prev => [...prev, new_obj]);
             }
 
 
-            setPosts(prev => [...prev, doc.data()]);
+            // setPosts(prev => [...prev, doc.data()]);
           });
         })
       })

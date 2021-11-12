@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import "./Topbar.css";
 import Logo from "../../ui/Logo"
-import { Search, Person, Chat, Notifications } from "@material-ui/icons";
+import { Search, Person } from "@material-ui/icons";
 
 export default function Topbar() {
   return (
@@ -13,31 +14,17 @@ export default function Topbar() {
         <div className="searchbar">
           <Search className="searchIcon" />
           <input
-            placeholder="Search for friend, post or video"
+            placeholder="Search for friends, post, or videos"
             className="searchInput"
           />
         </div>
       </div>
       <div className="topbarRight">
-        <div className="topbarLinks">
-          <span className="topbarLink">Homepage</span>
-          <span className="topbarLink">Timeline</span>
-        </div>
-        <div className="topbarIcons">
-          <div className="topbarIconItem">
-            <Person />
-            <span className="topbarIconBadge">1</span>
-          </div>
-          <div className="topbarIconItem">
-            <Chat />
-            <span className="topbarIconBadge">2</span>
-          </div>
-          <div className="topbarIconItem">
-            <Notifications />
-            <span className="topbarIconBadge">1</span>
-          </div>
-        </div>
-        <img src="assets/user/guy_1.png" alt="" className="topbarImg"/>
+        <Link to="./Profile">
+          <button>
+          <img src="assets/user/guy_1.png" alt="" className="topbarImg"/>
+          </button>
+        </Link>
       </div>
     </div>
   );
