@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Post from "../Post/Post";
 import Share from "../Share/Share";
 import "./Feed.css";
-//import { Posts } from "../../../firebase/dummyData";
 import { 
   doc, 
   setDoc, 
@@ -56,7 +55,7 @@ export default function Feed({user}) {
       const user = docSnap.data();
       //loop through follows
 
-      user.following.forEach((u) => {
+      user.following?.forEach((u) => {
         const postQuery = query(collection(db, "test"), where("usr", "==", u));
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
