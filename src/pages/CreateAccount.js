@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "../components/sections/Header";
+import Header from "../components/sections/LandingHeader";
 import {
   Box,
   Button,
@@ -12,19 +12,17 @@ import {
   Spacer,
   FormControl,
   FormErrorMessage,
-  HStack,
   InputRightElement,
-  InputGroup
+  InputGroup,
 } from "@chakra-ui/react";
 import {
   auth,
   createUser,
   sendEmailVerification,
-  onAuthStateChanged,
   updateProfile,
 } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
-import { doc, setDoc, db, collection, addDoc, updateDoc} from "../firebase/firebase";
+import { doc, setDoc, db } from "../firebase/firebase";
 
 export default function CreateAccount({
   title,
@@ -46,14 +44,14 @@ export default function CreateAccount({
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMakeUser = async() => {
-    await setDoc(doc(db, "Profile", auth.currentUser.uid),{
+  const handleMakeUser = async () => {
+    await setDoc(doc(db, "Profile", auth.currentUser.uid), {
       User_id: auth.currentUser.uid,
       Name: auth.currentUser.displayName,
       Email: auth.currentUser.email,
-      Dob: input.dob
+      Dob: input.dob,
     });
-};
+  };
 
   const {
     handleSubmit,
@@ -66,25 +64,29 @@ export default function CreateAccount({
   const handleClickConfirm = () => setShowConfirm(!showConfirm);
 
   const onSubmit = async () => {
-    const userCred = await createUser(auth, input.email, input.password).then(async(userCred)=>{
-     var name = input.firstName.concat(" ", input.lastName);
-      await sendEmailVerification(userCred.user);
-      await updateProfile(auth.currentUser, { displayName: name });
-      await alert("User is created & updated & added to database");
-      await handleMakeUser();
-      var state = auth.onAuthStateChanged((user)=> {
-        if (state) state();
-        if (user){
-          window.location = '/profile_info';
-        }
-    });
-    }).catch((error) => {alert(error.message)});
+    await createUser(auth, input.email, input.password)
+      .then(async (userCred) => {
+        var name = input.firstName.concat(" ", input.lastName);
+        await sendEmailVerification(userCred.user);
+        await updateProfile(auth.currentUser, { displayName: name });
+        alert("User is created & updated & added to database");
+        await handleMakeUser();
+        var state = auth.onAuthStateChanged((user) => {
+          if (state) state();
+          if (user) {
+            window.location = "/profile_info";
+          }
+        });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
     <Flex direction="column" m="0 auto">
       <Header />
-      <Stack spacing={6} align = "center">
+      <Stack spacing={6} align="center">
         <Heading
           as="h1"
           size="2xl"
@@ -105,7 +107,7 @@ export default function CreateAccount({
         >
           {subtitle}
         </Heading>
-        <Box w="300px" h="300px" align="center" >
+        <Box w="300px" h="300px" align="center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack align="center">
               <FormControl isInvalid={errors}>
@@ -170,55 +172,68 @@ export default function CreateAccount({
                 </FormErrorMessage>
 
                 <InputGroup size="md">
-                <Input
-                  mb="5"
-                  id="password"
-                  type={show ? "text" : "password"}
-                  placeholder="Password"
-                  value={input.password}
-                  {...register("password", {
-                    required: "Field is required",
-                    minLength: {
-                      value: 8,
-                      message: "Minimum length should be 8",
-                    },
-                  })}
-                  onChange={(event) =>
-                    handleChange("password", event.target.value)
-                  }
-                  size="sm"
-                />
-                <InputRightElement width="4.3rem">
-                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClick}>
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+                  <Input
+                    mb="5"
+                    id="password"
+                    type={show ? "text" : "password"}
+                    placeholder="Password"
+                    value={input.password}
+                    {...register("password", {
+                      required: "Field is required",
+                      minLength: {
+                        value: 8,
+                        message: "Minimum length should be 8",
+                      },
+                    })}
+                    onChange={(event) =>
+                      handleChange("password", event.target.value)
+                    }
+                    size="sm"
+                  />
+                  <InputRightElement width="4.3rem">
+                    <Button
+                      variant="outline"
+                      mt="-8px"
+                      mr="-7px"
+                      h="1.4rem"
+                      size="xs"
+                      onClick={handleClick}
+                    >
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.password && errors.password.message}
                 </FormErrorMessage>
                 <InputGroup size="md">
-                <Input
-                  mb="5"
-                  id="password"
-                  type={showConfirm ? "text" : "password"}
-                  placeholder="Confirm Password"
-               
-                  {...register("confirm", {
-                    required: "Field is required",
-                    validate: (value) => value === input.password,
-                  })}
-                  onChange={(event) =>
-                    handleChange("password", event.target.value)
-                  }
-                  size="sm"
-                />
-                <InputRightElement width="4.3rem">
-                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClickConfirm}>
-                    {showConfirm ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+                  <Input
+                    mb="5"
+                    id="password"
+                    type={showConfirm ? "text" : "password"}
+                    placeholder="Confirm Password"
+                    {...register("confirm", {
+                      required: "Field is required",
+                      validate: (value) => value === input.password,
+                    })}
+                    onChange={(event) =>
+                      handleChange("password", event.target.value)
+                    }
+                    size="sm"
+                  />
+                  <InputRightElement width="4.3rem">
+                    <Button
+                      variant="outline"
+                      mt="-8px"
+                      mr="-7px"
+                      h="1.4rem"
+                      size="xs"
+                      onClick={handleClickConfirm}
+                    >
+                      {showConfirm ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.confirm && errors.confirm.type === "validate" && (
                     <div className="error">Password must match</div>

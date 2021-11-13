@@ -1,99 +1,77 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState } from "react";
 import "./Post.css";
 import { MoreVert } from "@material-ui/icons";
-import { Users } from "../../../firebase/dummyData";
-import { 
-  doc, 
-  setDoc, 
-  db, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  getStorage, 
-  ref, 
-  uploadBytes, 
-  getDoc, 
-  getDownloadURL,
-  auth, 
+import {
+  doc,
+  db,
+  getDoc,
+  auth,
   updateDoc,
   arrayUnion,
-  query,
-  where,
   increment,
   arrayRemove,
-  getDocs,
-  orderBy
-  } from "../../../firebase/firebase";
-  import { 
-    Text
-  } from "@chakra-ui/react";
+} from "../../../firebase/firebase";
+import { Text } from "@chakra-ui/react";
 
 export default function Post({ post }) {
-  const [like,setLike] = useState(post.like)
-  const [isLiked,setIsLiked] = useState(false)
+  const [like, setLike] = useState(post.like);
+  const [isLiked, setIsLiked] = useState(false);
 
-  const likeHandler =()=>{
-    setLike(isLiked ? like-1 : like+1)
-    setIsLiked(!isLiked)
-  
-  }
-
+  const likeHandler = () => {
+    setLike(isLiked ? like - 1 : like + 1);
+    setIsLiked(!isLiked);
+  };
 
   const handleLike = () => {
     // setLN("");
     var alreadyLiked = false;
     var user = auth.currentUser;
     //if no user
-    if(!user){
+    if (!user) {
       console.log("No user");
       return;
     }
-    console.log('Searching for post to like:');
+    console.log("Searching for post to like:");
     console.log(post.id);
 
-
-    getDoc(doc(db, "test", post.id)).then(docSnap => {
+    getDoc(doc(db, "test", post.id)).then((docSnap) => {
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        const data = docSnap.data(); 
-        //loop through array 
-        for(let i = 0; i<data.likes;i++){
+        const data = docSnap.data();
+        //loop through array
+        for (let i = 0; i < data.likes; i++) {
           //if the user has already liked it
-          if(data.likers[i] == user.uid){
-            console.log("already liked")
+          if (data.likers[i] === user.uid) {
+            console.log("already liked");
             alreadyLiked = true;
           }
-        }   
-        const docRef = doc(db, "test", post.id)
+        }
+        const docRef = doc(db, "test", post.id);
 
-        console.log(alreadyLiked)
+        console.log(alreadyLiked);
         //like post
-        if(alreadyLiked == false){
-          console.log("like")
+        if (alreadyLiked === false) {
+          console.log("like");
           // setLN("Liked Post");
           updateDoc(docRef, {
             likers: arrayUnion(user.uid),
-            likes: increment(1)
+            likes: increment(1),
           });
         }
         //unlike post
-        else{
+        else {
           console.log("unlike");
           // setLN("Unliked Post");
           updateDoc(docRef, {
             likers: arrayRemove(user.uid),
-            likes: increment(-1)
+            likes: increment(-1),
           });
         }
-        
-      } 
-      else {
+      } else {
         console.log("No such document!");
       }
-    })
-  }
-
-    
+    });
+  };
 
   return (
     <div className="post">
@@ -105,11 +83,20 @@ export default function Post({ post }) {
               src={Users.filter((u) => u.id === post?.userId)[0].profilePicture}
               alt=""
             /> */}
-            <span className="postUsername">
-              {post?.usr}
+            <span className="postUsername">{post?.usr}</span>
+            <span className="postDate">
+              {new Date(post?.timestamp.seconds * 1000)
+                .toISOString()
+                .substring(0, 10) +
+                "\xa0" +
+                "@" +
+                "\xa0"}
             </span>
-            <span className="postDate">{new Date(post?.timestamp.seconds*1000).toISOString().substring(0,10) + '\xa0' + "@" + '\xa0'}</span>
-            <span className="postDate">{new Date(post?.timestamp.seconds*1000).toISOString().substring(11,19)}</span>
+            <span className="postDate">
+              {new Date(post?.timestamp.seconds * 1000)
+                .toISOString()
+                .substring(11, 19)}
+            </span>
           </div>
           <div className="postTopRight">
             <MoreVert />
@@ -121,13 +108,26 @@ export default function Post({ post }) {
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img className="likeIcon" src="assets/like.png" onClick={handleLike} alt="" />
-            <img className="likeIcon" src="assets/heart.png" onClick={handleLike} alt="" />
-            <span className="postLikeCounter"> {post?.likes == 1 ?
-                            <Text>{post?.likes} person likes it</Text>
-                            :
-                            <Text> {post?.likes} people like it </Text>}
-                            </span>
+            <img
+              className="likeIcon"
+              src="assets/like.png"
+              onClick={handleLike}
+              alt=""
+            />
+            <img
+              className="likeIcon"
+              src="assets/heart.png"
+              onClick={handleLike}
+              alt=""
+            />
+            <span className="postLikeCounter">
+              {" "}
+              {post?.likes === 1 ? (
+                <Text>{post?.likes} person likes it</Text>
+              ) : (
+                <Text> {post?.likes} people like it </Text>
+              )}
+            </span>
           </div>
           <div className="postBottomRight">
             <span className="postCommentText">{post?.comment} comments</span>

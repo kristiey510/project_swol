@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "../components/sections/Header";
+import Header from "../components/sections/LandingHeader";
 import {
   Box,
   Button,
@@ -14,7 +14,7 @@ import {
   FormControl,
   FormErrorMessage,
   InputRightElement,
-  InputGroup
+  InputGroup,
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
@@ -28,7 +28,6 @@ export default function LogIn({
   ctaCreateAccount,
   ...rest
 }) {
-
   const [input, setInput] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState({ email: "", password: "" });
   const [show, setShow] = React.useState(false);
@@ -41,7 +40,7 @@ export default function LogIn({
   const handleLogin = async () => {
     try {
       await logIn(auth, input.email, input.password);
-      window.location = "/dashboard"
+      window.location = "/dashboard";
     } catch ({ code }) {
       setErrs({ email: "", password: "", ...errors[code] });
       alert(code);
@@ -56,23 +55,12 @@ export default function LogIn({
 
   const onSubmit = async () => {
     await handleLogin();
-    // var state = auth.onAuthStateChanged((user)=> {
-    //     if (state) state();
-    //     if (user){
-    //       window.location = "/dashboard"
-    //     }
-    // });
   };
-
 
   return (
     <Flex direction="column" m="0 auto">
       <Header />
-      <Stack
-        spacing={10}
-        mt="10"
-        align="center"
-      >
+      <Stack spacing={10} mt="10" align="center">
         <Heading
           as="h1"
           size="2xl"
@@ -113,26 +101,33 @@ export default function LogIn({
                   {errors.email && errors.email.message}
                 </FormErrorMessage>
                 <InputGroup size="md">
-                <Input
-                  mb="5"
-                  id="password"
-                  type={show ? "text" : "password"}
-                  placeholder="Password"
-                  value={input.password}
-                  {...register("password", {
-                    required: "Field is required",
-                  })}
-                  onChange={(event) =>
-                    handleChange("password", event.target.value)
-                  }
-                  size="sm"
-                />
-                <InputRightElement width="4.3rem">
-                  <Button variant="outline" mt = "-8px" mr = "-7px" h="1.4rem" size="xs" onClick={handleClick}>
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+                  <Input
+                    mb="5"
+                    id="password"
+                    type={show ? "text" : "password"}
+                    placeholder="Password"
+                    value={input.password}
+                    {...register("password", {
+                      required: "Field is required",
+                    })}
+                    onChange={(event) =>
+                      handleChange("password", event.target.value)
+                    }
+                    size="sm"
+                  />
+                  <InputRightElement width="4.3rem">
+                    <Button
+                      variant="outline"
+                      mt="-8px"
+                      mr="-7px"
+                      h="1.4rem"
+                      size="xs"
+                      onClick={handleClick}
+                    >
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
                 <FormErrorMessage mb="3" fontSize="12px">
                   {errors.password && errors.password.message}
                 </FormErrorMessage>

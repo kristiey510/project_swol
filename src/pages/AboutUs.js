@@ -1,12 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Header from "../components/sections/Header";
+import Header from "../components/sections/LandingHeader";
 import { Flex, Heading, Stack } from "@chakra-ui/react";
 
-//function name needs to be capitalized
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   return (
-    //<Text fontSize="6xl">(6xl) Hello World</Text>
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
       <Header />
       <Stack
