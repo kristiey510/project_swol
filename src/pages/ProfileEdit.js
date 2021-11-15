@@ -12,6 +12,7 @@ import {
   Editable,
   FormLabel,
   FormControl,
+  Stack,
   Image,
   InputRightAddon,
   EditableInput,
@@ -20,6 +21,9 @@ import {
   ButtonGroup,
   InputGroup,
   InputLeftAddon,
+  Checkbox,
+  Text,
+  Select
 } from "@chakra-ui/react";
 import Topbar from "../components/sections/Topbar/Topbar";
 import { v4 as uuidv4 } from "uuid";
@@ -44,6 +48,7 @@ export default function ProfileEdit() {
     weight: "",
     height_in: "",
     height_ft: "",
+    email: ""
   });
   const [image, setImage] = useState(null);
   const [Error, setError] = useState("");
@@ -56,10 +61,12 @@ export default function ProfileEdit() {
             const data = docSnap.data();
             setInput({
               name: data.Name,
+              email: data.Email,
               height_in: data.Height_In,
               height_ft: data.Height_Ft,
               gender: data.Gender,
               weight: data.Weight,
+              dob: data.Dob
             });
             const storage = getStorage();
             await getDownloadURL(ref(storage, data.Picture_id))
@@ -80,10 +87,11 @@ export default function ProfileEdit() {
 
   function EditableControls({ isEditing, onSubmit, onEdit }) {
     return isEditing ? (
-      <ButtonGroup px="18px" py="3px" size="sm">
+      <ButtonGroup px="8px"  size="sm">
         <IconButton
           colorScheme="myblue"
           icon={<CheckIcon />}
+          size="xs"
           onClick={onSubmit}
         />
       </ButtonGroup>
@@ -92,7 +100,7 @@ export default function ProfileEdit() {
         <IconButton
           colorScheme="myblue"
           aria-label="Edit"
-          size="sm"
+          size="xs"
           icon={<EditIcon />}
           onClick={onEdit}
         />
@@ -136,292 +144,66 @@ export default function ProfileEdit() {
 
   return (
     <Flex direction="column" align="center" m="auto">
-      <Topbar />
-      <Flex mt="30px" ml="-230px">
-        <Image
-          id="myimg"
-          h="200px"
-          w="200px"
-          bg="transparent"
-          mt="80px"
-          mr="80px"
-          borderRadius="full"
-        />
-        <Box rounded={"xl"} mt="38" w="680px" h="600">
-          <Heading mt="-5px" align="center" color="primary.2350">
-            {" "}
-            Profile Update{" "}
-          </Heading>
-          <InputGroup mt="60px" ml="20px">
-            <InputLeftAddon
-              color="primary.150"
-              fontSize="md"
-              fontWeight="extrabold"
-              w="100px"
-              bg="primary.3200"
-              ml="5"
-              mr="2"
-            >
-              {" "}
-              Name{" "}
-            </InputLeftAddon>
-            <Editable
-              id="name"
-              fontSize="lg"
-              value={input.name}
-              isPreviewFocusable={false}
-              onChange={(nextValue) => handleChange("name", nextValue)}
-              onSubmit={handleSubmit}
-              color="orange.400"
-              fontWeight="bold"
-            >
-              {(props) => (
-                <HStack>
-                  <EditablePreview
-                    textAlign="center"
-                    ml="3"
-                    mt="1"
-                    minW="423"
-                    maxW="423"
-                    minH="9"
-                    maxH="9"
-                  />
-                  <EditableInput
-                    textAlign="center"
-                    minW="423"
-                    maxW="423"
-                    minH="9"
-                    maxH="9"
-                  />
-                  <EditableControls {...props} />
-                </HStack>
-              )}
-            </Editable>
-          </InputGroup>
-          <Flex>
-            <InputGroup mt="10" ml="20px">
-              <InputLeftAddon
-                align="center"
-                color="primary.150"
-                fontSize="15"
-                fontWeight="extrabold"
-                w="100px"
-                bg="primary.3200"
-                ml="5"
-                mr="2"
-              >
-                {" "}
-                Height (Ft)
-              </InputLeftAddon>
-              <Editable
-                fontSize="md"
-                value={input.height_ft}
-                isPreviewFocusable={false}
-                onChange={(nextValue) => handleChange("height_ft", nextValue)}
-                onSubmit={handleSubmit}
-                color="orange.400"
-                fontWeight="bold"
-              >
-                {(props) => (
-                  <HStack>
-                    <EditablePreview
-                      textAlign="center"
-                      ml="3"
-                      mt="1"
-                      minW="104px"
-                      maxW="104px"
-                      minH="9"
-                      maxH="9"
-                    />
-                    <EditableInput
-                      variant="filled"
-                      textAlign="center"
-                      minW="104px"
-                      maxW="104px"
-                      minH="9"
-                      maxH="9"
-                    />
-                    <EditableControls {...props} />
-                  </HStack>
-                )}
-              </Editable>
-            </InputGroup>
-            <InputGroup mt="10">
-              <InputLeftAddon
-                color="primary.150"
-                fontSize="15"
-                fontWeight="extrabold"
-                w="100px"
-                bg="primary.3200"
-                ml="5px"
-                mr="3"
-              >
-                {" "}
-                Height (In){" "}
-              </InputLeftAddon>
-              <Editable
-                fontSize="md"
-                value={input.height_in}
-                isPreviewFocusable={false}
-                onChange={(nextValue) => handleChange("height_in", nextValue)}
-                onSubmit={handleSubmit}
-                color="orange.400"
-                fontWeight="bold"
-              >
-                {(props) => (
-                  <HStack>
-                    <EditablePreview
-                      textAlign="center"
-                      ml="3"
-                      mt="1"
-                      minW="104px"
-                      maxW="104px"
-                      minH="9"
-                      maxH="9"
-                    />
-                    <EditableInput
-                      textAlign="center"
-                      minW="104px"
-                      maxW="104px"
-                      minH="9"
-                      maxH="9"
-                    />
-                    <EditableControls {...props} />
-                  </HStack>
-                )}
-              </Editable>
-            </InputGroup>
-          </Flex>
-          <InputGroup mt="10" ml="20px">
-            <InputLeftAddon
-              color="primary.150"
-              fontSize="md"
-              fontWeight="extrabold"
-              w="100px"
-              bg="primary.3200"
-              ml="5"
-              mr="2"
-            >
-              {" "}
-              Weight{" "}
-            </InputLeftAddon>
-            <Editable
-              fontSize="md"
-              value={input.weight}
-              isPreviewFocusable={false}
-              onChange={(nextValue) => handleChange("weight", nextValue)}
-              onSubmit={handleSubmit}
-              color="orange.400"
-              fontWeight="bold"
-            >
-              {(props) => (
-                <HStack>
-                  <EditablePreview
-                    textAlign="center"
-                    ml="3"
-                    mt="1"
-                    minW="385"
-                    maxW="385"
-                    minH="9"
-                    maxH="9"
-                  />
-                  <EditableInput
-                    textAlign="center"
-                    ml="3"
-                    minW="385"
-                    maxW="385"
-                    minH="9"
-                    maxH="9"
-                  />
-                  <InputRightAddon
-                    fontSize="md"
-                    fontWeight="extrabold"
-                    w="30px"
-                    h="30px"
-                  >
-                    {" "}
-                    lbs
-                  </InputRightAddon>
-                  <EditableControls {...props} />
-                </HStack>
-              )}
-            </Editable>
-          </InputGroup>
-          <InputGroup w="100px" mt="10" ml="20px">
-            <InputLeftAddon
-              color="primary.150"
-              fontSize="md"
-              fontWeight="extrabold"
-              w="100px"
-              bg="primary.3200"
-              ml="5"
-              mr="10"
-            >
-              {" "}
-              Gender{" "}
-            </InputLeftAddon>
-            <RadioGroup
-              color="primary.2350"
-              fontWeight="bold"
-              mt="10px"
-              value={input.gender}
-            >
-              <HStack spacing="73px">
-                <Radio
-                  value="Female"
-                  size="md"
-                  onChange={(event) =>
-                    handleChange("gender", event.target.value)
-                  }
-                  onClick={handleSubmit}
-                >
-                  Female
-                </Radio>
-                <Radio
-                  value="Male"
-                  size="md"
-                  onChange={(event) =>
-                    handleChange("gender", event.target.value)
-                  }
-                >
-                  Male
-                </Radio>
-                <Radio
-                  value="Other"
-                  size="md"
-                  onChange={(event) =>
-                    handleChange("gender", event.target.value)
-                  }
-                >
-                  Other
-                </Radio>
-                <IconButton
-                  colorScheme="myblue"
-                  aria-label="Edit"
-                  size="sm"
-                  icon={<CheckIcon />}
-                  onClick={handleSubmit}
-                />
-              </HStack>
-            </RadioGroup>
-          </InputGroup>
-          <Box backgroundColor="tomato"></Box>
-
-          <FormControl id="email">
+      <Topbar/>
+      <Flex direction = "row" mt = "50px" boxShadow="lg" borderRadius="lg" >
+      <Box maxW="sm" borderRadius="lg" bg ="#E3EEF9" overflow="hidden" mr = "70px" w = "250px" boxShadow="lg" border = "3px">
+      <Image id = "myimg" h="200px" w="200px" borderRadius = "lg" mt = "20px" ml= "25px" />
+      <Box p="4"> 
+        <Box display="flex" alignItems="baseline" >
+          <Box
+            color="gray.500"
+            fontWeight="semibold"
+            letterSpacing="wide"
+            fontSize="xs"
+            textTransform="uppercase"
+          >
+          Name : 
+          </Box>
+        </Box>
+        <Text fontSize = "sm"> 
+        {input.name}
+        </Text> 
+        <Box 
+          mt = "10px"
+          color="gray.500"
+          fontWeight="semibold"
+          letterSpacing="wide"
+          fontSize="xs"
+          textTransform="uppercase"
+        >
+         Date of Birth:
+        </Box>
+          <Text fontSize = "sm"> 
+          {input.dob}
+          </Text> 
+         <Box
+          mt = "10px"
+          color="gray.500"
+          fontWeight="semibold"
+          letterSpacing="wide"
+          fontSize="xs"
+          textTransform="uppercase"
+        >
+         Email:
+        </Box>
+          <Text fontSize = "sm"> 
+          {input.email}
+          </Text> 
+        <FormControl id="email">
             <FormLabel
-              pt="12.5px"
-              pl="18px"
-              ml="250px"
-              mt="50px"
+              mt = "50px"
+              ml = "20px"
+              pt="12px"
+              pl="15px"
+              bg="primary.3200"
+              color = "white"
               borderRadius="10px"
-              w="200px"
-              h="50px"
+              w="175px"
+              h="40px"
               htmlFor="getFile"
               class="button"
-              bg="primary.3200"
-              color="primary.150"
               fontWeight="bold"
-              fontSize="16"
+              fontSize="10pt"
             >
               Upload Profile Picture
             </FormLabel>
@@ -433,16 +215,162 @@ export default function ProfileEdit() {
               style={{ display: "none" }}
             />
           </FormControl>
+      </Box>
+    </Box>
+        <Box rounded={"xl"}  w="680px" h="600" >
+          <Heading fontSize = "20pt" mt="25px" align="center" color="primary.2350" textTransform= "uppercase" fontWeight = "bold">
+            Profile 
+          </Heading>
+          <HStack align = "space-between" mt = "10px" >
+            <Stack> 
+            <Heading fontSize = "11pt" mt="20px" align="left" color="primary.2350" textTransform= "uppercase" fontWeight = "bold">
+              Personal Info
+            </Heading>
+            <InputGroup py = "5px">
+             <FormLabel mt = "5px" fontSize = "10pt"  w = "125px"> Height (Feet): </FormLabel>
+              <Editable
+                fontSize="sm"
+                value={input.height_ft}
+                isPreviewFocusable={false}
+                onChange={(nextValue) => handleChange("height_ft", nextValue)}
+                onSubmit={handleSubmit}
+                color="orange.400"
+                fontWeight="bold"
+              >
+                {(props) => (
+                  <HStack>
+                  <EditablePreview
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"    
+                  />
+                  <EditableInput
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"   
+               
+                  />
+                  <EditableControls {...props} />
+                </HStack>
+                )}
+              </Editable>
+            </InputGroup>
+            <InputGroup py = "5px" >
+            <FormLabel mt = "5px" fontSize = "10pt" w = "125px"> Height (Inches): </FormLabel>
+              <Editable
+                fontSize="sm"
+                value={input.height_in}
+                isPreviewFocusable={false}
+                onChange={(nextValue) => handleChange("height_in", nextValue)}
+                onSubmit={handleSubmit}
+                color="orange.400"
+                fontWeight="bold"
+              >
+                {(props) => (
+                  <HStack>
+                  <EditablePreview
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"  
+                  />
+                  <EditableInput
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"  
+                  />
+                  <EditableControls {...props} />
+                </HStack>
+                )}
+              </Editable>
+            </InputGroup>
+          <InputGroup py = "5px">
+            <FormLabel mt = "5px" fontSize = "10pt" w = "125px"> Weight (lbs): </FormLabel>
+            <Editable
+              fontSize="sm"
+              value={input.weight}
+              isPreviewFocusable={false}
+              onChange={(nextValue) => handleChange("weight", nextValue)}
+              onSubmit={handleSubmit}
+              color="orange.400"
+              fontWeight="bold"
+            >
+              {(props) => (
+                <HStack>
+                  <EditablePreview
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"  
+                  />
+                  <EditableInput
+                    textAlign="center"
+                    minW= "100px" 
+                    maxW = "100px" 
+                    minH = "25px" 
+                    maxH = "25px"   
+                  />
+                  <EditableControls {...props} />
+                </HStack>
+              )}
+            </Editable>
+          </InputGroup>
+          <InputGroup py = "5px">
+            <FormLabel mt = "5px" fontSize = "10pt" w="125px"> Gender : </FormLabel>
+            <Select w = "100px" fontSize = "sm" h = "25px" value = {input.gender} 
+              onChange={(event) =>handleChange("gender", event.target.value)}>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </Select>
+              <IconButton
+                ml="23px"
+                colorScheme="myblue"
+                aria-label="Edit"
+                size="xs"
+                icon={<CheckIcon />}
+                onClick={handleSubmit}
+              />
+          </InputGroup>
+          <Stack spacing = "10px">
+            <Checkbox size = "sm" defaultIsChecked>Follow requests</Checkbox>
+            <Checkbox size = "sm"> Automatically accept follow requests</Checkbox>
+          </Stack>
+          </Stack>
+          
+          <Stack px = "50px">
+          <Heading fontSize = "11pt" mt="20px" align="left" color="primary.2350" textTransform= "uppercase" fontWeight = "bold">
+              Settings
+          </Heading>
+          <FormLabel py = "5px" fontSize = "9pt"> Old Password : </FormLabel>
+            <Input w = "200px" placeholder="Type in old password" size="xs" type = "password"/>
+          <FormLabel py = "5px" fontSize = "9pt" type = "password"> New Password : </FormLabel>
+            <Input placeholder="New password" size="xs" type = "password"/>
+          <FormLabel py = "5px" fontSize = "9pt"> Confirm New Password : </FormLabel>
+            <Input placeholder="Retype new password" size="xs"/>
+            <Box >
+              <Button ml = "30px" mt = "15px" size = "xs" w = "125px" bg="primary.3200" color="primary.150"> Change Password</Button>
+            </Box>
+          </Stack>
+          </HStack>
           <Link to="/dashboard">
             <Button
-              ml="310px"
-              mt="25px"
+              ml="250px"
+              mt="60px"
               bg="primary.3200"
               color="primary.150"
               fontWeight="bold"
-              fontSize="16"
+              fontSize="13"
             >
-              Done
+              Save Changes
             </Button>
           </Link>
         </Box>

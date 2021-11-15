@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Header from "../components/sections/LandingHeader";
+import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import { v4 as uuidv4 } from "uuid";
 import {
   Button,
@@ -215,7 +215,7 @@ export default function TestPost({
 
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
-      <Header />
+      <LandingHeader />
       <Stack
         spacing={10}
         w={{ base: "10%", md: "120%" }}

@@ -28,6 +28,7 @@ export default function StartingPage({
 }) {
   return (
     <Flex
+      mt = "20px"
       align="center"
       justify={{ base: "center", md: "space-around", xl: "center" }}
       direction={{ base: "column-reverse", md: "row" }}

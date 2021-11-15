@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/sections/LandingHeader";
+import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
   Box,
   Button,
@@ -59,7 +59,7 @@ export default function ProfileCreate() {
 
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
-      <Header />
+      <LandingHeader />
       <Stack
         spacing={10}
         w={{ base: "10%", md: "120%" }}

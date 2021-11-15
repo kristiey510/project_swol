@@ -51,10 +51,9 @@ export default function Topbar() {
           </MenuButton>
           <MenuList bg="#FDEBD0" color="primary.2500" minW="150px" maxW="150px">
             <Link to="./profile">
-              <MenuItem fontWeight="bold">Profile</MenuItem>
-              <MenuDivider />
+              <MenuItem fontSize = "sm" fontWeight="bold">Profile</MenuItem>
             </Link>
-            <MenuItem fontWeight="bold" onClick={exit}>
+            <MenuItem fontSize = "sm" fontWeight="bold" onClick={exit}>
               Log Out
             </MenuItem>
           </MenuList>
