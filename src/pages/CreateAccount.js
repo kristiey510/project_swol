@@ -41,6 +41,7 @@ export default function CreateAccount({
     password: "",
     confirmPass:""
   });
+
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
@@ -51,6 +52,7 @@ export default function CreateAccount({
       Name: auth.currentUser.displayName,
       Email: auth.currentUser.email,
       Dob: input.dob,
+      Picture_id: "default.png"
     });
   };
 
@@ -264,6 +266,7 @@ export default function CreateAccount({
             <Stack spacing={5} align="center">
               <Button
                 id="submit_button"
+                type = "submit"
                 ml = "10px"
                 color="primary.150"
                 borderRadius="10px"

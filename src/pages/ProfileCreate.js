@@ -41,7 +41,7 @@ export default function ProfileCreate() {
     Weight: "",
   });
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [Error, setError] = useState("");
 
   const handleChange = (name, value) => {
@@ -50,8 +50,8 @@ export default function ProfileCreate() {
 
   const { handleSubmit } = useForm();
 
-  const toDash = () => {
-    window.location = "/dashboard";
+  const toDash = async () => {
+  window.location = "/dashboard";
   };
 
   const handleMakeUser = async () => {
@@ -68,6 +68,7 @@ export default function ProfileCreate() {
         Height_In: input.Height_In,
         Gender: input.Gender,
         Weight: input.Weight,
+        Picture_id: image
       });
       alert("User information added to database");
       window.location = "./dashboard";
@@ -75,24 +76,23 @@ export default function ProfileCreate() {
   };
 
 const handleImage = async (event) => {
-console.log(event.target.files[0]);
-setImage(event.target.files[0]);
-console.log("hello");
-const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
-if (!acceptedImageTypes.includes(image.type)) {
-  console.log("wrong file type:", image.type);
-  setError("Error: Not a JPG or PNG");
-  return;
-}
-var filename = uuidv4();
-const storage = getStorage();
-const imageRef = ref(storage, filename);
-await uploadBytes(imageRef, image).then((snapshot) => {
-  console.log("Uploaded a blob or file!");
-});
-await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
-  Picture_id: filename,
-});
+  console.log(event.target.files[0]);
+  setImage(event.target.files[0]);
+  const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
+  if (!acceptedImageTypes.includes(image.type)) {
+    console.log("wrong file type:", image.type);
+    setError("Error: Not a JPG or PNG");
+    return;
+  }
+  var filename = uuidv4();
+  const storage = getStorage();
+  const imageRef = ref(storage, filename);
+  await uploadBytes(imageRef, image).then((snapshot) => {
+    console.log("Uploaded a blob or file!");
+  });
+  await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
+    Picture_id: filename,
+  });
 };
 
   return (
