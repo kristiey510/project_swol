@@ -37,6 +37,9 @@ import {
   uploadBytes,
   ref,
   getDownloadURL,
+  Auth,
+  reauthenticateWithCredential,
+  updatePassword
 } from "../firebase/firebase";
 import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
@@ -51,10 +54,11 @@ export default function ProfileEdit() {
     email: ""
   });
   const [image, setImage] = useState(null);
-  const [Error, setError] = useState("");
+  const [password, setPassword] = useState({old: "", new: "", confirm: ""});
+  const [error, setError] = useState({currPass: "", newPass: ""});
 
   useEffect(() => {
-    async function getUser() {
+    async function getUser(){
       await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(
         async (docSnap) => {
           if (docSnap.exists()) {
@@ -109,6 +113,32 @@ export default function ProfileEdit() {
   }
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleNewPass = (name, value) => {
+    setPassword((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const changePass = async() => {
+    let credential = await Auth.EmailAuthProvider.credential(auth.currentUser.email, password.old);
+    await reauthenticateWithCredential(auth.currentUser, credential).then(async() => {
+      if(password.new != password.confirm){
+        await setError((prev) => ({ ...prev, ["newPass"]: "Make sure passwords match"}));
+      }else if(password.new.length < 8){
+        await setError((prev) => ({ ...prev, ["newPass"]: "Password too short"}));
+      }else if(password.new == password.old){
+        await setError((prev) => ({ ...prev, ["newPass"]: "Same as old password"}));
+      }else{
+        await updatePassword(auth.currentUser, password.new).then(async() =>{
+          await setError((prev) => ({ ...prev, ["currPass"]: ""}));
+          await setError((prev) => ({ ...prev, ["newPass"]: ""}));
+        });
+      }
+    }).catch(async(error) => {
+      await setError((prev) => ({ ...prev, ["currPass"]: "Incorrect Password"}));
+      console.log(error);
+    });
+
   };
 
   const handleSubmit = async () => {
@@ -345,19 +375,20 @@ export default function ProfileEdit() {
             <Checkbox size = "sm"> Automatically accept follow requests</Checkbox>
           </Stack>
           </Stack>
-          
           <Stack px = "50px">
           <Heading fontSize = "11pt" mt="20px" align="left" color="primary.2350" textTransform= "uppercase" fontWeight = "bold">
               Settings
           </Heading>
           <FormLabel py = "5px" fontSize = "9pt"> Old Password : </FormLabel>
-            <Input w = "200px" placeholder="Type in old password" size="xs" type = "password"/>
-          <FormLabel py = "5px" fontSize = "9pt" type = "password"> New Password : </FormLabel>
-            <Input placeholder="New password" size="xs" type = "password"/>
+            <Input w = "200px" placeholder="Type in old password" size="xs" type = "password"  onChange={(event) =>handleNewPass("old", event.target.value)}/>
+            <Text align = "center" fontSize = "xs" color = "red"> {error.currPass}</Text>
+          <FormLabel py = "5px" fontSize = "9pt" > New Password : </FormLabel>
+            <Input placeholder="New password" size="xs" type = "password" onChange={(event) =>handleNewPass("new", event.target.value)}/>
           <FormLabel py = "5px" fontSize = "9pt"> Confirm New Password : </FormLabel>
-            <Input placeholder="Retype new password" size="xs"/>
+            <Input type = "password" placeholder="Retype new password" size="xs" onChange={(event) =>handleNewPass("confirm", event.target.value)}/>
+            <Text align = "center" fontSize = "xs" color = "red"> {error.newPass}</Text>
             <Box >
-              <Button ml = "30px" mt = "15px" size = "xs" w = "125px" bg="primary.3200" color="primary.150"> Change Password</Button>
+              <Button ml = "30px" mt = "15px" size = "xs" w = "125px" bg="primary.3200" color="primary.150" onClick = {changePass}> Change Password</Button>
             </Box>
           </Stack>
           </HStack>

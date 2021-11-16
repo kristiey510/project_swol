@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import * as Auth from "firebase/auth";
 import {
   getFirestore,
   doc,
@@ -29,7 +30,10 @@ import {
   sendEmailVerification,
   signOut,
   onAuthStateChanged,
-  updateProfile
+  updateProfile, 
+  EmailAuthProvider, 
+  reauthenticateWithCredential,
+  updatePassword 
 } from "firebase/auth";
 
 initializeApp({
@@ -71,5 +75,8 @@ export {
   increment,
   arrayRemove, 
   getDocs,
-  orderBy
+  orderBy,
+  Auth,
+  reauthenticateWithCredential,
+  updatePassword 
 };
