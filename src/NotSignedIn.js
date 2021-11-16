@@ -5,6 +5,7 @@ import Landing from "./pages/Landing";
 import CreateAccount from "./pages/CreateAccount";
 import LogIn from "./pages/LogIn";
 import ForgotPass from "./pages/forgotPassword";
+import AboutUs from "./pages/AboutUs";
 
 function NotSignedIn() {
   return (
@@ -21,6 +22,9 @@ function NotSignedIn() {
         </Route>
         <Route path={"/forgot_pass"}>
           <ForgotPass />
+        </Route>
+        <Route path={"/about_us"}>
+          <AboutUs />
         </Route>
       </Switch>
     </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "../components/sections/LandingHeader";
+import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
   Box,
   Button,
@@ -58,8 +58,9 @@ export default function LogIn({
   };
 
   return (
-    <Flex direction="column" m="0 auto">
-      <Header />
+    <Flex direction="column" m="0 auto" align = "center">
+      <LandingHeader />
+      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
       <Stack spacing={10} mt="10" align="center">
         <Heading
           as="h1"
@@ -117,12 +118,14 @@ export default function LogIn({
                   />
                   <InputRightElement width="4.3rem">
                     <Button
-                      variant="outline"
+                      variant="solid"
                       mt="-8px"
                       mr="-7px"
                       h="1.4rem"
-                      size="xs"
+                      size = "xs"
+                      fontSize="6pt"
                       onClick={handleClick}
+                      textTransform ="uppercase"
                     >
                       {show ? "Hide" : "Show"}
                     </Button>
@@ -136,31 +139,34 @@ export default function LogIn({
               </Stack>
               <Stack spacing={5} align="center">
                 <Button
+                  ml = "10px"
                   color="primary.150"
-                  borderRadius="8px"
+                  borderRadius="10px"
                   fontWeight="bold"
-                  type="submit"
-                  py="4"
-                  px="7"
+                  fontSize="10pt"
+                  bg="primary.3200"
+                  w="150px"
+                  h="32px"
                   lineHeight="1"
                   size="md"
-                  bg="primary.3200"
                 >
                   {ctaTextLogIn}
                 </Button>
                 <Spacer />
               </Stack>
             </FormControl>
-            <HStack align="center">
+            <HStack align="center" spacing = "10px">
               <Link to={ctaForgotPass}>
                 <Button
                   color="primary.150"
-                  borderRadius="8px"
+                  borderRadius="10px"
                   fontWeight="bold"
-                  py="2"
-                  px="4"
-                  size="sm"
+                  fontSize="10pt"
                   bg="primary.3200"
+                  w="150px"
+                  h="32px"
+                  lineHeight="1"
+                  size="md"
                 >
                   Forgot Password
                 </Button>
@@ -168,12 +174,14 @@ export default function LogIn({
               <Link to={ctaCreateAccount}>
                 <Button
                   color="primary.150"
-                  borderRadius="8px"
+                  borderRadius="10px"
                   fontWeight="bold"
-                  py="2"
-                  px="4"
-                  size="sm"
+                  fontSize="10pt"
                   bg="primary.3200"
+                  w="150px"
+                  h="32px"
+                  lineHeight="1"
+                  size="md"
                 >
                   Create Account
                 </Button>
@@ -182,6 +190,7 @@ export default function LogIn({
           </form>
         </Box>
       </Stack>
+      </Box>
     </Flex>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
@@ -15,9 +15,23 @@ import {
   HStack,
   Radio,
   RadioGroup,
+  Image,
 } from "@chakra-ui/react";
-import { doc, db, updateDoc, auth } from "../firebase/firebase";
+import {
+  doc,
+  db,
+  updateDoc,
+  auth,
+  getDoc,
+  getStorage,
+  uploadBytes,
+  ref,
+  getDownloadURL,
+} from "../firebase/firebase";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
+import { ArrowBackIcon } from '@chakra-ui/icons'
+
 
 export default function ProfileCreate() {
   const [input, setInput] = useState({
@@ -26,6 +40,10 @@ export default function ProfileCreate() {
     Gender: "",
     Weight: "",
   });
+
+  const [image, setImage] = useState(null);
+  const [Error, setError] = useState("");
+
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
@@ -44,7 +62,6 @@ export default function ProfileCreate() {
       !input.Height_In
     ) {
       alert("You forgot to upload information");
-      window.location = "/profile_info";
     } else {
       await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
         Height_Ft: input.Height_Ft,
@@ -57,42 +74,69 @@ export default function ProfileCreate() {
     }
   };
 
+const handleImage = async (event) => {
+console.log(event.target.files[0]);
+setImage(event.target.files[0]);
+console.log("hello");
+const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
+if (!acceptedImageTypes.includes(image.type)) {
+  console.log("wrong file type:", image.type);
+  setError("Error: Not a JPG or PNG");
+  return;
+}
+var filename = uuidv4();
+const storage = getStorage();
+const imageRef = ref(storage, filename);
+await uploadBytes(imageRef, image).then((snapshot) => {
+  console.log("Uploaded a blob or file!");
+});
+await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
+  Picture_id: filename,
+});
+};
+
   return (
-    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
+    <Flex direction="column" align="center"  m="0 auto">
       <LandingHeader />
+     <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
+       <Link to = "./signup"> 
+       <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
+       </Link>
       <Stack
-        spacing={10}
-        w={{ base: "10%", md: "120%" }}
+        spacing="30px"
         mt="10"
         mb="10"
         align="center"
       >
         <Heading
           as="h1"
-          size="lg"
+          size="md"
           fontWeight="bold"
-          color="#F89880"
+          color="primary.2350"
           textAlign="center"
+          textTransform = "uppercase"
         >
           Fill out additional information
         </Heading>
         <Heading
           as="h2"
-          size="md"
+          size="10pt"
           fontWeight="bold"
-          color="#F89880"
+          color="primary.2350"
           textAlign="center"
         >
           <Text> Welcome !</Text>
         </Heading>
       </Stack>
-      <form onSubmit={handleSubmit(handleMakeUser)}>
-        <FormControl>
-          <FormLabel fontSize="lg" fontWeight="bold" color="#89CFF0">
+      
+      <form onSubmit={handleSubmit(handleMakeUser)} >
+        <FormControl  align = "center">
+        <Box w = "400px">
+          <FormLabel textTransform = "uppercase" fontSize="sm"  fontWeight="bold" color="primary.2350">
             {" "}
-            Height{" "}
+            Height : {" "}
           </FormLabel>
-          <HStack spacing="10px" mb="6">
+          <HStack  spacing="10px" mb="6" >
             <Box w="200px" h="40px">
               <Input
                 id="height_ft"
@@ -115,11 +159,11 @@ export default function ProfileCreate() {
             </Box>
           </HStack>
           <Spacer />
-          <FormLabel fontSize="lg" fontWeight="bold" color="#89CFF0">
+          <FormLabel textTransform = "uppercase" fontSize="sm" fontWeight="bold" color="primary.2350">
             {" "}
-            Weight
+            Weight :
           </FormLabel>
-          <Box w="410px" h="40px" mb="6">
+          <Box w="400px" h="40px" mb="6">
             <Input
               id="weight"
               size="sm"
@@ -127,12 +171,12 @@ export default function ProfileCreate() {
               onChange={(event) => handleChange("Weight", event.target.value)}
             />
           </Box>
-          <FormLabel fontSize="lg" fontWeight="bold" color="#89CFF0" mb="5">
+          <FormLabel textTransform = "uppercase" fontSize="sm" fontWeight="bold" color="primary.2350" mb="5">
             {" "}
-            Gender{" "}
+            Gender :{" "}
           </FormLabel>
-          <RadioGroup color="#F89880" fontWeight="semibold">
-            <HStack spacing="80px">
+          <RadioGroup color = "gray.500" >
+            <HStack spacing="100px">
               <Radio
                 value="Female"
                 size="sm"
@@ -156,34 +200,68 @@ export default function ProfileCreate() {
               </Radio>
             </HStack>
           </RadioGroup>
-        </FormControl>
-        <Box w="410px" h="50px" mt="10" align="center">
-          <Stack>
+          </Box>
+          <FormControl align = "center">
+            <FormLabel
+              mt = "30px"
+              ml = "20px"
+              pt="7px"
+              pl="17px"
+              bg="primary.3200"
+              color = "white"
+              borderRadius="10px"
+              w="175px"
+              h="35px"
+              htmlFor="getFile"
+              type="button"
+              fontWeight="bold"
+              fontSize="10pt"
+              variant = "outline"
+            >
+              Upload Profile Picture
+            </FormLabel>
+            <Input
+              border="transparent"
+              type="file"
+              onChange={handleImage}
+              id="getFile"
+              style={{ display: "none" }}
+            />
+          </FormControl>
+        
+        <Box w="410px" h="35px" mt="15px" align="center">
+          <Stack align = "center">
             <Button
+              ml = "10px"
               type="submit"
               color="primary.150"
-              borderRadius="4px"
+              borderRadius="10px"
               fontWeight="bold"
+              fontSize="10pt"
               bg="primary.3200"
+              w="150px"
+              h="32px"
             >
               Submit
             </Button>
           </Stack>
         </Box>
-      </form>
-      <Link to="/dashboard">
+        <Link to="/dashboard">
         <Button
           onClick={toDash}
           size="xs"
           variant="link"
           color="#89CFF0"
-          borderRadius="4px"
           fontWeight="bold"
           bg="transparent"
         >
           skip for now
         </Button>
       </Link>
+        </FormControl>
+      </form>
+      </Box>
+      
     </Flex>
   );
 }

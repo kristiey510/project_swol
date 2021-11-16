@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Header from "../components/sections/LandingHeader";
+import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import { Flex, Heading, Stack } from "@chakra-ui/react";
 
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   return (
     <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
-      <Header />
+      <LandingHeader/>
       <Stack
         spacing={10}
         w={{ base: "10%", md: "120%" }}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import Header from "../components/sections/LandingHeader";
+import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
   Box,
   Button,
@@ -39,6 +39,7 @@ export default function CreateAccount({
     dob: "",
     email: "",
     password: "",
+    confirmPass:""
   });
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -84,9 +85,10 @@ export default function CreateAccount({
   };
 
   return (
-    <Flex direction="column" m="0 auto">
-      <Header />
-      <Stack spacing={6} align="center">
+    <Flex direction="column" m="0 auto" align = "center">
+      <LandingHeader />
+      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
+      <Stack spacing={6} align="center" mt = "50px">
         <Heading
           as="h1"
           size="2xl"
@@ -192,12 +194,14 @@ export default function CreateAccount({
                   />
                   <InputRightElement width="4.3rem">
                     <Button
-                      variant="outline"
+                      variant="solid"
                       mt="-8px"
                       mr="-7px"
                       h="1.4rem"
-                      size="xs"
+                      size = "xs"
+                      fontSize="6pt"
                       onClick={handleClick}
+                      textTransform ="uppercase"
                     >
                       {show ? "Hide" : "Show"}
                     </Button>
@@ -209,26 +213,24 @@ export default function CreateAccount({
                 <InputGroup size="md">
                   <Input
                     mb="5"
-                    id="password"
                     type={showConfirm ? "text" : "password"}
                     placeholder="Confirm Password"
                     {...register("confirm", {
                       required: "Field is required",
                       validate: (value) => value === input.password,
                     })}
-                    onChange={(event) =>
-                      handleChange("password", event.target.value)
-                    }
                     size="sm"
                   />
                   <InputRightElement width="4.3rem">
                     <Button
-                      variant="outline"
+                      variant="solid"
                       mt="-8px"
                       mr="-7px"
                       h="1.4rem"
-                      size="xs"
+                      size = "xs"
+                      fontSize="6pt"
                       onClick={handleClickConfirm}
+                      textTransform ="uppercase"
                     >
                       {showConfirm ? "Hide" : "Show"}
                     </Button>
@@ -247,13 +249,14 @@ export default function CreateAccount({
             <Stack spacing={5} align="center">
               <Button
                 id="submit_button"
+                ml = "10px"
                 color="primary.150"
+                borderRadius="10px"
                 fontWeight="bold"
-                borderRadius="8px"
-                type="submit"
-                py=""
-                px="7"
+                fontSize="10pt"
                 bg="primary.3200"
+                w="150px"
+                h="32px"
                 lineHeight="1"
                 size="md"
               >
@@ -264,14 +267,17 @@ export default function CreateAccount({
               </FormErrorMessage>
               <Link to={ctaLinkLogIn}>
                 <Button
+                  ml = "10px"
                   color="primary.150"
-                  borderRadius="8px"
+                  borderRadius="10px"
                   fontWeight="bold"
-                  py="4"
-                  px="7"
+                  fontSize="10pt"
+                  bg="primary.3200"
+                  w="150px"
+                  h="32px"
                   lineHeight="1"
                   size="md"
-                  bg="primary.3200"
+
                 >
                   {ctaTextLogIn}
                 </Button>
@@ -280,6 +286,7 @@ export default function CreateAccount({
           </form>
         </Box>
       </Stack>
+      </Box>
     </Flex>
   );
 }
