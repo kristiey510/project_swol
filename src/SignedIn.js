@@ -7,6 +7,7 @@ import TestPost from "./pages/TestPost";
 import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
 import AddFriend from "./pages/AddFriend";
+import Faq from "./pages/Faq";
 
 function SignedIn({ user }) {
   return (
@@ -32,6 +33,9 @@ function SignedIn({ user }) {
         </Route>
         <Route path="/personal_log">
           <AddFriend />
+        </Route>
+        <Route path="/faq">
+          <Faq />
         </Route>
       </Switch>
     </Router>

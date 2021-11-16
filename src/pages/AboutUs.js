@@ -5,7 +5,7 @@ import { Flex, Heading, Stack } from "@chakra-ui/react";
 
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   return (
-    <Flex direction="column" align="center" maxW={{ xl: "1200px" }} m="0 auto">
+    <Flex direction="column" align="center"  m="0 auto">
       <LandingHeader/>
       <Stack
         spacing={10}
