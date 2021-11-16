@@ -118,6 +118,8 @@ export default function CreateAccount({
                   id="firstName"
                   size="sm"
                   placeholder="First Name"
+                  bg = "gray.50"
+                  rounded = "md"
                   {...register("firstName", {
                     required: "Field is required",
                   })}
@@ -129,6 +131,8 @@ export default function CreateAccount({
                   {errors.firstName && errors.firstName.message}
                 </FormErrorMessage>
                 <Input
+                  bg = "gray.50"
+                  rounded = "md"
                   mb="5"
                   id="lastName"
                   size="sm"
@@ -144,6 +148,8 @@ export default function CreateAccount({
                   {errors.lastName && errors.lastName.message}
                 </FormErrorMessage>
                 <Input
+                  bg = "gray.50"
+                  rounded = "md"
                   mb="5"
                   type="text"
                   placeholder="Date of Birth MM/DD/YY"
@@ -157,6 +163,8 @@ export default function CreateAccount({
                   {errors.dob && errors.dob.message}
                 </FormErrorMessage>
                 <Input
+                  bg = "gray.50"
+                  rounded = "md"
                   mb="5"
                   id="email"
                   {...register("email", {
@@ -175,6 +183,8 @@ export default function CreateAccount({
 
                 <InputGroup size="md">
                   <Input
+                    bg = "gray.50"
+                    rounded = "md"
                     mb="5"
                     id="password"
                     type={show ? "text" : "password"}
@@ -197,11 +207,13 @@ export default function CreateAccount({
                       variant="solid"
                       mt="-8px"
                       mr="-7px"
-                      h="1.4rem"
+                      h="1.2rem"
                       size = "xs"
                       fontSize="6pt"
+                      bg = "gray.200"
                       onClick={handleClick}
                       textTransform ="uppercase"
+
                     >
                       {show ? "Hide" : "Show"}
                     </Button>
@@ -212,6 +224,8 @@ export default function CreateAccount({
                 </FormErrorMessage>
                 <InputGroup size="md">
                   <Input
+                    bg = "gray.50"
+                    rounded = "md"
                     mb="5"
                     type={showConfirm ? "text" : "password"}
                     placeholder="Confirm Password"
@@ -223,6 +237,7 @@ export default function CreateAccount({
                   />
                   <InputRightElement width="4.3rem">
                     <Button
+                      bg = "gray.200"
                       variant="solid"
                       mt="-8px"
                       mr="-7px"

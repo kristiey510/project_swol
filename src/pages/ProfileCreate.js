@@ -139,6 +139,8 @@ await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
           <HStack  spacing="10px" mb="6" >
             <Box w="200px" h="40px">
               <Input
+                bg = "gray.50"
+                rounded = "md"
                 id="height_ft"
                 size="sm"
                 placeholder="ft"
@@ -149,6 +151,8 @@ await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
             </Box>
             <Box w="200px" h="40px">
               <Input
+                bg = "gray.50"
+                rounded = "md"
                 id="height_in"
                 size="sm"
                 placeholder="in"
@@ -165,6 +169,8 @@ await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
           </FormLabel>
           <Box w="400px" h="40px" mb="6">
             <Input
+              bg = "gray.50"
+              rounded = "md"
               id="weight"
               size="sm"
               placeholder="lbs"

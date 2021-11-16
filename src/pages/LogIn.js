@@ -87,6 +87,8 @@ export default function LogIn({
             <FormControl isInvalid={errors}>
               <Stack spacing={3} align="center">
                 <Input
+                  bg = "gray.50"
+                  rounded = "md"
                   id="email"
                   value={input.email}
                   placeholder="Email"
@@ -103,6 +105,8 @@ export default function LogIn({
                 </FormErrorMessage>
                 <InputGroup size="md">
                   <Input
+                    bg = "gray.50"
+                    rounded = "md"
                     mb="5"
                     id="password"
                     type={show ? "text" : "password"}
@@ -118,6 +122,7 @@ export default function LogIn({
                   />
                   <InputRightElement width="4.3rem">
                     <Button
+                      bg = "gray.200"
                       variant="solid"
                       mt="-8px"
                       mr="-7px"
@@ -140,6 +145,7 @@ export default function LogIn({
               <Stack spacing={5} align="center">
                 <Button
                   ml = "10px"
+                  type = "submit"
                   color="primary.150"
                   borderRadius="10px"
                   fontWeight="bold"
@@ -208,7 +214,7 @@ LogIn.defaultProps = {
   title: "Log in",
   subtitle: "One step closer to a healthier life",
   ctaTextLogIn: "Log in",
-  ctaLinkLogIn: "/homepage",
+  ctaLinkLogIn: "/dashboard",
   ctaForgotPass: "/forgot_pass",
   ctaCreateAccount: "/signup",
 };
