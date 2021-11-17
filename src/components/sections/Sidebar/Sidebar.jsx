@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import {
   RssFeed,
@@ -8,8 +8,59 @@ import {
   Person,
 } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import {
+  doc,
+  db,
+  collection,
+  getStorage,
+  ref,
+  getDoc,
+  getDownloadURL,
+  query,
+  where,
+  getDocs,
+} from "../../../firebase/firebase";
 
-export default function Sidebar() {
+
+export default function Sidebar({user}) {
+
+  const [friends, setFriends] = useState([]);
+  
+  useEffect(async () => {
+    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+      const user = docSnap.data();
+      //loop through follows
+      user.following.forEach((u) => {
+        const postQuery = query(collection(db, "Profile"), where("User_id", "==", u));
+        getDocs(postQuery).then(querySnapshot => {
+          querySnapshot.forEach((doc) => {
+            var new_obj = {}
+            console.log("friend: ",doc.data())
+            if(doc.data().img != 'no_image_provided'){
+  
+              //get image ref
+              const storage = getStorage();
+              const pathReference = ref(storage, doc.data().Picture_id);
+  
+              //download, then set attribute to image tag in file
+              getDownloadURL(pathReference).then((url) => {
+                console.log("url",url)
+                new_obj = { ...doc.data(), imgUrl: url }
+                setFriends(prev => [...prev, new_obj]);
+              })
+            }
+            else{
+              new_obj = { ...doc.data(), imgUrl: null }
+              setFriends(prev => [...prev, new_obj]);
+            }
+          });
+        })
+      })    
+    })
+  }, []);
+  
+
+
   return (
     <div className="Sidebar">
       <div className="sidebarWrapper">
@@ -45,14 +96,18 @@ export default function Sidebar() {
         </ul>
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-          <li className="sidebarFriend">
+        {console.log("friends",friends)}
+        {friends.map((friend,index) => (
+          <li className="sidebarFriend" key = {index}>
             <img
               className="sidebarFriendImg"
-              src="/assets/user/girl_1.png"
+              id = "proPic"
+              src={friend.imgUrl}
               alt=""
             />
-            <span className="sidebarFriendName">Jane</span>
+            <span className="sidebarFriendName">{friend.Name}</span>
           </li>
+          ))}
         </ul>
       </div>
     </div>

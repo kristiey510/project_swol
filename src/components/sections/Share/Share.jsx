@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Share.css";
 import { PermMedia, EmojiEmotions, AddCircleOutline } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
@@ -12,11 +12,38 @@ import {
   ref,
   uploadBytes,
   auth,
+  getDoc,
+  getDownloadURL
 } from "../../../firebase/firebase";
 
-export default function Share() {
+export default function Share({user}) {
   const [input, setInput] = useState({ title: "", type: "", desc: "" });
   const [image, setImage] = useState(null);
+
+
+  useEffect(async () => {
+    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+      console.log("doc: ",docSnap.data())
+      if (docSnap.data().img !== "no_image_provided") {
+
+        const data = docSnap.data();
+
+        console.log("image", data);
+
+        const img = document.getElementById("profilePicture");
+        console.log(img);
+        //get image ref
+        const storage = getStorage();
+        const pathReference = ref(storage, data.Picture_id);
+
+        //download, then set attribute to image tag in file
+        getDownloadURL(pathReference).then((url) => {
+          img.setAttribute("src", url);
+        });
+
+      }
+    });
+  }, []);
 
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -101,8 +128,9 @@ export default function Share() {
       <div className="shareWrapper">
         <div className="shareTop">
           <img
+            id = "profilePicture"
             className="shareProfileImg"
-            src="/assets/user/guy_1.png"
+            src=""
             alt=""
           />
           <input
@@ -118,7 +146,7 @@ export default function Share() {
           <div className="shareOptions">
             <div className="shareOption">
               <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span className="shareOptio nText">Add photos</span>
+              <span className="shareOptionText">Add photos</span>
             </div>
             <div className="shareOption">
               <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />

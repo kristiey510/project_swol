@@ -61,6 +61,7 @@ export default function Feed({ user }) {
           // })
         });
 
+
         //get display name and profile picture
       } else {
         console.log("No such document!");
@@ -69,10 +70,16 @@ export default function Feed({ user }) {
     });
   }, []);
 
+  //console.log(posts)
+  //sorts by date descending
+  posts.sort((a, b) => {
+    return b.timestamp - a.timestamp;
+  });
+
   return (
     <div className="Feed">
       <div className="feedWrapper">
-        <Share />
+        <Share user = {user} />
         {posts.map((post, index) => (
           <Post key={index} post={post} />
         ))}
