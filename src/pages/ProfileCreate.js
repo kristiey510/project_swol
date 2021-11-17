@@ -1,5 +1,5 @@
 import React, { useState} from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
   Box,
@@ -99,9 +99,9 @@ const handleImage = async (event) => {
     <Flex direction="column" align="center"  m="0 auto">
       <LandingHeader />
      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
-       <Link to = "./signup"> 
+  {/*     <Link to = "./signup"> 
        <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
-       </Link>
+       </Link>*/}
       <Stack
         spacing="30px"
         mt="10"
