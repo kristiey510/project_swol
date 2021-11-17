@@ -155,11 +155,11 @@ export default function ProfileEdit({user}) {
     console.log(event.target.files[0]);
     await setImage(event.target.files[0]);
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
-    if (image.type != null && !acceptedImageTypes.includes(image.type)) {
-      console.log("wrong file type:", await image.type);
-      await setError("Error: Not a JPG or PNG");
-      return;
-    }
+      if (!acceptedImageTypes.includes(event.target.files[0].type)) {
+        console.log("wrong file type:", event.target.files[0].type);
+        await setError("Error: Not a JPG or PNG");
+        return;
+      }
     var filename = uuidv4();
     const storage = getStorage();
     const imageRef = ref(storage, filename);
