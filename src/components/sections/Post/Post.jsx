@@ -114,12 +114,12 @@ export default function Post({ post }) {
               onClick={handleLike}
               alt=""
             />
-            <img
+            {/* <img
               className="likeIcon"
               src="assets/heart.png"
               onClick={handleLike}
               alt=""
-            />
+            /> */}
             <span className="postLikeCounter">
               {" "}
               {post?.likes === 1 ? (
