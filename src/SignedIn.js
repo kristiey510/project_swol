@@ -9,6 +9,7 @@ import ProfileEdit from "./pages/ProfileEdit";
 import AddFriend from "./pages/AddFriend";
 import Faq from "./pages/Faq";
 import CreateAccount from "./pages/CreateAccount";
+import PersonalLog from "./pages/PersonalLog"
 
 function SignedIn({ user }) {
   return (
@@ -33,7 +34,7 @@ function SignedIn({ user }) {
           <ProfileEdit user={user}/>
         </Route>
         <Route path="/personal_log">
-          <AddFriend user={user}/>
+          <PersonalLog user={user}/>
         </Route>
         <Route path="/faq">
           <Faq user={user}/>
