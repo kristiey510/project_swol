@@ -1,62 +1,46 @@
-import React, {useState} from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import * as GiIcons from 'react-icons/gi'
-import * as GrIcons from 'react-icons/gr'
-import * as RiIcons from 'react-icons/ri'
+import React, { useState } from 'react';
+import * as AiIcons from 'react-icons/ai';
+import * as GiIcons from 'react-icons/gi';
+import { Link } from 'react-router-dom';
+import { RightbarData } from './RightbarData';
+import './Rightbar.css';
+import { IconContext } from 'react-icons';
 
-const Nav = styled.div`
-  background: #ffffff;
-  height: 80px;
-  display: flex;
-  flex: 3.5;
-  justify-content: flex-start;
-  align-items: center;
-`;
+function Navbar() {
+  const [rightbar, setRightbar] = useState(false);
 
-const NavIcon = styled(Link)`
-  margin-left: 2rem;
-  font-size: 2rem;
-  height: 8px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const RightbarNav = styled.nav`
-  background: #ffffff;
-  width: 250px;
-  height: 100vh;
-  display: flex;
-  justify-content
-`;
-
-const RightbarWrap = styled.nav`
-  width: 100%
-`;
-
-
-const Rightbar = () => {
-  const [Rightbar, setRightbar] = useState(false)
-
-  const showRightbar = () => setRightbar(!Rightbar)
+  const showRightbar = () => setRightbar(!rightbar);
 
   return (
     <>
-      <Nav>
-        <NavIcon to="#">
-          <GiIcons.GiMuscleUp onClick={showRightbar} />
-        </NavIcon>
-      </Nav>
-      <RightbarNav>
-        <RightbarWrap>
-        <NavIcon to="#">
-          <RiIcons.RiArrowDownSFill />
-        </NavIcon>
-        </RightbarWrap>
-      </RightbarNav>
+      <IconContext.Provider value={{ color: '#000' }}>
+        <div className='navbar'>
+          <Link to='#' className='menu-bars'>
+            <GiIcons.GiMuscleUp onClick={showRightbar} />
+          </Link>
+        </div>
+        <nav className={rightbar ? 'nav-menu active' : 'nav-menu'}>
+          <ul className='nav-menu-items' onClick={showRightbar}>
+            <li className='navbar-toggle'>
+              <Link to='#' className='menu-bars'>
+                <AiIcons.AiOutlineClose />
+              </Link>
+            </li>
+            {RightbarData.map((item, index) => {
+              return (
+                <li key={index} className={item.cName}>
+                  <Link to={item.path}>
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </IconContext.Provider>
     </>
-  )
+  );
 }
 
-export default Rightbar
+export default Rightbar;

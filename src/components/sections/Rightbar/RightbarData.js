@@ -1,42 +1,41 @@
 import React from 'react';
-import * as GiIcons from 'react-icons/gi'
-import * as GrIcons from 'react-icons/gr'
-import * as RiIcons from 'react-icons/ri'
+import * as GiIcons from 'react-icons/gi';
 
 export const RightbarData = [
-    {
-      title: 'Exercise Suggestions',
-      path: '/exerciseSuggestions',
-      icon: <GiIcons.GiMuscleUp />,
-      iconClosed: <RiIcons.RiArrowDownSFill />,
-      iconOpened: <RiIcons.RiArrowUpSFill />,
-  
-      subNav: [
-        {
-          title: 'Biceps',
-          path: '/exerciseSuggestions/biceps',
-          icon: <GiIcons.GiBiceps />,
-        },
-        {
-          title: 'Chest',
-          path: '/exerciseSuggestions/chest',
-          icon: <GiIcons.GiChestArmor />,
-        },
-        {
-            title: 'Back muscle',
-            path: '/exerciseSuggestions/backMuscle',
-            icon: <GiIcons.GiBackPain />,
-        },
-        {
-            title: 'Leg',
-            path: '/exerciseSuggestions/leg',
-            icon: <GiIcons.GiLeg />,
-        },
-        {
-            title: 'Yoga',
-            path: '/exerciseSuggestions/yoga',
-            icon: <GrIcons.GrYoga />,
-        },
-      ]
-    }
-  ];
+  {
+    title: 'Arms',
+    path: '/arms exercise',
+    icon: <GiIcons.GiForearm />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Shoulders',
+    path: '/shoulders exercise',
+    icon: <GiIcons.GiShoulderArmor />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Chest',
+    path: '/chest exercise',
+    icon: <GiIcons.GiChestArmor />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Back',
+    path: '/back exercise',
+    icon: <GiIcons.GiMuscleUp />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Abdominals',
+    path: '/abdomials exercise',
+    icon: <GiIcons.GiAbdominalArmor />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Legs',
+    path: '/legs exercise',
+    icon: <GiIcons.GiLegArmor />,
+    cName: 'nav-text'
+  }
+];
