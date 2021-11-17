@@ -23,15 +23,15 @@ export default function Share({user}) {
 
   useEffect(async () => {
     await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-      console.log("doc: ",docSnap.data())
+      //console.log("doc: ",docSnap.data())
       if (docSnap.data().img !== "no_image_provided") {
 
         const data = docSnap.data();
 
-        console.log("image", data);
+        //console.log("image", data);
 
         const img = document.getElementById("profilePicture");
-        console.log(img);
+        //console.log(img);
         //get image ref
         const storage = getStorage();
         const pathReference = ref(storage, data.Picture_id);

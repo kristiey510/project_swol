@@ -8,9 +8,9 @@ import "./Dashboard.css";
 export default function Dashboard({ user }) {
   return (
     <>
-      <Topbar />
+      <Topbar user={user}/>
       <div className="homeContainer">
-        <Sidebar />
+        <Sidebar user = {user}/>
         <Feed user={user} />
         <Rightbar />
       </div>

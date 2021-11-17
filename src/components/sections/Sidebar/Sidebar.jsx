@@ -35,7 +35,7 @@ export default function Sidebar({user}) {
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
             var new_obj = {}
-            console.log("friend: ",doc.data())
+            //console.log("friend: ",doc.data())
             if(doc.data().img != 'no_image_provided'){
   
               //get image ref
@@ -44,7 +44,7 @@ export default function Sidebar({user}) {
   
               //download, then set attribute to image tag in file
               getDownloadURL(pathReference).then((url) => {
-                console.log("url",url)
+                //console.log("url",url)
                 new_obj = { ...doc.data(), imgUrl: url }
                 setFriends(prev => [...prev, new_obj]);
               })
@@ -96,7 +96,6 @@ export default function Sidebar({user}) {
         </ul>
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-        {console.log("friends",friends)}
         {friends.map((friend,index) => (
           <li className="sidebarFriend" key = {index}>
             <img

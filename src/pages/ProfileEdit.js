@@ -43,7 +43,7 @@ import {
 } from "../firebase/firebase";
 import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
-export default function ProfileEdit() {
+export default function ProfileEdit({user}) {
   const [input, setInput] = useState({
     name: "",
     dob: "",
@@ -174,7 +174,7 @@ export default function ProfileEdit() {
 
   return (
     <Flex direction="column" align="center" m="auto">
-      <Topbar/>
+      <Topbar user = {user}/>
       <Flex direction = "row" mt = "50px" boxShadow="lg" borderRadius="lg" >
       <Box maxW="sm" borderRadius="lg" bg ="#E3EEF9" overflow="hidden" mr = "70px" w = "250px" boxShadow="lg" border = "3px">
       <Image id = "myimg" h="200px" w="200px" borderRadius = "lg" mt = "20px" ml= "25px" />

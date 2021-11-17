@@ -14,28 +14,28 @@ function SignedIn({ user }) {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Dashboard />
+          <Dashboard user={user}/>
         </Route>
         <Route path="/dashboard">
           <Dashboard user={user} />
         </Route>
         <Route path="/About_us">
-          <AboutUs />
+          <AboutUs user={user}/>
         </Route>
         <Route path="/TestPost">
-          <TestPost />
+          <TestPost user={user}/>
         </Route>
         <Route path="/profile_info">
-          <ProfileCreate />
+          <ProfileCreate user={user}/>
         </Route>
         <Route path="/profile">
-          <ProfileEdit />
+          <ProfileEdit user={user}/>
         </Route>
         <Route path="/personal_log">
-          <AddFriend />
+          <AddFriend user={user}/>
         </Route>
         <Route path="/faq">
-          <Faq />
+          <Faq user={user}/>
         </Route>
       </Switch>
     </Router>

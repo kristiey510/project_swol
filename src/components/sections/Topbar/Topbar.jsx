@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Link } from "react-router-dom";
 import "./Topbar.css";
 import Logo from "../../ui/Logo";
 import { Search } from "@material-ui/icons";
-import { auth } from "../../../firebase/firebase";
 import {
   Menu,
   MenuButton,
@@ -12,6 +11,19 @@ import {
   Button,
   MenuDivider,
 } from "@chakra-ui/react";
+import {
+  doc,
+  setDoc,
+  db,
+  collection,
+  serverTimestamp,
+  getStorage,
+  ref,
+  uploadBytes,
+  auth,
+  getDoc,
+  getDownloadURL
+} from "../../../firebase/firebase";
 
 const exit = async () => {
   try {
@@ -23,7 +35,35 @@ const exit = async () => {
   }
 };
 
-export default function Topbar() {
+export default function Topbar({user}) {
+
+  useEffect(async () => {
+    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+      //console.log("doc: ",docSnap.data())
+      if (docSnap.data().img !== "no_image_provided") {
+
+        const data = docSnap.data();
+
+        //console.log("image", data);
+
+        const img = document.getElementById("propic3");
+        //console.log(img);
+        //get image ref
+        const storage = getStorage();
+        const pathReference = ref(storage, data.Picture_id);
+
+        //download, then set attribute to image tag in file
+        getDownloadURL(pathReference).then((url) => {
+          img.setAttribute("src", url);
+        });
+
+      }
+    });
+  }, []);
+
+
+
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -44,7 +84,8 @@ export default function Topbar() {
         <Menu>
           <MenuButton as={Button} colorScheme="transparent">
             <img
-              src="assets/user/guy_1.png"
+              id = "propic3"
+              src=""
               alt="Just a dude"
               className="topbarImg"
             />
