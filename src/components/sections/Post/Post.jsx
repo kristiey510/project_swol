@@ -78,22 +78,19 @@ export default function Post({ post }) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            {/* <img
+            <img
               className="postProfileImg"
-              src={Users.filter((u) => u.id === post?.userId)[0].profilePicture}
+              src={post?.propic}
               alt=""
-            /> */}
-            <span className="postUsername">{post?.usr}</span>
+            />
+            <span className="postUsername">{post?.username}</span>
             <span className="postDate">
-              {new Date(post?.timestamp.seconds * 1000)
+              {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
                 .substring(0, 10) +
                 "\xa0" +
-                "@" +
-                "\xa0"}
-            </span>
-            <span className="postDate">
-              {new Date(post?.timestamp.seconds * 1000)
+                "@" + "\xa0" } 
+                {new Date(post?.timestamp.seconds * 1000)
                 .toISOString()
                 .substring(11, 19)}
             </span>
