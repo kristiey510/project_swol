@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Topbar.css";
 import Logo from "../../ui/Logo";
 import { Search } from "@material-ui/icons";
-import { auth } from "../../../firebase/firebase";
+import { 
+  doc,
+  db,
+  updateDoc,
+  auth,
+  getDoc,
+  getStorage,
+  ref,
+  getDownloadURL,
+} from "../../../firebase/firebase";
 import {
   Menu,
   MenuButton,
@@ -11,9 +20,11 @@ import {
   MenuItem,
   Button,
   MenuDivider,
+  Image
 } from "@chakra-ui/react";
 
-const exit = async () => {
+export default function Topbar() {
+  const exit = async () => {
   try {
     await auth.signOut();
     alert("You are signed out.");
@@ -23,7 +34,31 @@ const exit = async () => {
   }
 };
 
-export default function Topbar() {
+const [image, setImage] = useState(null);
+
+ useEffect(() => {
+    async function getPic(){
+      await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(
+        async (docSnap) => {
+          const data = docSnap.data();
+          if (docSnap.exists()) {
+            const storage = getStorage();
+            await getDownloadURL(ref(storage, data.Picture_id))
+              .then((url) => {
+                const img = document.getElementById("myimg");
+                img.setAttribute("src", url);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            console.log("Image set");
+          }
+        }
+      );
+    }
+    getPic();
+  }, []);
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -42,11 +77,12 @@ export default function Topbar() {
       </div>
       <div className="topbarRight">
         <Menu>
-          <MenuButton as={Button} colorScheme="transparent">
-            <img
-              src="assets/user/guy_1.png"
-              alt="Just a dude"
-              className="topbarImg"
+          <MenuButton as={Button} colorScheme="transparent" w = "50px" p = "0" pl = "5px">
+            <Image
+              borderRadius = "50%"
+              w = "40px"
+              h = "40px"
+              id = "myimg" 
             />
           </MenuButton>
           <MenuList bg="#FDEBD0" color="primary.2500" minW="150px" maxW="150px">

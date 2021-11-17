@@ -75,7 +75,7 @@ export default function ProfileEdit() {
             const storage = getStorage();
             await getDownloadURL(ref(storage, data.Picture_id))
               .then((url) => {
-                const img = document.getElementById("myimg");
+                const img = document.getElementById("profile_pic");
                 img.setAttribute("src", url);
               })
               .catch((error) => {
@@ -154,7 +154,6 @@ export default function ProfileEdit() {
   const handleImage = async (event) => {
     console.log(event.target.files[0]);
     setImage(event.target.files[0]);
-    console.log("hello");
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!acceptedImageTypes.includes(image.type)) {
       console.log("wrong file type:", image.type);
@@ -177,7 +176,7 @@ export default function ProfileEdit() {
       <Topbar/>
       <Flex direction = "row" mt = "50px" boxShadow="lg" borderRadius="lg" >
       <Box maxW="sm" borderRadius="lg" bg ="#E3EEF9" overflow="hidden" mr = "70px" w = "250px" boxShadow="lg" border = "3px">
-      <Image id = "myimg" h="200px" w="200px" borderRadius = "lg" mt = "20px" ml= "25px" />
+      <Image id = "profile_pic" h="200px" w="200px" borderRadius = "lg" mt = "20px" ml= "25px" />
       <Box p="4"> 
         <Box display="flex" alignItems="baseline" >
           <Box
