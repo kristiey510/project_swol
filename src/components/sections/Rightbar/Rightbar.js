@@ -6,7 +6,7 @@ import { RightbarData } from './RightbarData';
 import './Rightbar.css';
 import { IconContext } from 'react-icons';
 
-function Navbar() {
+function Rightbar() {
   const [rightbar, setRightbar] = useState(false);
 
   const showRightbar = () => setRightbar(!rightbar);
