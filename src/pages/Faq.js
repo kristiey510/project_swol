@@ -12,7 +12,8 @@ import {Flex,
         AccordionPanel,
         AccordionIcon,
         Box,
-        Heading
+        Heading,
+        Input
 } from "@chakra-ui/react";
 
 export default function Faq({ user }) {

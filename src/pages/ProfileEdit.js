@@ -153,7 +153,7 @@ export default function ProfileEdit({user}) {
 
   const handleImage = async (event) => {
     console.log(event.target.files[0]);
-    await setImage(event.target.files[0]);
+    setImage(event.target.files[0]);
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
       if (!acceptedImageTypes.includes(event.target.files[0].type)) {
         console.log("wrong file type:", event.target.files[0].type);
@@ -163,7 +163,9 @@ export default function ProfileEdit({user}) {
     var filename = uuidv4();
     const storage = getStorage();
     const imageRef = ref(storage, filename);
-    await uploadBytes(imageRef, image).then((snapshot) => {
+    await uploadBytes(imageRef, image, {
+      contentType: event.target.files[0].type
+} ).then((snapshot) => {
       console.log("Uploaded a blob or file!");
     });
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {

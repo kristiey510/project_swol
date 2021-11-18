@@ -84,7 +84,7 @@ export default function LogIn({
         </Heading>
         <Box w="300px" h="300px" align="center">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors}>
+            <FormControl>
               <Stack spacing={3} align="center">
                 <Input
                   bg = "gray.50"

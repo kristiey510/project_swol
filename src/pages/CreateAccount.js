@@ -90,7 +90,7 @@ export default function CreateAccount({
     <Flex direction="column" m="0 auto" align = "center">
       <LandingHeader />
       <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
-      <Stack spacing={6} align="center" mt = "50px">
+      <Stack spacing={6} align="center" mt = "30px">
         <Heading
           as="h1"
           size="2xl"
@@ -114,7 +114,7 @@ export default function CreateAccount({
         <Box w="300px" h="300px" align="center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack align="center">
-              <FormControl isInvalid={errors}>
+              <FormControl>
                 <Input
                   mb="5"
                   id="firstName"
