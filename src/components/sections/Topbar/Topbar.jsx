@@ -77,11 +77,12 @@ const [image, setImage] = useState(null);
       </div>
       <div className="topbarRight">
         <Menu>
-          <MenuButton as={Button} colorScheme="transparent" w = "50px" p = "0" pl = "5px">
+          <MenuButton as={Button} colorScheme="transparent" w = "50px" p = "0">
             <Image
+              ml = "-7px"
               borderRadius = "50%"
               w = "40px"
-              h = "40px"
+              h = "38px"
               id = "myimg" 
             />
           </MenuButton>

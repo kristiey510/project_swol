@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
@@ -11,6 +11,11 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import {
+  auth,
+  sendPasswordResetEmail
+} from "../firebase/firebase";
+import { ArrowBackIcon } from '@chakra-ui/icons'
 
 export default function ForgotPassword(
   title,
@@ -21,63 +26,80 @@ export default function ForgotPassword(
   ctaForgotUser,
   ...rest
 ) {
+
+  const [email, setEmail] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleChange = (value) => {
+    setEmail(value);
+  };
+
+  const resetPass= async () => {
+
+    await sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setError("Reset email sent!");
+      })
+      .catch((error) => {
+        setError(error);
+    });
+  }
+
   return (
     <Flex
       minH={"100vh"}
-      align={"center"}
+      // align={"center"}
       justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
     >
       <Stack
         spacing={4}
         w={"full"}
-        maxW={"md"}
-        bg={useColorModeValue("white", "gray.700")}
+        h = {"full"}
+        maxW={"lg"}
+        bg = "#FDF2E9"
         rounded={"xl"}
         boxShadow={"lg"}
-        p={6}
+        p={3}
         my={12}
       >
+      <Link to = "./"> 
+       <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
+     </Link>
         <Heading
+          align = "center"
+          mt = "20px"
           lineHeight={1.1}
           fontSize={{ base: "2xl", md: "3xl" }}
           color="primary.2500"
         >
           Forgot your password?
         </Heading>
-        <Text fontSize={{ base: "sm", sm: "md" }} color="primary.2400">
+        <Text fontSize={{ base: "sm", sm: "md" }} color="primary.2400" align = "center">
           You&apos;ll get an email with a reset link
         </Text>
         <FormControl id="email">
           <Input
             placeholder="Email"
-            _placeholder={{ color: "gray.500" }}
+            bg = "gray.50"
             type="email"
+            onChange={(event) => handleChange(event.target.value)}
           />
         </FormControl>
-        <Stack spacing={12}>
+        <Stack align = "center">
           <Button
-            bg={"priamry.3200"}
+            mt = "10px"
+            w = "200px"
+            bg={"primary.3200"}
             color={"white"}
             _hover={{
               bg: "blue.500",
             }}
+            onClick = {resetPass}
+            mb = "20px"
           >
             Request Reset
           </Button>
-          <Link to={ctaForgotUser}>
-            <Button
-              color="primary.3100"
-              borderRadius="8px"
-              fontWeight="bold"
-              py="2"
-              px="4"
-              size="sm"
-              bg="primary.3200"
-            >
-              Forgot Username
-            </Button>
-          </Link>
+          <Text color = "red" fontSize = "xs" > {error} </Text>
         </Stack>
       </Stack>
     </Flex>

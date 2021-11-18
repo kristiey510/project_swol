@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
+import { ArrowBackIcon } from '@chakra-ui/icons'
 
 export default function LogIn({
   title,
@@ -60,7 +61,10 @@ export default function LogIn({
   return (
     <Flex direction="column" m="0 auto" align = "center">
       <LandingHeader />
-      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
+      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"} p={3}>
+      <Link to = "./"> 
+       <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
+     </Link>
       <Stack spacing={10} mt="10" align="center">
         <Heading
           as="h1"

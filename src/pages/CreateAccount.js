@@ -23,6 +23,7 @@ import {
 } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
 import { doc, setDoc, db } from "../firebase/firebase";
+import { ArrowBackIcon } from '@chakra-ui/icons'
 
 export default function CreateAccount({
   title,
@@ -52,15 +53,17 @@ export default function CreateAccount({
       Name: auth.currentUser.displayName,
       Email: auth.currentUser.email,
       Dob: input.dob,
-      Picture_id: "default.png"
+      Picture_id: "default.png",
+      following : auth.currentUser.uid
     });
   };
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors }
   } = useForm();
+
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const [showConfirm, setShowConfirm] = React.useState(false);
@@ -89,8 +92,11 @@ export default function CreateAccount({
   return (
     <Flex direction="column" m="0 auto" align = "center">
       <LandingHeader />
-      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}>
-      <Stack spacing={6} align="center" mt = "30px">
+      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}  p={3}>
+      <Link to = "./"> 
+       <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
+     </Link>
+      <Stack spacing={6} align="center" mt = "10px">
         <Heading
           as="h1"
           size="2xl"
@@ -114,7 +120,7 @@ export default function CreateAccount({
         <Box w="300px" h="300px" align="center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack align="center">
-              <FormControl>
+              <FormControl isInvalid = {errors}>
                 <Input
                   mb="5"
                   id="firstName"
@@ -129,7 +135,7 @@ export default function CreateAccount({
                     handleChange("firstName", event.target.value)
                   }
                 />
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
+               <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
                   {errors.firstName && errors.firstName.message}
                 </FormErrorMessage>
                 <Input
@@ -277,6 +283,7 @@ export default function CreateAccount({
                 h="32px"
                 lineHeight="1"
                 size="md"
+                mt = "-15px"
               >
                 {ctaTextCreate}
               </Button>

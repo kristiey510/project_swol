@@ -73,7 +73,7 @@ export default function Sidebar({user}) {
           </li>
           <li className="sidebarListsItems">
             <Person className="sidebarIcon" />
-            <Link to="./personal_log">
+            <Link to="./followers">
               <span className="sidebarListItemNext">Followers</span>
             </Link>
           </li>

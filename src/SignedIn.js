@@ -21,7 +21,7 @@ function SignedIn({ user }) {
         <Route path="/dashboard">
           <Dashboard user={user} />
         </Route>
-        <Route path="/About_us">
+        <Route path="/about_us">
           <AboutUs user={user}/>
         </Route>
         <Route path="/TestPost">
@@ -35,6 +35,9 @@ function SignedIn({ user }) {
         </Route>
         <Route path="/personal_log">
           <PersonalLog user={user}/>
+        </Route>
+        <Route path="/followers">
+          <AddFriend />
         </Route>
         <Route path="/faq">
           <Faq user={user}/>
