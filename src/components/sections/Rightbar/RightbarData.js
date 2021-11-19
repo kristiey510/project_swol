@@ -1,6 +1,5 @@
 import React from 'react';
 import * as GiIcons from 'react-icons/gi';
-import * as FaIcons from 'react-icons/fa';
 
 export const RightbarData = [
 
