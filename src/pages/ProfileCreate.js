@@ -30,7 +30,6 @@ import {
 } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { ArrowBackIcon } from '@chakra-ui/icons'
 
 
 export default function ProfileCreate() {

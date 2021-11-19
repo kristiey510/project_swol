@@ -33,7 +33,8 @@ import {
   updateProfile, 
   EmailAuthProvider, 
   reauthenticateWithCredential,
-  updatePassword 
+  updatePassword,
+  sendPasswordResetEmail
 } from "firebase/auth";
 
 initializeApp({
@@ -78,5 +79,6 @@ export {
   orderBy,
   Auth,
   reauthenticateWithCredential,
-  updatePassword 
+  updatePassword,
+  sendPasswordResetEmail
 };

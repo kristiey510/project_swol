@@ -20,6 +20,9 @@ import {
   getDocs,
   query,
   orderBy,
+  updateDoc,
+  doc, 
+  arrayUnion
 } from "../firebase/firebase";
 
 export default function AddFriend() {
@@ -46,14 +49,8 @@ export default function AddFriend() {
   };
 
   const Follow = async () => {
-    await addDoc(collection(db, "Following"), {
-      Uid: auth.currentUser.uid,
-      Following: searchUser.user_id,
-    }).then(async () => {
-      await addDoc(collection(db, "Followers"), {
-        Uid: searchUser.user_id,
-        Followed_by: auth.currentUser.uid,
-      });
+    await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
+      following: arrayUnion(searchUser.user_id)
     });
   };
 

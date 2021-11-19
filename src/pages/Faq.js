@@ -12,16 +12,17 @@ import {Flex,
         AccordionPanel,
         AccordionIcon,
         Box,
-        Heading
+        Heading,
+        Input
 } from "@chakra-ui/react";
 
 export default function Faq({ user }) {
   return (
         <Flex width = "100%" direction = "column">
-        <Topbar />
+        <Topbar user = {user}/>
         <Flex direction = "row">
           <Box width = "370px">
-          <Sidebar/>
+          <Sidebar user = {user}/>
           </Box>
           <Box w = "100%" mt = "30px" > 
           <Heading color = "primary.2350" align = "center" fontSize = "md" textTransform = "uppercase"> Frequently asked questions </Heading>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Share.css";
-import { PermMedia, EmojiEmotions, AddCircleOutline } from "@material-ui/icons";
+import { PermMedia, EmojiEmotions, AddCircleOutline, AccessTime } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 import {
   doc,
@@ -151,6 +151,10 @@ export default function Share({user}) {
             <div className="shareOption">
               <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />
               <span className="shareOptionText">Add activities</span>
+            </div>
+            <div className="shareOption">
+              <AccessTime htmlColor="black" className="shareIcon" />
+              <span className="shareOptionText">Workout Duration</span>
             </div>
             <div className="shareOption">
               <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
