@@ -30,7 +30,7 @@ export default function Sidebar({user}) {
     await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
       const user = docSnap.data();
       //loop through follows
-      user.following.forEach((u) => {
+      user.following?.forEach((u) => {
         const postQuery = query(collection(db, "Profile"), where("User_id", "==", u));
         getDocs(postQuery).then(querySnapshot => {
           querySnapshot.forEach((doc) => {
