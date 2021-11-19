@@ -1,34 +1,4 @@
-.navbar {
-    flex: 3.5;
-    background-color: white;
-    height: 80px;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-  
-  .menu-bars {
-    margin-left: 2rem;
-    font-size: 2rem;
-    background: none;
-  }
-  
-  .nav-menu {
-    background-color: rgb(253, 242, 233);
-    width: 250px;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: -100%;
-    transition: 850ms;
-  }
-  
-  .nav-menu.active {
-    left: 0;
-    transition: 350ms;
-  }
+
   
   .nav-text {
     display: flex;
@@ -56,6 +26,8 @@
   }
   
   .nav-menu-items {
+    padding-top: 20px;
+    flex: 3.5;
     width: 100%;
   }
   
