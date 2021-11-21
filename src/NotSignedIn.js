@@ -20,10 +20,10 @@ function NotSignedIn() {
         <Route path="/login">
           <LogIn />
         </Route>
-        <Route path={"/forgot_pass"}>
+        <Route path="/forgot_pass">
           <ForgotPass />
         </Route>
-        <Route path={"/about_us"}>
+        <Route path="/about_us">
           <AboutUs />
         </Route>
       </Switch>

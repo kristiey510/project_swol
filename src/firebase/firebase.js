@@ -15,14 +15,9 @@ import {
   where,
   increment,
   arrayRemove,
-  orderBy
+  orderBy,
 } from "firebase/firestore";
-import { 
-  getStorage, 
-  ref, 
-  uploadBytes, 
-  getDownloadURL 
-} from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -30,11 +25,10 @@ import {
   sendEmailVerification,
   signOut,
   onAuthStateChanged,
-  updateProfile, 
-  EmailAuthProvider, 
+  updateProfile,
   reauthenticateWithCredential,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 initializeApp({
@@ -67,18 +61,18 @@ export {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  getDoc, 
+  getDoc,
   updateDoc,
   getDownloadURL,
   arrayUnion,
   query,
   where,
   increment,
-  arrayRemove, 
+  arrayRemove,
   getDocs,
   orderBy,
   Auth,
   reauthenticateWithCredential,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 };

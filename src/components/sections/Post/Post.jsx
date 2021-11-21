@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Post.css";
 import { MoreVert } from "@material-ui/icons";
 import {
@@ -14,14 +14,6 @@ import {
 import { Text } from "@chakra-ui/react";
 
 export default function Post({ post }) {
-  const [like, setLike] = useState(post.like);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1);
-    setIsLiked(!isLiked);
-  };
-
   const handleLike = () => {
     // setLN("");
     var alreadyLiked = false;
@@ -78,19 +70,15 @@ export default function Post({ post }) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <img
-              className="postProfileImg"
-              src={post?.propic}
-              alt=""
-            />
+            <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
             <span className="postDate">
               {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
                 .substring(0, 10) +
                 "\xa0" +
-                "@" + "\xa0" } 
-                {new Date(post?.timestamp.seconds * 1000)
+                "@\xa0"}
+              {new Date(post?.timestamp.seconds * 1000)
                 .toISOString()
                 .substring(11, 19)}
             </span>
@@ -118,11 +106,10 @@ export default function Post({ post }) {
               alt=""
             /> */}
             <span className="postLikeCounter">
-              {" "}
               {post?.likes === 1 ? (
-                <Text>{post?.likes} person likes it</Text>
+                <Text>{post?.likes} like</Text>
               ) : (
-                <Text> {post?.likes} people like it </Text>
+                <Text> {post?.likes} likes</Text>
               )}
             </span>
           </div>

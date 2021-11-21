@@ -15,14 +15,13 @@ import { Heading, Box, Flex, Button, Stack } from "@chakra-ui/react";
 import {
   db,
   collection,
-  addDoc,
   auth,
   getDocs,
   query,
   orderBy,
   updateDoc,
-  doc, 
-  arrayUnion
+  doc,
+  arrayUnion,
 } from "../firebase/firebase";
 
 export default function AddFriend() {
@@ -50,7 +49,7 @@ export default function AddFriend() {
 
   const Follow = async () => {
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
-      following: arrayUnion(searchUser.user_id)
+      following: arrayUnion(searchUser.user_id),
     });
   };
 

@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Topbar.css";
 import Logo from "../../ui/Logo";
 import { Search } from "@material-ui/icons";
-import { 
+import {
   doc,
   db,
-  updateDoc,
   auth,
   getDoc,
   getStorage,
@@ -19,25 +18,24 @@ import {
   MenuList,
   MenuItem,
   Button,
-  MenuDivider,
-  Image
+  Image,
 } from "@chakra-ui/react";
 
 export default function Topbar() {
   const exit = async () => {
-  try {
-    await auth.signOut();
-    alert("You are signed out.");
-    window.location = "/";
-  } catch (err) {
-    console.log("err", err);
-  }
-};
+    try {
+      await auth.signOut();
+      alert("You are signed out.");
+      window.location = "/";
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
 
-const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null);
 
- useEffect(() => {
-    async function getPic(){
+  useEffect(() => {
+    async function getPic() {
       await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(
         async (docSnap) => {
           const data = docSnap.data();
@@ -77,20 +75,16 @@ const [image, setImage] = useState(null);
       </div>
       <div className="topbarRight">
         <Menu>
-          <MenuButton as={Button} colorScheme="transparent" w = "50px" p = "0">
-            <Image
-              ml = "-7px"
-              borderRadius = "50%"
-              w = "40px"
-              h = "38px"
-              id = "myimg" 
-            />
+          <MenuButton as={Button} colorScheme="transparent" w="50px" p="0">
+            <Image ml="-7px" borderRadius="50%" w="40px" h="38px" id="myimg" />
           </MenuButton>
           <MenuList bg="#FDEBD0" color="primary.2500" minW="150px" maxW="150px">
             <Link to="./profile">
-              <MenuItem fontSize = "sm" fontWeight="bold">Profile</MenuItem>
+              <MenuItem fontSize="sm" fontWeight="bold">
+                Profile
+              </MenuItem>
             </Link>
-            <MenuItem fontSize = "sm" fontWeight="bold" onClick={exit}>
+            <MenuItem fontSize="sm" fontWeight="bold" onClick={exit}>
               Log Out
             </MenuItem>
           </MenuList>
