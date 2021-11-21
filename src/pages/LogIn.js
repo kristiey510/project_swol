@@ -40,12 +40,16 @@ export default function LogIn({
   };
 
   const handleLogin = async () => {
-    await logIn(auth, input.email, input.password).then(async () => {
-        window.location = "./dashboard"
-      })
-    .catch( (error) => {
-      setErrs(error.code);
-    });
+    if (input.email.length == 0 || input.password.length == 0){
+      setErrs("Missing required fields");
+    }else{
+      await logIn(auth, input.email, input.password).then(async () => {
+          window.location = "./dashboard"
+        })
+      .catch( (error) => {
+        setErrs(error.code);
+      });
+    }
   };
 
   return (

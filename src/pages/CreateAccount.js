@@ -97,7 +97,6 @@ export default function CreateAccount({
         var name = input.firstName.concat(" ", input.lastName);
         await sendEmailVerification(userCred.user);
         await updateProfile(auth.currentUser, { displayName: name });
-        alert("User is created & updated & added to database");
         await handleMakeUser();
         var state = await auth.onAuthStateChanged(async (user) => {
           if (state) state();
@@ -106,8 +105,8 @@ export default function CreateAccount({
           }
         });
       })
-      .catch(async (error) => {
-        await setErrs(error.message);
+      .catch((error) => {
+        setErrs(error.code);
       });
   };
 
@@ -265,7 +264,7 @@ export default function CreateAccount({
                 h="32px"
                 lineHeight="1"
                 size="md"
-                onClick = {validate}
+                onClick = {onSubmit}
               >
                 {ctaTextCreate}
               </Button>
