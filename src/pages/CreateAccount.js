@@ -14,6 +14,7 @@ import {
   FormErrorMessage,
   InputRightElement,
   InputGroup,
+  Text
 } from "@chakra-ui/react";
 import {
   auth,
@@ -43,6 +44,8 @@ export default function CreateAccount({
     confirmPass:""
   });
 
+  const [errs, setErrs] = useState(null);
+
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
@@ -69,7 +72,26 @@ export default function CreateAccount({
   const [showConfirm, setShowConfirm] = React.useState(false);
   const handleClickConfirm = () => setShowConfirm(!showConfirm);
 
+  const validate = async () => {
+    const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    if (input.firstName.length == 0 || 
+        input.lastName.length == 0 ||
+        input.dob.length == 0 ||
+        input.email.length == 0 ||
+        input.password.length == 0 ||
+        input.confirmPass.length == 0){
+      await setErrs("Missing required fields");
+    } else if (!regex.test(input.dob)){
+      await setErrs("Check format of dob (MM/DD/YYYY)");
+    } else if (input.password.length < 8){
+      await setErrs("Passwords length too short");
+    } else if (input.password.length != input.confirmPass.length){
+      await setErrs("Passwords don't match");
+    }
+  }
+
   const onSubmit = async () => {
+    await validate();
     await createUser(auth, input.email, input.password)
       .then(async (userCred) => {
         var name = input.firstName.concat(" ", input.lastName);
@@ -77,22 +99,22 @@ export default function CreateAccount({
         await updateProfile(auth.currentUser, { displayName: name });
         alert("User is created & updated & added to database");
         await handleMakeUser();
-        var state = auth.onAuthStateChanged((user) => {
+        var state = await auth.onAuthStateChanged(async (user) => {
           if (state) state();
           if (user) {
             window.location = "/profile_info";
           }
         });
       })
-      .catch((error) => {
-        alert(error.message);
+      .catch(async (error) => {
+        await setErrs(error.message);
       });
   };
 
   return (
     <Flex direction="column" m="0 auto" align = "center">
       <LandingHeader />
-      <Box  h = "600px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}  p={3}>
+      <Box  h = "630px" w = "600px" mt = "25px" boxShadow = "xl" bg = "#FDF2E9" rounded={"xl"}  p={3}>
       <Link to = "./"> 
        <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
      </Link>
@@ -118,43 +140,31 @@ export default function CreateAccount({
           {subtitle}
         </Heading>
         <Box w="300px" h="300px" align="center">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form >
             <Stack align="center">
-              <FormControl isInvalid = {errors}>
+              <FormControl >
                 <Input
-                  mb="5"
+                  mb = "5"
                   id="firstName"
                   size="sm"
                   placeholder="First Name"
                   bg = "gray.50"
                   rounded = "md"
-                  {...register("firstName", {
-                    required: "Field is required",
-                  })}
                   onChange={(event) =>
                     handleChange("firstName", event.target.value)
                   }
                 />
-               <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.firstName && errors.firstName.message}
-                </FormErrorMessage>
                 <Input
+                  mb = "5"
                   bg = "gray.50"
                   rounded = "md"
-                  mb="5"
                   id="lastName"
                   size="sm"
                   placeholder="Last Name"
-                  {...register("lastName", {
-                    required: "Field is required",
-                  })}
                   onChange={(event) =>
                     handleChange("lastName", event.target.value)
                   }
                 />
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.lastName && errors.lastName.message}
-                </FormErrorMessage>
                 <Input
                   bg = "gray.50"
                   rounded = "md"
@@ -162,22 +172,13 @@ export default function CreateAccount({
                   type="text"
                   placeholder="Date of Birth MM/DD/YY"
                   size="sm"
-                  {...register("dob", {
-                    required: "Field is required",
-                  })}
                   onChange={(event) => handleChange("dob", event.target.value)}
                 />
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.dob && errors.dob.message}
-                </FormErrorMessage>
                 <Input
                   bg = "gray.50"
                   rounded = "md"
                   mb="5"
                   id="email"
-                  {...register("email", {
-                    required: "Field is required",
-                  })}
                   placeholder="Email address"
                   value={input.email}
                   size="sm"
@@ -185,10 +186,6 @@ export default function CreateAccount({
                     handleChange("email", event.target.value)
                   }
                 />
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.email && errors.email.message}
-                </FormErrorMessage>
-
                 <InputGroup size="md">
                   <Input
                     bg = "gray.50"
@@ -198,13 +195,6 @@ export default function CreateAccount({
                     type={show ? "text" : "password"}
                     placeholder="Password"
                     value={input.password}
-                    {...register("password", {
-                      required: "Field is required",
-                      minLength: {
-                        value: 8,
-                        message: "Minimum length should be 8",
-                      },
-                    })}
                     onChange={(event) =>
                       handleChange("password", event.target.value)
                     }
@@ -227,20 +217,15 @@ export default function CreateAccount({
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.password && errors.password.message}
-                </FormErrorMessage>
                 <InputGroup size="md">
                   <Input
                     bg = "gray.50"
                     rounded = "md"
-                    mb="5"
                     type={showConfirm ? "text" : "password"}
+                    onChange={(event) =>
+                      handleChange("confirmPass", event.target.value)
+                    }
                     placeholder="Confirm Password"
-                    {...register("confirm", {
-                      required: "Field is required",
-                      validate: (value) => value === input.password,
-                    })}
                     size="sm"
                   />
                   <InputRightElement width="4.3rem">
@@ -259,20 +244,17 @@ export default function CreateAccount({
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                  {errors.confirm && errors.confirm.type === "validate" && (
-                    <div className="error">Password must match</div>
-                  )}
-                </FormErrorMessage>
               </FormControl>
-              <Spacer />
+              <Box h = "25px" align = "center"  p = "2px">
+              <Text color = "red" fontSize = "xs"> {errs}</Text>
+              </Box>
               <Spacer />
               <Spacer />
             </Stack>
+            
             <Stack spacing={5} align="center">
               <Button
                 id="submit_button"
-                type = "submit"
                 ml = "10px"
                 color="primary.150"
                 borderRadius="10px"
@@ -283,13 +265,10 @@ export default function CreateAccount({
                 h="32px"
                 lineHeight="1"
                 size="md"
-                mt = "-15px"
+                onClick = {validate}
               >
                 {ctaTextCreate}
               </Button>
-              <FormErrorMessage mt="-3" mb="1.5" fontSize="12px">
-                {errors.submit_button && errors.submit_button.message}
-              </FormErrorMessage>
               <Link to={ctaLinkLogIn}>
                 <Button
                   ml = "10px"

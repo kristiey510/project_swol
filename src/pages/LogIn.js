@@ -15,6 +15,7 @@ import {
   FormErrorMessage,
   InputRightElement,
   InputGroup,
+  Text
 } from "@chakra-ui/react";
 import { auth, logIn } from "../firebase/firebase";
 import { useForm } from "react-hook-form";
@@ -30,7 +31,7 @@ export default function LogIn({
   ...rest
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
-  const [errs, setErrs] = useState({ email: "", password: "" });
+  const [errs, setErrs] = useState(null);
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
@@ -39,23 +40,12 @@ export default function LogIn({
   };
 
   const handleLogin = async () => {
-    try {
-      await logIn(auth, input.email, input.password);
-      window.location = "/dashboard";
-    } catch ({ code }) {
-      setErrs({ email: "", password: "", ...errors[code] });
-      alert(code);
-    }
-  };
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = async () => {
-    await handleLogin();
+    await logIn(auth, input.email, input.password).then(async () => {
+        window.location = "./dashboard"
+      })
+    .catch( (error) => {
+      setErrs(error.code);
+    });
   };
 
   return (
@@ -87,7 +77,7 @@ export default function LogIn({
           {subtitle}
         </Heading>
         <Box w="300px" h="300px" align="center">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form >
             <FormControl>
               <Stack spacing={3} align="center">
                 <Input
@@ -97,16 +87,10 @@ export default function LogIn({
                   value={input.email}
                   placeholder="Email"
                   size="sm"
-                  {...register("email", {
-                    required: "Field is required",
-                  })}
                   onChange={(event) =>
                     handleChange("email", event.target.value)
                   }
                 />
-                <FormErrorMessage mb="3" fontSize="12px">
-                  {errors.email && errors.email.message}
-                </FormErrorMessage>
                 <InputGroup size="md">
                   <Input
                     bg = "gray.50"
@@ -116,9 +100,6 @@ export default function LogIn({
                     type={show ? "text" : "password"}
                     placeholder="Password"
                     value={input.password}
-                    {...register("password", {
-                      required: "Field is required",
-                    })}
                     onChange={(event) =>
                       handleChange("password", event.target.value)
                     }
@@ -140,16 +121,11 @@ export default function LogIn({
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <FormErrorMessage mb="3" fontSize="12px">
-                  {errors.password && errors.password.message}
-                </FormErrorMessage>
-                <Spacer />
-                <Spacer />
               </Stack>
+              <Text align = "center" fontSize = "xs" color = "red" mb = "20px">{errs}</Text>
               <Stack spacing={5} align="center">
                 <Button
                   ml = "10px"
-                  type = "submit"
                   color="primary.150"
                   borderRadius="10px"
                   fontWeight="bold"
@@ -159,6 +135,7 @@ export default function LogIn({
                   h="32px"
                   lineHeight="1"
                   size="md"
+                  onClick = {handleLogin}
                 >
                   {ctaTextLogIn}
                 </Button>
