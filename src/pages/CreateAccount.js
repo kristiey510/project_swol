@@ -58,6 +58,7 @@ export default function CreateAccount({
       Dob: input.dob,
       Picture_id: "default.png",
       following: following,
+      cache: [],
     });
   };
 
