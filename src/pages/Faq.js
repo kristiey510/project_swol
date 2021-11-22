@@ -43,34 +43,42 @@ export default function Faq({ user }) {
                 <h2>
                   <AccordionButton rounded={"xl"}>
                     <Box flex="1" textAlign="left">
-                      1. Question 1
+                      1. What is Swol?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>Answer to q1</AccordionPanel>
+                <AccordionPanel pb={4}>Swol is an all-in-one fitness and social media app,
+                 with a goal of staying healthy and connecting with others. It allows you 
+                 o post about activities of all kinds, and share them with a group of followers. 
+                 It also has a complete list of exercises so you can use Swol to plan your 
+                 workout and hit the gym!</AccordionPanel>
               </AccordionItem>
               <AccordionItem>
                 <h2>
                   <AccordionButton rounded={"xl"}>
                     <Box flex="1" textAlign="left">
-                      2. Question 2
+                      2. How can I follow my friends?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>Answer to q2</AccordionPanel>
+                <AccordionPanel pb={4}>To search for friends to follow, click on the 
+                followers tab on the left-hand sidebar. Then, click search and search for your friends by first and last name. 
+                Once you follow and they accept, their activitis will show up in your feed!</AccordionPanel>
               </AccordionItem>
               <AccordionItem>
                 <h2>
                   <AccordionButton rounded={"xl"}>
                     <Box flex="1" textAlign="left">
-                      3. Question 3
+                      3. Can I edit my profile?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>Answer to q3</AccordionPanel>
+                <AccordionPanel pb={4}>Yes! Click on your profile picture in the top right corner,
+                and navigate to your profile. From there, if you click on the light blue edit button, 
+                you can edit features such as height, weight, gender, profile picture, and password. </AccordionPanel>
               </AccordionItem>
               <AccordionItem>
                 <h2>
