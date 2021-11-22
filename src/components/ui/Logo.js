@@ -1,12 +1,16 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
+import logo from "../../icons/landing_page/Logo.png";
 
 export default function Logo(props) {
   return (
     <Box {...props}>
-      <Text fontSize="33px" fontWeight="bold" fontFamily = "logo" color = "primary.2350" ml = "10px">
-        SWOL
-      </Text>
+       <Image
+              src={logo}
+              backgroundColor="transparent"
+              w="100px"
+              h="50px"
+            />
     </Box>
   );
 }
