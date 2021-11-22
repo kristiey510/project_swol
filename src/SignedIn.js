@@ -10,6 +10,7 @@ import AddFriend from "./pages/AddFriend";
 import Faq from "./pages/Faq";
 import CreateAccount from "./pages/CreateAccount";
 import PersonalLog from "./pages/PersonalLog"
+import Followers from "./pages/Followers";
 
 function SignedIn({ user }) {
   return (
@@ -37,7 +38,7 @@ function SignedIn({ user }) {
           <PersonalLog user={user}/>
         </Route>
         <Route path="/followers">
-          <AddFriend />
+          <Followers/>
         </Route>
         <Route path="/faq">
           <Faq user={user}/>

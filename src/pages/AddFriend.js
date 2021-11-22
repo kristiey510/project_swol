@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Image
 } from "@chakra-ui/react";
 import { Heading, Box, Flex, Button, Stack } from "@chakra-ui/react";
 import {
@@ -22,9 +23,13 @@ import {
   updateDoc,
   doc,
   arrayUnion,
+  getStorage,
+  getDownloadURL,
+  ref
 } from "../firebase/firebase";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
-export default function AddFriend() {
+export default function AddFriend({user}) {
   const [options, setOptions] = useState({ value: "", label: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchUser, setSearchUser] = useState({ name: "", user_id: "" });
@@ -36,7 +41,11 @@ export default function AddFriend() {
         query(collection(db, "Profile"), orderBy("Name"))
       );
       querySnapshot.forEach(async (doc) => {
-        optionVals.push({ value: doc.id, label: doc.data().Name });
+        const storage = getStorage();
+        await getDownloadURL(ref(storage, doc.data().Picture_id))
+          .then((url) => {
+            optionVals.push({ value: doc.data().Name, label: <Flex align = "center" direction = "row"><Image src={url} height="35px" width="40px" borderRadius= "10" mr = "10px"/>{doc.data().Name}</Flex>})
+          });
       });
       setOptions(optionVals);
     }
@@ -44,25 +53,27 @@ export default function AddFriend() {
   }, []);
 
   const addFriend = (val) => {
-    setSearchUser({ name: val.label, user_id: val.value });
+    if (val != null){
+      setSearchUser({ name: val.label, user_id: val.value });
+    }
   };
 
   const Follow = async () => {
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
       following: arrayUnion(searchUser.user_id),
     });
+    onClose();
   };
 
   return (
-    <Flex>
-      <Stack w="400px" ml="50px" mt="50px">
+    <Flex align = "center" direction = "column">
         <Heading align="center" mb="10px" mt="10px" color="primary.2350">
           Follow
         </Heading>
+        <Box width='500px' mt = "20px">
         <Select
           theme={(theme) => ({
             ...theme,
-            borderRadius: "25px",
             colors: {
               ...theme.colors,
               primary25: "#FEEBC8",
@@ -72,17 +83,25 @@ export default function AddFriend() {
           components={{
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
+            ClearIndicator: () => null
           }}
+          arrowRenderer={null}
           options={options}
           openMenuOnClick={false}
+          openMenuOnFocus = {false}
           search
+          isClearable
+          itemSize = {5}
+          backspaceRemovesValue = {true}
           placeholder="Search User"
           onChange={addFriend}
+          closeMenuOnSelect = {true}
+          closeMenuOnScroll= {true}
         />
+        </Box>
         <Box>
           <Button
-            mt="10px"
-            ml="125px"
+            mt="30px"
             w="150px"
             bg="primary.3200"
             color="primary.150"
@@ -93,13 +112,16 @@ export default function AddFriend() {
             Search User
           </Button>
         </Box>
-      </Stack>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+      <Modal  isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay/>
         <ModalContent>
           <ModalHeader color="primary.2350">User</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Do you want to follow {searchUser.name}?</ModalBody>
+          <ModalBody>
+            <Box >
+            Do you want to follow {searchUser.user_id} ?
+            </Box>
+          </ModalBody>
           <ModalFooter>
             <Button
               bg="primary.3200"
