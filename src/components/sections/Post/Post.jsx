@@ -73,6 +73,9 @@ export default function Post({ post }) {
             <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
             <span className="postDate">
+              {post?.type}
+            </span>
+            <span className="postDate">
               {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
                 .substring(0, 10) +
