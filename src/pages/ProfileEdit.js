@@ -488,7 +488,7 @@ export default function ProfileEdit({ user }) {
                   <option value="Other">Other</option>
                 </Select>
                 <IconButton
-                  ml="23px"
+                  ml="39px"
                   colorScheme="myblue"
                   aria-label="Edit"
                   size="xs"
