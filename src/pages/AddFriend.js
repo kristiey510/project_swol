@@ -32,7 +32,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 export default function AddFriend({user}) {
   const [options, setOptions] = useState({ value: "", label: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [searchUser, setSearchUser] = useState({ name: "", user_id: "" });
+  const [searchUser, setSearchUser] = useState({ name: "", user_id: "" , id: ""});
 
   useEffect(() => {
     async function fetchUsers() {
@@ -44,7 +44,7 @@ export default function AddFriend({user}) {
         const storage = getStorage();
         await getDownloadURL(ref(storage, doc.data().Picture_id))
           .then((url) => {
-            optionVals.push({ value: doc.data().Name, label: <Flex align = "center" direction = "row"><Image src={url} height="35px" width="40px" borderRadius= "10" mr = "10px"/>{doc.data().Name}</Flex>})
+            optionVals.push({ value: doc.data().Name, id: doc.data().User_id, label: <Flex align = "center" direction = "row"><Image src={url} height="35px" width="40px" borderRadius= "10" mr = "10px"/>{doc.data().Name}</Flex>})
           });
       });
       setOptions(optionVals);
@@ -54,13 +54,13 @@ export default function AddFriend({user}) {
 
   const addFriend = (val) => {
     if (val != null){
-      setSearchUser({ name: val.label, user_id: val.value });
+      setSearchUser({ name: val.label, user_id: val.value , id: val.id});
     }
   };
 
   const Follow = async () => {
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
-      following: arrayUnion(searchUser.user_id),
+      following: arrayUnion(searchUser.id),
     });
     onClose();
   };
