@@ -29,6 +29,7 @@ import {
   reauthenticateWithCredential,
   updatePassword,
   sendPasswordResetEmail,
+  deleteUser
 } from "firebase/auth";
 
 initializeApp({
@@ -75,4 +76,5 @@ export {
   reauthenticateWithCredential,
   updatePassword,
   sendPasswordResetEmail,
+  deleteUser
 };
