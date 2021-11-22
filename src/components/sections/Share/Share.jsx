@@ -112,6 +112,14 @@ export default function Share({user}) {
     if (!user) {
       return;
     }
+    console.log("type",input.type)
+
+    if(input.type == ""){
+      alert("Please select an exercise");
+      //setError("Please select an exercise")
+      return;
+    }
+    
 
     //validate image size
     if (image != null) {
@@ -207,12 +215,34 @@ export default function Share({user}) {
               placeholder="Select Exercise" 
               id = "dropdown"
               onChange={(event) => handleChange("type", event.target.value)}>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+              <option value="Running">Running</option>
+              <option value="Biking">Biking</option>
+              <option value="Elliptical">Elliptical</option>
+              <option value="Stair climber">Stair climber</option>
+              <option value="Plank">Plank</option>
+
+              <option value="Pull up/chin up">Pull up/chin up</option>
+              <option value="Sit up/crunch">Sit up/crunch</option>
+              <option value="Push up">Push up</option>
+              <option value="Bench">Bench</option>
+              <option value="Squat">Squat</option>
+              <option value="Deadlift">Deadlift</option>
+              <option value="Bicep curl">Bicep curl</option>
+              <option value="Shoulder press">Shoulder press</option>
+              <option value="Shoulder raises">Shoulder raises</option>
+              <option value="Rows">Rows</option>
+              <option value="Lunges">Lunges</option>
+              <option value="Shrugs">Shrugs</option>
+              <option value="Hang clean">Hang clean</option>
+              <option value="Clean and jerk">Clean and jerk</option>
+              <option value="Snatch">Snatch</option>
             </Select>
         <hr className="shareHr" />
         
+        {/* <Text color="red" textAlign="center">
+            {Error}
+        </Text> */}
+
         <div className="shareBottom">
           <div className="shareOptions">
             <div className="shareOption">
@@ -244,43 +274,11 @@ export default function Share({user}) {
         </div>
       </div>
 
-      <Modal  isOpen={isTypeOpen} onClose={onTypeClose}>
-        <ModalOverlay/>
-        <ModalContent>
-          <ModalHeader color="primary.2350">Exercise</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box >
-            <Select 
-              variant="filled" 
-              placeholder="Select Exercise" 
-              id = "dropdown"
-              onChange={(event) => handleChange("type", event.target.value)}>
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
-            </Select>
-            </Box>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              bg="primary.3200"
-              color="primary.150"
-              fontWeight="bold"
-              fontSize="16"
-              onClick={onTypeClose}
-            >
-              Done
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-
+      
       <Modal  isOpen={isPhotoOpen} onClose={onPhotoClose}>
         <ModalOverlay/>
         <ModalContent>
-          <ModalHeader color="primary.2350">Exercise</ModalHeader>
+          <ModalHeader color="primary.2350">Add Photo</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box >
