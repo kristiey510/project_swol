@@ -23,7 +23,15 @@ import {
   InputLeftAddon,
   Checkbox,
   Text,
-  Select
+  Select,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Topbar from "../components/sections/Topbar/Topbar";
 import { v4 as uuidv4 } from "uuid";
@@ -39,11 +47,15 @@ import {
   getDownloadURL,
   Auth,
   reauthenticateWithCredential,
-  updatePassword
+  updatePassword,
+  deleteUser
 } from "../firebase/firebase";
 import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
 export default function ProfileEdit({user}) {
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [input, setInput] = useState({
     name: "",
     dob: "",
@@ -51,11 +63,21 @@ export default function ProfileEdit({user}) {
     weight: "",
     height_in: "",
     height_ft: "",
-    email: ""
+    email: "",
   });
   const [image, setImage] = useState(null);
   const [password, setPassword] = useState({old: "", new: "", confirm: ""});
   const [error, setError] = useState({currPass: "", newPass: ""});
+
+  const deactivateAccount = async() =>{
+
+    await deleteUser(user).then(() => {
+       console.log("User is deleted");
+       window.location = "./"
+    }).catch((error) => {
+       console.log(error.code);
+    });
+  }
 
   useEffect(() => {
     async function getUser(){
@@ -246,6 +268,39 @@ export default function ProfileEdit({user}) {
               style={{ display: "none" }}
             />
           </FormControl>
+          <Box align = "center">
+          <Button variant = "link" color = "red" fontSize = "xs" onClick = {onOpen}> Deactivate Account </Button>
+          </Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader color="primary.2350">Deactivate Account</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>Are you sure you want to delete account?</ModalBody>
+              <ModalFooter>
+                <Button
+                  bg="primary.3200"
+                  color="primary.150"
+                  fontWeight="bold"
+                  fontSize="16"
+                  onClick={onClose}
+                >
+                  Back
+                </Button>
+                <Button
+                  ml="5"
+                  variant="ghost"
+                  bg="primary.3200"
+                  color="primary.150"
+                  fontWeight="bold"
+                  fontSize="16"
+                  onClick = {deactivateAccount}
+                >
+                  Delete
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+        </Modal>
       </Box>
     </Box>
         <Box rounded={"xl"}  w="680px" h="600" >

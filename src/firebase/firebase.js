@@ -34,7 +34,8 @@ import {
   EmailAuthProvider, 
   reauthenticateWithCredential,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  deleteUser
 } from "firebase/auth";
 
 initializeApp({
@@ -80,5 +81,6 @@ export {
   Auth,
   reauthenticateWithCredential,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  deleteUser
 };
