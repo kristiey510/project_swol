@@ -50,7 +50,7 @@ export default function Faq({ user }) {
                 </h2>
                 <AccordionPanel pb={4}>Swol is an all-in-one fitness and social media app,
                  with a goal of staying healthy and connecting with others. It allows you 
-                 o post about activities of all kinds, and share them with a group of followers. 
+                 to post about activities of all kinds, and share them with a group of followers. 
                  It also has a complete list of exercises so you can use Swol to plan your 
                  workout and hit the gym!</AccordionPanel>
               </AccordionItem>
@@ -65,7 +65,7 @@ export default function Faq({ user }) {
                 </h2>
                 <AccordionPanel pb={4}>To search for friends to follow, click on the 
                 followers tab on the left-hand sidebar. Then, click search and search for your friends by first and last name. 
-                Once you follow and they accept, their activitis will show up in your feed!</AccordionPanel>
+                Once you follow and they accept, their activities will show up in your feed!</AccordionPanel>
               </AccordionItem>
               <AccordionItem>
                 <h2>
