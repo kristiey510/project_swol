@@ -38,7 +38,7 @@ function SignedIn({ user }) {
           <PersonalLog user={user}/>
         </Route>
         <Route path="/followers">
-          <Followers/>
+          <Followers user={user}/>
         </Route>
         <Route path="/faq">
           <Faq user={user}/>

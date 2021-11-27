@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/sections/Sidebar/Sidebar";
 import Topbar from "../components/sections/Topbar/Topbar";
 import AddFriend from "./AddFriend";
+import Friend from "./Friend";
 import "./Dashboard.css";
 import {
   Flex,
@@ -12,7 +13,8 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Text
+  Text,
+  Container
 } from "@chakra-ui/react";
 import {
   db,
@@ -33,21 +35,24 @@ import {
 export default function Followers({ user }) {
   const [followers, setFollowers] = useState([]);
 
+  const [friends, setFriends] = useState([]);
+
   useEffect(async () => {
-    await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(async (docSnap) => {
-      if (docSnap.exists()) {
-        const currUser = docSnap.data();     
-        currUser.following?.forEach((u) => {
-          getDoc(doc(db, "Profile", u)).then((docSnap) => {
-            console.log(docSnap.data().Name);
-            followers.push({ name: docSnap.data().Name , pic: docSnap.data().Picture_id })     
+    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+        var new_obj = {}; 
+        const currUser = docSnap.data();  
+        await currUser.following?.forEach(async (u) => {
+          await getDoc(doc(db, "Profile", u)).then(async (docSnap) => {
+            const storage = getStorage();
+            const pathReference = ref(storage, docSnap.data().Picture_id);
+            getDownloadURL(pathReference).then((url) => {
+              new_obj = { uid: u,  name: docSnap.data().Name , imgUrl: url};  
+              setFollowers(prev => [...prev, new_obj]);
+            });
           });
-        });
-      }
-      console.log(followers);
+      });
     });
   }, []);
-
 
 
   return (
@@ -67,24 +72,26 @@ export default function Followers({ user }) {
             Followers
           </Heading>
           <Box align="center" mt="50px">
-            <Tabs isFitted colorScheme="white" variant="enclosed" border = "30pt" borderColor = "gray.50" spacing = "10px">
+            <Tabs isLazy isFitted colorScheme="white" variant="enclosed" border = "30pt" borderColor = "gray.50" spacing = "10px">
               <TabList mb="3em">
                 <Tab bg="#FDF2E9" color="primary.2350" fontWeight = "bold" fontSize = "xs">FOLLOWING</Tab>
                 <Tab ml = "5px" mr = "5px"bg="#FDF2E9" color="primary.2350" fontWeight = "bold" fontSize = "xs">SEARCH</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {followers.map((item, index) => (
-                    <Text key = {index} >{item.name}</Text>
+                    <Flex wrap = "wrap" justify = "space-evenly" mt = "-30px">
+                   {followers.map((item, index) => (
+                    <Friend key = {index} user = {user} uid = {item.uid} name = {item.name} image = {item.imgUrl} />
                    ))}
+                    </Flex>
                 </TabPanel>
                 <TabPanel>
+                  <Flex w = "600px" h = "300px" justify = "center" direction = "column" bg="#FDF2E9" borderRadius ="10" boxShadow = "lg">
                   <AddFriend user = {user}/>
+                  </Flex>
                 </TabPanel>
               </TabPanels>
            </Tabs>
-            
-              
           </Box>
         </Box>
       </Flex>

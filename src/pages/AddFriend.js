@@ -27,7 +27,7 @@ import {
   getDownloadURL,
   ref
 } from "../firebase/firebase";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, SearchIcon} from "@chakra-ui/icons";
 
 export default function AddFriend({user}) {
   const [options, setOptions] = useState({ value: "", label: "" });
@@ -41,6 +41,7 @@ export default function AddFriend({user}) {
         query(collection(db, "Profile"), orderBy("Name"))
       );
       querySnapshot.forEach(async (doc) => {
+        console.log(doc.data().Name);
         const storage = getStorage();
         await getDownloadURL(ref(storage, doc.data().Picture_id))
           .then((url) => {
@@ -67,10 +68,10 @@ export default function AddFriend({user}) {
 
   return (
     <Flex align = "center" direction = "column">
-        <Heading align="center" mb="10px" mt="10px" color="primary.2350">
+        <Heading align="center" mb="30px" mt="10px" color="primary.2350">
           Follow
         </Heading>
-        <Box width='500px' mt = "20px">
+        <Box width='400px' mt = "20px">
         <Select
           theme={(theme) => ({
             ...theme,
@@ -101,14 +102,15 @@ export default function AddFriend({user}) {
         </Box>
         <Box>
           <Button
-            mt="30px"
+            mt="40px"
             w="150px"
             bg="primary.3200"
             color="primary.150"
             fontWeight="bold"
-            fontSize="16"
+            fontSize="15"
             onClick={onOpen}
-          >
+          >  
+          <SearchIcon mr = "10px"/> 
             Search User
           </Button>
         </Box>

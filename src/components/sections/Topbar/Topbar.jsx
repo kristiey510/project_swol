@@ -75,8 +75,8 @@ export default function Topbar() {
       </div>
       <div className="topbarRight">
         <Menu>
-          <MenuButton as={Button} colorScheme="transparent" w="50px" p="0">
-            <Image ml="-7px" borderRadius="50%" w="40px" h="38px" id="myimg" />
+          <MenuButton as={Button} colorScheme="transparent" w="55px" p="0">
+            <Image ml="-7px" borderRadius="50%" h="40px" id="myimg" />
           </MenuButton>
           <MenuList bg="#FDEBD0" color="primary.2500" minW="150px" maxW="150px">
             <Link to="./profile">
