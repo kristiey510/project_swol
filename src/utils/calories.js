@@ -41,7 +41,6 @@ const estimateMET = (scale, quantity) => {
 
 //final functions
 const runningCal = (weight, scale, quantity) => {
-  //scale in miles, quantity in minutes
   return (
     factor["Running"] *
     weightToKg(weight) *
