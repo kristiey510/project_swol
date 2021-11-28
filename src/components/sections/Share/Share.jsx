@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Share.css";
 import PropTypes from "prop-types";
-import {
-  PermMedia,
-  EmojiEmotions,
-  AddCircleOutline,
-  AccessTime,
-} from "@material-ui/icons";
+import { PermMedia, AddCircleOutline, AccessTime } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 import {
   Modal,
@@ -21,7 +16,13 @@ import {
   Box,
   Select,
   Text,
+  Flex,
   HStack,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import {
   doc,
@@ -36,9 +37,16 @@ import {
   getDoc,
   getDownloadURL,
 } from "../../../firebase/firebase";
+import { exerciseUnits } from "../../../utils/exercises";
 
 export default function Share({ user }) {
-  const [input, setInput] = useState({ title: "", type: "", desc: "" });
+  const [input, setInput] = useState({
+    title: "",
+    type: "",
+    desc: "",
+    scale: "",
+    quantity: "",
+  });
   const [image, setImage] = useState(null);
   const [Error, setError] = useState("");
   //const { isOpen, onOpen, onClose } = useDisclosure();
@@ -143,6 +151,8 @@ export default function Share({ user }) {
       title: input.title,
       type: input.type,
       desc: input.desc,
+      scale: Number(input.scale),
+      quantity: Number(input.quantity),
       timestamp: serverTimestamp(),
       img: filename,
       usr: user.uid,
@@ -241,11 +251,51 @@ export default function Share({ user }) {
           <option value="Shrugs">&nbsp;&nbsp;&nbsp;&nbsp;Shrugs</option>
           <option value="Lunges">&nbsp;&nbsp;&nbsp;&nbsp;Lunges</option>
         </Select>
+
+        {input.type && (
+          <Flex mt="10px" justify="center" align="center">
+            {exerciseUnits[input.type].scale && (
+              <>
+                <NumberInput
+                  min={0}
+                  step={1}
+                  value={input.scale}
+                  onChange={(str) => handleChange("scale", str)}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                <Text ml="5px" mr="5px">
+                  {exerciseUnits[input.type].scale}
+                </Text>
+              </>
+            )}
+            <NumberInput
+              min={0}
+              step={1}
+              value={input.quantity}
+              onChange={(str) => handleChange("quantity", str)}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <Text ml="5px" mr="5px">
+              {exerciseUnits[input.type].quantity}
+            </Text>
+          </Flex>
+        )}
+
         <hr className="shareHr" />
 
         {/* <Text color="red" textAlign="center">
-            {Error}
-        </Text> */}
+        {Error}
+    </Text> */}
 
         <div className="shareBottom">
           <div className="shareOptions">
@@ -271,7 +321,6 @@ export default function Share({ user }) {
           </button>
         </div>
       </div>
-
       <Modal isOpen={isPhotoOpen} onClose={onPhotoClose}>
         <ModalOverlay />
         <ModalContent>
