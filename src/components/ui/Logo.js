@@ -5,12 +5,7 @@ import logo from "../../icons/landing_page/Logo.png";
 export default function Logo(props) {
   return (
     <Box {...props}>
-       <Image
-              src={logo}
-              backgroundColor="transparent"
-              w="100px"
-              h="50px"
-            />
+      <Image src={logo} backgroundColor="transparent" w="155px" h="50px" />
     </Box>
   );
 }
