@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Share.css";
 import PropTypes from "prop-types";
-import { PermMedia, EmojiEmotions, AddCircleOutline, AccessTime } from "@material-ui/icons";
+import {
+  PermMedia,
+  EmojiEmotions,
+  AddCircleOutline,
+  AccessTime,
+} from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 import {
   Modal,
@@ -12,11 +17,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Image,
   Button,
   Box,
   Select,
-  Heading,
   Text,
   HStack,
 } from "@chakra-ui/react";
@@ -31,75 +34,69 @@ import {
   uploadBytes,
   auth,
   getDoc,
-  getDownloadURL
+  getDownloadURL,
 } from "../../../firebase/firebase";
 
-export default function Share({user}) {
+export default function Share({ user }) {
   const [input, setInput] = useState({ title: "", type: "", desc: "" });
   const [image, setImage] = useState(null);
   const [Error, setError] = useState("");
   //const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isTypeOpen , onOpen: onTypeOpen, onClose: onTypeClose } = useDisclosure()
-  const { isOpen: isPhotoOpen , onOpen: onPhotoOpen, onClose: onPhotoClose } = useDisclosure()
+  const {
+    isOpen: isTypeOpen,
+    onOpen: onTypeOpen,
+    onClose: onTypeClose,
+  } = useDisclosure();
+  const {
+    isOpen: isPhotoOpen,
+    onOpen: onPhotoOpen,
+    onClose: onPhotoClose,
+  } = useDisclosure();
 
   const handleImage = () => {
-    console.log(image)
     if (image != null) {
       const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
-      console.log(image);
       if (image.size > 5000000) {
-        console.log("image too large");
         setError("Error: File too large");
         setImage(null);
-        console.log(image);
         return;
       }
       //validate image filetype
       else if (!acceptedImageTypes.includes(image.type)) {
-        console.log("wrong file type:", image.type);
         setError("Error: Not a JPG or PNG");
-        setImage(null)
-        console.log(image);
+        setImage(null);
+        return;
+      } else {
+        setError("");
         return;
       }
-      else {
-        setError("")
-        console.log(image);
-        return;
-      }
-    }
-    else{
+    } else {
       setError("Error: No Image Selected");
-      setImage(null)
-      console.log(image);
+      setImage(null);
       return;
     }
-  }
+  };
 
+  useEffect(() => {
+    async function fetchProfile() {
+      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+        if (docSnap.data().img !== "no_image_provided") {
+          const data = docSnap.data();
 
-  useEffect(async () => {
-    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-      //console.log("doc: ",docSnap.data())
-      if (docSnap.data().img !== "no_image_provided") {
+          const img = document.getElementById("profilePicture");
+          //get image ref
+          const storage = getStorage();
+          const pathReference = ref(storage, data.Picture_id);
 
-        const data = docSnap.data();
-
-        //console.log("image", data);
-
-        const img = document.getElementById("profilePicture");
-        //console.log(img);
-        //get image ref
-        const storage = getStorage();
-        const pathReference = ref(storage, data.Picture_id);
-
-        //download, then set attribute to image tag in file
-        getDownloadURL(pathReference).then((url) => {
-          img.setAttribute("src", url);
-        });
-
-      }
-    });
-  }, []);
+          //download, then set attribute to image tag in file
+          getDownloadURL(pathReference).then((url) => {
+            img.setAttribute("src", url);
+          });
+        }
+      });
+    }
+    fetchProfile();
+  }, [user.uid]);
 
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -112,20 +109,16 @@ export default function Share({user}) {
     if (!user) {
       return;
     }
-    console.log("type",input.type)
 
-    if(input.type == ""){
+    if (input.type === "") {
       alert("Please select an exercise");
       //setError("Please select an exercise")
       return;
     }
-    
 
     //validate image size
     if (image != null) {
-      console.log(image);
       if (image.size > 5000000) {
-        console.log("image too large");
         //setError("Error: File too large");
         return;
       }
@@ -140,13 +133,9 @@ export default function Share({user}) {
     //reset error on success
     //setError("");
 
-    console.log("user: ", user.uid);
     //default filename (sticks if empty)
     var filename = "no_image_provided";
     if (image != null) {
-      //old way
-      //filename = image.name
-      //need to npm install uuid
       filename = uuidv4();
     }
     const newDocRef = doc(collection(db, "test"));
@@ -160,7 +149,6 @@ export default function Share({user}) {
       //no likes for now
       likes: 0,
       id: newDocRef.id,
-      type: input.type,
     });
 
     //clear field
@@ -168,7 +156,7 @@ export default function Share({user}) {
     descInput.value = "";
     const typeInput = document.getElementById("dropdown");
     typeInput.value = "";
-    setInput({ title: "", type: "", desc: "" })
+    setInput({ title: "", type: "", desc: "" });
 
     //no image log
     if (image == null) {
@@ -195,12 +183,7 @@ export default function Share({user}) {
     <div className="Share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img
-            id = "profilePicture"
-            className="shareProfileImg"
-            src=""
-            alt=""
-          />
+          <img id="profilePicture" className="shareProfileImg" src="" alt="" />
           <input
             id="mainInput"
             placeholder="Today's Workout"
@@ -209,36 +192,57 @@ export default function Share({user}) {
             onChange={(event) => handleChange("desc", event.target.value)}
           />
         </div>
-        <br/>
-        <Select 
-              variant="filled" 
-              placeholder="Select Exercise" 
-              id = "dropdown"
-              onChange={(event) => handleChange("type", event.target.value)}>
-              <option value="Running">Running</option>
-              <option value="Biking">Biking</option>
-              <option value="Elliptical">Elliptical</option>
-              <option value="Stair climber">Stair climber</option>
-              <option value="Plank">Plank</option>
+        <br />
+        <Select
+          variant="filled"
+          placeholder="Select Exercise"
+          id="dropdown"
+          onChange={(event) => handleChange("type", event.target.value)}
+        >
+          <option disabled>Cardio</option>
+          <option value="Running">&nbsp;&nbsp;&nbsp;&nbsp;Running</option>
+          <option value="Biking">&nbsp;&nbsp;&nbsp;&nbsp;Biking</option>
+          <option value="Elliptical">&nbsp;&nbsp;&nbsp;&nbsp;Elliptical</option>
+          <option value="Stair climber">
+            &nbsp;&nbsp;&nbsp;&nbsp;Stair climber
+          </option>
 
-              <option value="Pull up/chin up">Pull up/chin up</option>
-              <option value="Sit up/crunch">Sit up/crunch</option>
-              <option value="Push up">Push up</option>
-              <option value="Bench">Bench</option>
-              <option value="Squat">Squat</option>
-              <option value="Deadlift">Deadlift</option>
-              <option value="Bicep curl">Bicep curl</option>
-              <option value="Shoulder press">Shoulder press</option>
-              <option value="Shoulder raises">Shoulder raises</option>
-              <option value="Rows">Rows</option>
-              <option value="Lunges">Lunges</option>
-              <option value="Shrugs">Shrugs</option>
-              <option value="Hang clean">Hang clean</option>
-              <option value="Clean and jerk">Clean and jerk</option>
-              <option value="Snatch">Snatch</option>
-            </Select>
+          <option disabled>Calisthetics</option>
+          <option value="Push up">&nbsp;&nbsp;&nbsp;&nbsp;Push up</option>
+          <option value="Pull up/chin up">
+            &nbsp;&nbsp;&nbsp;&nbsp;Pull up/chin up
+          </option>
+          <option value="Sit up/crunch">
+            &nbsp;&nbsp;&nbsp;&nbsp;Sit up/crunch
+          </option>
+          <option value="Plank">&nbsp;&nbsp;&nbsp;&nbsp;Plank</option>
+
+          <option disabled>Powerlifting</option>
+          <option value="Bench">&nbsp;&nbsp;&nbsp;&nbsp;Bench</option>
+          <option value="Squat">&nbsp;&nbsp;&nbsp;&nbsp;Squat</option>
+          <option value="Deadlift">&nbsp;&nbsp;&nbsp;&nbsp;Deadlift</option>
+
+          <option disabled>Olympic weightlifting</option>
+          <option value="Hang clean">&nbsp;&nbsp;&nbsp;&nbsp;Hang clean</option>
+          <option value="Clean and jerk">
+            &nbsp;&nbsp;&nbsp;&nbsp;Clean and jerk
+          </option>
+          <option value="Snatch">&nbsp;&nbsp;&nbsp;&nbsp;Snatch</option>
+
+          <option disabled>General</option>
+          <option value="Bicep curl">&nbsp;&nbsp;&nbsp;&nbsp;Bicep curl</option>
+          <option value="Rows">&nbsp;&nbsp;&nbsp;&nbsp;Rows</option>
+          <option value="Shoulder press">
+            &nbsp;&nbsp;&nbsp;&nbsp;Shoulder press
+          </option>
+          <option value="Shoulder raise">
+            &nbsp;&nbsp;&nbsp;&nbsp;Shoulder raises
+          </option>
+          <option value="Shrugs">&nbsp;&nbsp;&nbsp;&nbsp;Shrugs</option>
+          <option value="Lunges">&nbsp;&nbsp;&nbsp;&nbsp;Lunges</option>
+        </Select>
         <hr className="shareHr" />
-        
+
         {/* <Text color="red" textAlign="center">
             {Error}
         </Text> */}
@@ -247,25 +251,19 @@ export default function Share({user}) {
           <div className="shareOptions">
             <div className="shareOption">
               <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span 
-              className="shareOptionText"
-              onClick = {onPhotoOpen}>
-                Add Photo</span>
+              <span className="shareOptionText" onClick={onPhotoOpen}>
+                Add Photo
+              </span>
             </div>
             <div className="shareOption">
               <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />
-              <span 
-                className="shareOptionText"
-                onClick = {onTypeOpen}>
-                  Choose Activity</span>
+              <span className="shareOptionText" onClick={onTypeOpen}>
+                Choose Activity
+              </span>
             </div>
             <div className="shareOption">
               <AccessTime htmlColor="black" className="shareIcon" />
-              <span className="shareOptionText">Workout Duration/Reps</span>
-            </div>
-            <div className="shareOption">
-              <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Share feelings</span>
+              <span className="shareOptionText">Workout Details</span>
             </div>
           </div>
           <button className="shareButton" onClick={handleMakePost}>
@@ -274,45 +272,44 @@ export default function Share({user}) {
         </div>
       </div>
 
-      
-      <Modal  isOpen={isPhotoOpen} onClose={onPhotoClose}>
-        <ModalOverlay/>
+      <Modal isOpen={isPhotoOpen} onClose={onPhotoClose}>
+        <ModalOverlay />
         <ModalContent>
           <ModalHeader color="primary.2350">Add Photo</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box >
-            <input
-            type="file"
-            onChange={(event) => {
-              setImage(event.target.files[0]);
-            }}
-          />
+            <Box>
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImage(event.target.files[0]);
+                }}
+              />
             </Box>
           </ModalBody>
           <ModalFooter>
-          <HStack>
-          <Text color="red" textAlign="center">
-            {Error}
-          </Text>
-          <Button
-              bg="primary.3200"
-              color="primary.150"
-              fontWeight="bold"
-              fontSize="16"
-              onClick={handleImage}
-            >
-              Upload
-            </Button>
-            <Button
-              bg="primary.3200"
-              color="primary.150"
-              fontWeight="bold"
-              fontSize="16"
-              onClick={onPhotoClose}
-            >
-              Done
-            </Button>
+            <HStack>
+              <Text color="red" textAlign="center">
+                {Error}
+              </Text>
+              <Button
+                bg="primary.3200"
+                color="primary.150"
+                fontWeight="bold"
+                fontSize="16"
+                onClick={handleImage}
+              >
+                Upload
+              </Button>
+              <Button
+                bg="primary.3200"
+                color="primary.150"
+                fontWeight="bold"
+                fontSize="16"
+                onClick={onPhotoClose}
+              >
+                Done
+              </Button>
             </HStack>
           </ModalFooter>
         </ModalContent>
