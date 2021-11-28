@@ -19,15 +19,15 @@ export const muscles = {
     major: ["abs", "obliques"],
     minor: ["delts"],
   },
-  "Pull-up/Chin-up": {
+  "Pull up/chin up": {
     major: ["bis", "lats"],
     minor: ["grip"],
   },
-  "Sit-up/crunch": {
+  "Sit up/crunch": {
     major: ["abs"],
     minor: ["obliques"],
   },
-  "Push-up": {
+  "Push up": {
     major: ["pecs", "tris"],
     minor: ["abs"],
   },
