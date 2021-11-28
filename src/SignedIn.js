@@ -6,45 +6,48 @@ import Dashboard from "./pages/Dashboard";
 import TestPost from "./pages/TestPost";
 import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
-import AddFriend from "./pages/AddFriend";
 import Faq from "./pages/Faq";
 import CreateAccount from "./pages/CreateAccount";
-import PersonalLog from "./pages/PersonalLog"
+import PersonalLog from "./pages/PersonalLog";
 import Followers from "./pages/Followers";
+import ErrorPage from "./errorPage";
 
 function SignedIn({ user }) {
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          <Dashboard user={user}/>
+          <Dashboard user={user} />
         </Route>
         <Route path="/dashboard">
           <Dashboard user={user} />
         </Route>
         <Route path="/about_us">
-          <AboutUs user={user}/>
+          <AboutUs user={user} />
         </Route>
         <Route path="/TestPost">
-          <TestPost user={user}/>
+          <TestPost user={user} />
         </Route>
         <Route path="/profile_info">
-          <ProfileCreate user={user}/>
+          <ProfileCreate user={user} />
         </Route>
         <Route path="/profile">
-          <ProfileEdit user={user}/>
+          <ProfileEdit user={user} />
         </Route>
         <Route path="/personal_log">
-          <PersonalLog user={user}/>
+          <PersonalLog user={user} />
         </Route>
         <Route path="/followers">
-          <Followers user={user}/>
+          <Followers user={user} />
         </Route>
         <Route path="/faq">
-          <Faq user={user}/>
+          <Faq user={user} />
         </Route>
         <Route path="/signup">
           <CreateAccount />
+        </Route>
+        <Route path="*">
+          <ErrorPage />
         </Route>
       </Switch>
     </Router>
