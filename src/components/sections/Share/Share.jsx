@@ -23,10 +23,12 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Textarea,
 } from "@chakra-ui/react";
 import {
   doc,
   setDoc,
+  updateDoc,
   db,
   collection,
   serverTimestamp,
@@ -49,6 +51,8 @@ export default function Share({ user }) {
   });
   const [image, setImage] = useState(null);
   const [Error, setError] = useState("");
+  const [cache, setCache] = useState([]);
+  const [inputHeight, setInputHeight] = useState(1);
   //const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isTypeOpen,
@@ -60,6 +64,7 @@ export default function Share({ user }) {
     onOpen: onPhotoOpen,
     onClose: onPhotoClose,
   } = useDisclosure();
+  const CACHE_SIZE = 5;
 
   const handleImage = () => {
     if (image != null) {
@@ -76,6 +81,7 @@ export default function Share({ user }) {
         return;
       } else {
         setError("");
+        onPhotoClose();
         return;
       }
     } else {
@@ -101,6 +107,7 @@ export default function Share({ user }) {
             img.setAttribute("src", url);
           });
         }
+        setCache(docSnap.data().cache);
       });
     }
     fetchProfile();
@@ -110,7 +117,18 @@ export default function Share({ user }) {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onChange = (event) => {
+    setInputHeight(`${event.target.scrollHeight}px`);
+    handleChange("desc", event.target.value);
+  };
+
   const handleMakePost = () => {
+    const bodyWtExercises = [
+      "Plank",
+      "Pull up/chin up",
+      "Sit up/crunch",
+      "Push up",
+    ];
     //check user
     var user = auth.currentUser;
     //if no user
@@ -121,6 +139,16 @@ export default function Share({ user }) {
     if (input.type === "") {
       alert("Please select an exercise");
       //setError("Please select an exercise")
+      return;
+    } else if (bodyWtExercises.includes(input.type)) {
+      if (input.quantity === "") {
+        alert("Please enter exercise details");
+        //setError("Please enter exercise details")
+        return;
+      }
+    } else if (input.scale === "" || input.quantity === "") {
+      alert("Please enter exercise details");
+      //setError("Please enter exercise details")
       return;
     }
 
@@ -146,20 +174,31 @@ export default function Share({ user }) {
     if (image != null) {
       filename = uuidv4();
     }
+
+    var updatedCache = cache;
+    updatedCache.unshift(input.type);
+    if (updatedCache.length > CACHE_SIZE) updatedCache.pop();
+
     const newDocRef = doc(collection(db, "test"));
-    setDoc(newDocRef, {
-      title: input.title,
-      type: input.type,
-      desc: input.desc,
-      scale: Number(input.scale),
-      quantity: Number(input.quantity),
-      timestamp: serverTimestamp(),
-      img: filename,
-      usr: user.uid,
-      //no likes for now
-      likes: 0,
-      id: newDocRef.id,
-    });
+    const userDocRef = doc(db, "Profile", user.uid);
+    Promise.all([
+      setDoc(newDocRef, {
+        title: input.title,
+        type: input.type,
+        desc: input.desc,
+        scale: Number(input.scale),
+        quantity: Number(input.quantity),
+        timestamp: serverTimestamp(),
+        img: filename,
+        usr: user.uid,
+        //no likes for now
+        likes: 0,
+        id: newDocRef.id,
+      }),
+      updateDoc(userDocRef, {
+        cache: updatedCache,
+      }),
+    ]);
 
     //clear field
     const descInput = document.getElementById("mainInput");
@@ -194,15 +233,26 @@ export default function Share({ user }) {
       <div className="shareWrapper">
         <div className="shareTop">
           <img id="profilePicture" className="shareProfileImg" src="" alt="" />
-          <input
+          <Textarea
             id="mainInput"
             placeholder="Today's Workout"
-            className="shareInput"
+            border="none"
+            focusBorderColor="none"
+            height={inputHeight}
+            resize="none"
+            rows="1"
+            minH="40px"
+            maxLength={300}
             value={input.desc}
-            onChange={(event) => handleChange("desc", event.target.value)}
+            onChange={onChange}
           />
         </div>
-        <br />
+        <Flex justify="flex-end" m="2px">
+          <Text
+            fontSize="xs"
+            color="gray.300"
+          >{`${input.desc.length}/300`}</Text>
+        </Flex>
         <Select
           variant="filled"
           placeholder="Select Exercise"
