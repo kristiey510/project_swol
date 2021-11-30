@@ -75,7 +75,6 @@ export default function Feed({ user }) {
     return b.timestamp - a.timestamp;
   });
 
-  console.log("posts", posts);
   return (
     <div className="Feed">
       <div className="feedWrapper">

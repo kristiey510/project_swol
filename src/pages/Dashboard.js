@@ -27,7 +27,7 @@ export default function Dashboard({ user }) {
       <div className="homeContainer">
         <Sidebar user={userDoc} />
         <Feed user={userDoc} />
-        <Rightbar />
+        <Rightbar user={userDoc} />
       </div>
     </>
   );
