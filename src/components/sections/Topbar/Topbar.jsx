@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Topbar.css";
 import Logo from "../../ui/Logo";
 import { Search } from "@material-ui/icons";
 import {
-  doc,
-  db,
   auth,
-  getDoc,
   getStorage,
   ref,
   getDownloadURL,
@@ -21,7 +18,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-export default function Topbar() {
+export default function Topbar({ user }) {
   const exit = async () => {
     try {
       await auth.signOut();
@@ -32,30 +29,20 @@ export default function Topbar() {
     }
   };
 
-  const [image, setImage] = useState(null);
-
   useEffect(() => {
     async function getPic() {
-      await getDoc(doc(db, "Profile", auth.currentUser.uid)).then(
-        async (docSnap) => {
-          const data = docSnap.data();
-          if (docSnap.exists()) {
-            const storage = getStorage();
-            await getDownloadURL(ref(storage, data.Picture_id))
-              .then((url) => {
-                const img = document.getElementById("myimg");
-                img.setAttribute("src", url);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-            console.log("Image set");
-          }
-        }
-      );
+      const storage = getStorage();
+      await getDownloadURL(ref(storage, user.Picture_id))
+        .then((url) => {
+          const img = document.getElementById("myimg");
+          img.setAttribute("src", url);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     getPic();
-  }, []);
+  }, [user.Picture_id]);
 
   return (
     <div className="topbarContainer">

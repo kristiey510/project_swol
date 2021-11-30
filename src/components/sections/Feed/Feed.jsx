@@ -17,76 +17,58 @@ import {
 
 export default function Feed({ user }) {
   const [posts, setPosts] = useState([]);
-  const [images, setImages] = useState([]);
-  const [userDoc, setUserDoc] = useState({});
 
   useEffect(() => {
     async function fetchPosts() {
       var username;
       var propic;
       var propicID;
-      //get the current user
-      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-        if (docSnap.exists()) {
-          setUserDoc(docSnap.data());
-          const user = docSnap.data();
-          user.following?.forEach((u) => {
-            //get the username of the original poster for each post
-            getDoc(doc(db, "Profile", u)).then((docSnap) => {
-              username = docSnap.data().Name;
-              propicID = docSnap.data().Picture_id;
-            });
-            //get all posts from users the user is following
-            const postQuery = query(
-              collection(db, "test"),
-              where("usr", "==", u)
-            );
-            getDocs(postQuery).then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                var name_obj = {};
-                var img_obj = {};
-                const data = doc.data();
+      user.following?.forEach((u) => {
+        //get the username of the original poster for each post
+        getDoc(doc(db, "Profile", u)).then((docSnap) => {
+          username = docSnap.data().Name;
+          propicID = docSnap.data().Picture_id;
+        });
+        //get all posts from users the user is following
+        const postQuery = query(collection(db, "test"), where("usr", "==", u));
+        getDocs(postQuery).then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            var name_obj = {};
+            var img_obj = {};
 
-                //store username with data
-                name_obj = { ...doc.data(), username: username };
+            //store username with data
+            name_obj = { ...doc.data(), username: username };
 
-                if (doc.data().img !== "no_image_provided") {
-                  //get image ref
-                  const storage = getStorage();
-                  const pathReference = ref(storage, doc.data().img);
+            if (doc.data().img !== "no_image_provided") {
+              //get image ref
+              const storage = getStorage();
+              const pathReference = ref(storage, doc.data().img);
 
-                  const pathReference1 = ref(storage, propicID);
+              const pathReference1 = ref(storage, propicID);
 
-                  //download, then set attribute to image tag in file
-                  getDownloadURL(pathReference).then((url1) => {
-                    getDownloadURL(pathReference1).then((url) => {
-                      propic = url;
-                      img_obj = { ...name_obj, imgUrl: url1, propic: propic };
-                      setPosts((prev) => [...prev, img_obj]);
-                    });
-                  });
-                } else {
-                  const storage = getStorage();
-                  const pathReference1 = ref(storage, propicID);
-                  getDownloadURL(pathReference1).then((url) => {
-                    propic = url;
-                    img_obj = { ...name_obj, imgUrl: null, propic: propic };
-                    setPosts((prev) => [...prev, img_obj]);
-                  });
-                }
+              //download, then set attribute to image tag in file
+              getDownloadURL(pathReference).then((url1) => {
+                getDownloadURL(pathReference1).then((url) => {
+                  propic = url;
+                  img_obj = { ...name_obj, imgUrl: url1, propic: propic };
+                  setPosts((prev) => [...prev, img_obj]);
+                });
               });
-            });
+            } else {
+              const storage = getStorage();
+              const pathReference1 = ref(storage, propicID);
+              getDownloadURL(pathReference1).then((url) => {
+                propic = url;
+                img_obj = { ...name_obj, imgUrl: null, propic: propic };
+                setPosts((prev) => [...prev, img_obj]);
+              });
+            }
           });
-
-          //get display name and profile picture
-        } else {
-          console.log("No such document!");
-          return [{ desc: "no posts" }];
-        }
+        });
       });
     }
     fetchPosts();
-  }, [user.uid]);
+  }, [user.following]);
 
   //sorts by date descending
   posts.sort((a, b) => {
@@ -99,7 +81,7 @@ export default function Feed({ user }) {
       <div className="feedWrapper">
         <Share user={user} />
         {posts.map((post, index) => (
-          <Post key={index} post={post} user={userDoc} />
+          <Post key={index} post={post} user={user} />
         ))}
       </div>
     </div>

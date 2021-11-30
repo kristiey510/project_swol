@@ -36,7 +36,6 @@ import {
   ref,
   uploadBytes,
   auth,
-  getDoc,
   getDownloadURL,
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
@@ -51,14 +50,7 @@ export default function Share({ user }) {
   });
   const [image, setImage] = useState(null);
   const [Error, setError] = useState("");
-  const [cache, setCache] = useState([]);
   const [inputHeight, setInputHeight] = useState(1);
-  //const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isTypeOpen,
-    onOpen: onTypeOpen,
-    onClose: onTypeClose,
-  } = useDisclosure();
   const {
     isOpen: isPhotoOpen,
     onOpen: onPhotoOpen,
@@ -93,25 +85,18 @@ export default function Share({ user }) {
 
   useEffect(() => {
     async function fetchProfile() {
-      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-        if (docSnap.data().img !== "no_image_provided") {
-          const data = docSnap.data();
+      const img = document.getElementById("profilePicture");
+      //get image ref
+      const storage = getStorage();
+      const pathReference = ref(storage, user.Picture_id);
 
-          const img = document.getElementById("profilePicture");
-          //get image ref
-          const storage = getStorage();
-          const pathReference = ref(storage, data.Picture_id);
-
-          //download, then set attribute to image tag in file
-          getDownloadURL(pathReference).then((url) => {
-            img.setAttribute("src", url);
-          });
-        }
-        setCache(docSnap.data().cache);
+      //download, then set attribute to image tag in file
+      getDownloadURL(pathReference).then((url) => {
+        img.setAttribute("src", url);
       });
     }
     fetchProfile();
-  }, [user.uid]);
+  }, [user.Picture_id]);
 
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
@@ -175,7 +160,7 @@ export default function Share({ user }) {
       filename = uuidv4();
     }
 
-    var updatedCache = cache;
+    var updatedCache = user.cache;
     updatedCache.unshift(input.type);
     if (updatedCache.length > CACHE_SIZE) updatedCache.pop();
 
@@ -357,9 +342,7 @@ export default function Share({ user }) {
             </div>
             <div className="shareOption">
               <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText" onClick={onTypeOpen}>
-                Choose Activity
-              </span>
+              <span className="shareOptionText">Choose Activity</span>
             </div>
             <div className="shareOption">
               <AccessTime htmlColor="black" className="shareIcon" />
