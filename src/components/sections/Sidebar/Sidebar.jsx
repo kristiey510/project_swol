@@ -78,10 +78,6 @@ export default function Sidebar({ user }) {
             </Link>
           </li>
           <li className="sidebarListsItems">
-            <ScheduleOutlined className="sidebarIcon" />
-            <span className="sidebarListItemNext">Schedule</span>
-          </li>
-          <li className="sidebarListsItems">
             <HelpOutline className="sidebarIcon" />
             <Link to="./faq">
               <span className="sidebarListItemNext">Questions</span>
