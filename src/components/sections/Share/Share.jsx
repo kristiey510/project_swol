@@ -115,7 +115,7 @@ export default function Share({ user }) {
       "Push up",
     ];
     //check user
-    var user = auth.currentUser;
+    //var user = auth.currentUser;
     //if no user
     if (!user) {
       return;
