@@ -84,23 +84,24 @@ export default function Faq({ user }) {
                 <h2>
                   <AccordionButton rounded={"xl"}>
                     <Box flex="1" textAlign="left">
-                      4. Question 4
+                      4. I am having trouble uploading images to my post
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>Answer to q4</AccordionPanel>
+                <AccordionPanel pb={4}> In order to upload images to our website, they need to be in .jpg or .png format.
+                Please convert the image file you are uploading as either .jpg or .png format. </AccordionPanel>
               </AccordionItem>
               <AccordionItem>
                 <h2>
                   <AccordionButton rounded={"xl"}>
                     <Box flex="1" textAlign="left">
-                      5. Question 5
+                      5. Have any further questions or concerns?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>Answer to q5</AccordionPanel>
+                <AccordionPanel pb={4}> Contact one of our team members via email. </AccordionPanel>
               </AccordionItem>
             </Accordion>
           </Box>
