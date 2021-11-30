@@ -11,9 +11,11 @@ import {
   increment,
   arrayRemove,
 } from "../../../firebase/firebase";
-import { Text } from "@chakra-ui/react";
+import { Text, Flex, Stack } from "@chakra-ui/react";
+import { exerciseUnits } from "../../../utils/exercises";
+import { calories } from "../../../utils/calories";
 
-export default function Post({ post }) {
+export default function Post({ post, user }) {
   const handleLike = () => {
     // setLN("");
     var alreadyLiked = false;
@@ -72,9 +74,7 @@ export default function Post({ post }) {
           <div className="postTopLeft">
             <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
-            <span className="postDate">
-              {post?.type}
-            </span>
+            <span className="postDate">{post?.type}</span>
             <span className="postDate">
               {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
@@ -94,6 +94,59 @@ export default function Post({ post }) {
           <span className="postText">{post?.desc}</span>
           <img className="postImg" src={post?.imgUrl} alt="" />
         </div>
+
+        <hr className="postHr" />
+
+        {post?.type &&
+          user?.Height_Ft &&
+          user?.Height_In &&
+          user?.Weight &&
+          post?.scale &&
+          post?.quantity && (
+            <>
+              <Flex justify="space-around" align="center" mb="10px">
+                <Stack>
+                  <Text color="gray.300" fontSize="xs">
+                    Exercise
+                  </Text>
+                  <Text>{post?.type}</Text>
+                </Stack>
+                <Stack>
+                  <Text>
+                    {post?.scale !== 1
+                      ? `${post?.scale} ${exerciseUnits[post?.type]?.scale}`
+                      : `${post?.scale} ${(exerciseUnits[
+                          post?.type
+                        ]?.scale).slice(0, -1)}`}
+                  </Text>
+                  <Text>
+                    {post?.quantity !== 1
+                      ? `${post?.quantity} ${
+                          exerciseUnits[post?.type]?.quantity
+                        }`
+                      : `${post?.quantity} ${(exerciseUnits[
+                          post?.type
+                        ]?.quantity).slice(0, -1)}`}
+                  </Text>
+                </Stack>
+                <Text>
+                  {`${Math.round(
+                    calories(
+                      post?.type,
+                      user?.Height_Ft,
+                      user?.Height_In,
+                      user?.Weight,
+                      post?.scale,
+                      post?.quantity
+                    )
+                  )} calories`}
+                </Text>
+              </Flex>
+
+              <hr className="postHr" />
+            </>
+          )}
+
         <div className="postBottom">
           <div className="postBottomLeft">
             <img

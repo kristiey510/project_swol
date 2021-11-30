@@ -1,25 +1,26 @@
 //scaling factor
 const factor = {
+  //* 10 fudge factor because human body not 100% efficient
   Running: 0.0175,
   Biking: 0.0175 * (7 / 8),
   Elliptical: 0.0175 * (5 / 8),
   "Stair climber": 0.0175 * (9 / 8),
   Plank: 0.026,
-  "Pull up/chin up": 9.8 * (5 / 12),
-  "Sit up/crunch": 9.8 * (5 / 32) * 0.64,
-  "Push up": 9.8 * (5 / 12) * 0.64,
-  Bench: 9.8 * (5 / 12),
-  Squat: 9.8 * (1 / 4),
-  Deadlift: 9.8 * (7 / 16),
-  "Bicep curl": 9.8 * (5 / 12),
-  "Shoulder press": 9.8 * (5 / 12),
-  "Shoulder raise": 9.8 * (5 / 12),
-  Rows: 9.8 * (5 / 12),
-  Lunges: 9.8 * (7 / 16),
-  Shrugs: 9.8 * (1 / 16),
-  "Hang clean": 9.8 * (3 / 8),
-  "Clean and jerk": 9.8 * (19 / 24),
-  Snatch: 9.8 * ((5 * Math.sqrt(2)) / 24 + 3 / 8),
+  "Pull up/chin up": 10 * 9.8 * (5 / 12),
+  "Sit up/crunch": 10 * 9.8 * (5 / 32) * 0.64,
+  "Push up": 10 * 9.8 * (5 / 12) * 0.64,
+  Bench: 10 * 9.8 * (5 / 12),
+  Squat: 10 * 9.8 * (1 / 4),
+  Deadlift: 10 * 9.8 * (7 / 16),
+  "Bicep curl": 10 * 9.8 * (5 / 12),
+  "Shoulder press": 10 * 9.8 * (5 / 12),
+  "Shoulder raise": 10 * 9.8 * (5 / 12),
+  Rows: 10 * 9.8 * (5 / 12),
+  Lunges: 10 * 9.8 * (7 / 16),
+  Shrugs: 10 * 9.8 * (1 / 16),
+  "Hang clean": 10 * 9.8 * (3 / 8),
+  "Clean and jerk": 10 * 9.8 * (19 / 24),
+  Snatch: 10 * 9.8 * ((5 * Math.sqrt(2)) / 24 + 3 / 8),
 };
 
 //unit conversions
@@ -193,25 +194,51 @@ const snatchCal = (feet, inches, scale, quantity) => {
   );
 };
 
-export {
-  runningCal,
-  bikingCal,
-  ellipticalCal,
-  stairClimberCal,
-  plankCal,
-  pullUpChinUpCal,
-  sitUpCrunchCal,
-  pushUpCal,
-  benchCal,
-  squatCal,
-  deadliftCal,
-  bicepCurlCal,
-  shoulderPressCal,
-  shoulderRaiseCal,
-  rowsCal,
-  lungesCal,
-  shrugsCal,
-  hangCleanCal,
-  cleanJerkCal,
-  snatchCal,
+const wrapper = (exercise, feet, inches, weight, scale, quantity) => {
+  switch (exercise) {
+    case "Running":
+      return runningCal(weight, scale, quantity);
+    case "Biking":
+      return bikingCal(weight, scale, quantity);
+    case "Elliptical":
+      return ellipticalCal(weight, scale, quantity);
+    case "Stair climber":
+      return stairClimberCal(weight, scale, quantity);
+    case "Plank":
+      return plankCal(weight, quantity);
+    case "Pull up/chin up":
+      return pullUpChinUpCal(feet, inches, weight, quantity);
+    case "Sit up/crunch":
+      return sitUpCrunchCal(feet, inches, weight, quantity);
+    case "Push up":
+      return pushUpCal(feet, inches, weight, quantity);
+    case "Bench":
+      return benchCal(feet, inches, scale, quantity);
+    case "Squat":
+      return squatCal(feet, inches, weight, scale, quantity);
+    case "Deadlift":
+      return deadliftCal(feet, inches, weight, scale, quantity);
+    case "Bicep curl":
+      return bicepCurlCal(feet, inches, scale, quantity);
+    case "Shoulder press":
+      return shoulderPressCal(feet, inches, scale, quantity);
+    case "Shoulder raise":
+      return shoulderRaiseCal(feet, inches, scale, quantity);
+    case "Rows":
+      return rowsCal(feet, inches, scale, quantity);
+    case "Lunges":
+      return lungesCal(feet, inches, weight, scale, quantity);
+    case "Shrugs":
+      return shrugsCal(feet, inches, scale, quantity);
+    case "Hang clean":
+      return hangCleanCal(feet, inches, scale, quantity);
+    case "Clean and jerk":
+      return cleanJerkCal(feet, inches, scale, quantity);
+    case "Snatch":
+      return snatchCal(feet, inches, scale, quantity);
+    default:
+      return 0;
+  }
 };
+
+export { wrapper as calories };
