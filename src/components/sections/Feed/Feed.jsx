@@ -28,14 +28,14 @@ export default function Feed({ user }) {
         getDoc(doc(db, "Profile", u)).then((docSnap) => {
           username = docSnap.data().Name;
           propicID = docSnap.data().Picture_id;
-        });
+          console.log(username);
+        }).catch((error) => {console.log(error);});
         //get all posts from users the user is following
         const postQuery = query(collection(db, "test"), where("usr", "==", u));
         getDocs(postQuery).then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             var name_obj = {};
             var img_obj = {};
-
             //store username with data
             name_obj = { ...doc.data(), username: username };
 
