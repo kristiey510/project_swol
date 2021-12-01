@@ -196,20 +196,22 @@ export default function Share({ user }) {
       console.log("no image provided");
       return;
     }
+    else {
 
-    //size in bytes
-    console.log("size:", image.size);
+      //size in bytes
+      console.log("size:", image.size);
 
-    //image type
-    console.log("type:", image.type);
+      //image type
+      console.log("type:", image.type);
 
-    //upload file
-    const storage = getStorage();
-    const imageRef = ref(storage, filename);
-    uploadBytes(imageRef, image).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-      //clear field?
-    });
+      //upload file
+      const storage = getStorage();
+      const imageRef = ref(storage, filename);
+      uploadBytes(imageRef, image).then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+        //clear field?
+      });
+    }
   };
 
   return (
