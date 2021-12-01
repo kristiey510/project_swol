@@ -68,7 +68,7 @@ export default function Sidebar({ user }) {
           <li className="sidebarListsItems">
             <Person className="sidebarIcon" />
             <Link to="./followers">
-              <span className="sidebarListItemNext">Followers</span>
+              <span className="sidebarListItemNext">Follows</span>
             </Link>
           </li>
           <li className="sidebarListsItems">
@@ -76,10 +76,6 @@ export default function Sidebar({ user }) {
             <Link to="./personal_log">
               <span className="sidebarListItemNext">Personal log</span>
             </Link>
-          </li>
-          <li className="sidebarListsItems">
-            <ScheduleOutlined className="sidebarIcon" />
-            <span className="sidebarListItemNext">Schedule</span>
           </li>
           <li className="sidebarListsItems">
             <HelpOutline className="sidebarIcon" />

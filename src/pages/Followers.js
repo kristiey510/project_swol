@@ -37,11 +37,15 @@ import {
 
 export default function Followers({ user }) {
   const [followers, setFollowers] = useState([]);
+  const [userDoc, setUserDoc] = useState({});
 
   useEffect(async () => {
-    await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
         var new_obj = {}; 
         const currUser = docSnap.data();  
+        currUser["uid"] = user.uid;
+        setUserDoc(currUser);
+        console.log(userDoc);
         await currUser.following?.forEach(async (u) => {
            getDoc(doc(db, "Profile", u)).then((docSnap) => {
             const storage = getStorage();
@@ -58,15 +62,15 @@ export default function Followers({ user }) {
           });
       });
     });
-  }, []);
+  }, [user.uid]);
 
 
   return (
     <Flex width="100%" direction="column">
-      <Topbar user={user} />
+      <Topbar user={userDoc} />
       <Flex direction="row">
         <Box width="370px">
-          <Sidebar user={user} />
+          <Sidebar user={userDoc} />
         </Box>
         <Box w="100%" mt="30px">
           <Heading
@@ -75,7 +79,7 @@ export default function Followers({ user }) {
             fontSize="md"
             textTransform="uppercase"
           >
-            Followers
+            Follows
           </Heading>
           <Box align="center" mt="50px">
             <Tabs isLazy isFitted colorScheme="white" variant="enclosed" border = "30pt" borderColor = "gray.50" spacing = "10px">
