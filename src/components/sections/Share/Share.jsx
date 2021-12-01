@@ -339,14 +339,14 @@ export default function Share({ user }) {
                 Add Photo
               </span>
             </div>
-            <div className="shareOption">
+            {/* <div className="shareOption">
               <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />
               <span className="shareOptionText">Choose Activity</span>
             </div>
             <div className="shareOption">
               <AccessTime htmlColor="black" className="shareIcon" />
               <span className="shareOptionText">Workout Details</span>
-            </div>
+            </div> */}
           </div>
           <button className="shareButton" onClick={handleMakePost}>
             Share

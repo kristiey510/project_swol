@@ -1,6 +1,6 @@
 import React from "react";
 import "./Post.css";
-import { MoreVert } from "@material-ui/icons";
+import { MoreVert, PostAddOutlined } from "@material-ui/icons";
 import {
   doc,
   db,
@@ -10,8 +10,26 @@ import {
   arrayUnion,
   increment,
   arrayRemove,
+  deleteDoc,
+  getStorage,
+  ref,
+  deleteObject
 } from "../../../firebase/firebase";
-import { Text, Flex, Stack } from "@chakra-ui/react";
+import { 
+  Text, 
+  Flex, 
+  Stack, 
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  Button,
+  ButtonGroup
+} from "@chakra-ui/react";
 import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
 
@@ -23,7 +41,26 @@ export default function Post({ post, user }) {
     "Push up",
   ];
 
+  const handleDelete = (post) => {
+    console.log("deleting")
+    console.log(post.id)
+
+    //delete image 
+    if(post.img != 'no_image_provided'){
+      console.log('deleting image',post.img)
+      const storage = getStorage();
+      const deleteRef = ref(storage, post.img);
+      deleteObject(deleteRef)
+    }
+    console.log(post)
+    //delete doc
+    deleteDoc(doc(db, "test", post.id));
+
+    //todo: handle cache?
+  };
+
   const handleLike = () => {
+    console.log("wtf")
     // setLN("");
     var alreadyLiked = false;
     var user = auth.currentUser;
@@ -81,7 +118,7 @@ export default function Post({ post, user }) {
           <div className="postTopLeft">
             <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
-            <span className="postDate">{post?.type}</span>
+            {/* <span className="postDate">{post?.type}</span> */}
             <span className="postDate">
               {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
@@ -94,7 +131,24 @@ export default function Post({ post, user }) {
             </span>
           </div>
           <div className="postTopRight">
-            <MoreVert />
+          {user.uid == post.usr ? 
+          <Popover>
+            <PopoverTrigger>
+              <MoreVert />
+            </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverHeader>Delete Post?</PopoverHeader>
+            <PopoverBody>
+              <ButtonGroup variant='outline' spacing='6'>
+              <Button 
+              onClick={() => handleDelete(post)}
+              colorScheme='red'>Delete</Button>
+              </ButtonGroup></PopoverBody>
+          </PopoverContent>
+          </Popover>
+          : null}
           </div>
         </div>
         {(post?.desc || post?.imgUrl) && (
