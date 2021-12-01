@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Post.css";
 import { MoreVert, PostAddOutlined } from "@material-ui/icons";
 import {
@@ -40,6 +40,7 @@ export default function Post({ post, user }) {
     "Sit up/crunch",
     "Push up",
   ];
+  const [isLiked,setIsLiked] = useState(0)
 
   const handleDelete = (post) => {
     console.log("deleting")
@@ -95,6 +96,7 @@ export default function Post({ post, user }) {
             likers: arrayUnion(user.uid),
             likes: increment(1),
           });
+          setIsLiked(1)
         }
         //unlike post
         else {
@@ -104,6 +106,7 @@ export default function Post({ post, user }) {
             likers: arrayRemove(user.uid),
             likes: increment(-1),
           });
+          setIsLiked(-1)
         }
       } else {
         console.log("No such document!");
@@ -233,9 +236,9 @@ export default function Post({ post, user }) {
             /> */}
             <span className="postLikeCounter">
               {post?.likes === 1 ? (
-                <Text>{post?.likes} like</Text>
+                <Text>{post?.likes + isLiked} like</Text>
               ) : (
-                <Text> {post?.likes} likes</Text>
+                <Text> {post?.likes + isLiked} likes</Text>
               )}
             </span>
           </div>
