@@ -3,7 +3,6 @@ import "./Sidebar.css";
 import {
   RssFeed,
   PostAddOutlined,
-  ScheduleOutlined,
   HelpOutline,
   Person,
 } from "@material-ui/icons";
