@@ -111,7 +111,7 @@ export default function AddFriend({user}) {
             onClick={onOpen}
           >  
           <SearchIcon mr = "10px"/> 
-            Search User
+            Follow User
           </Button>
         </Box>
       <Modal  isOpen={isOpen} onClose={onClose}>
