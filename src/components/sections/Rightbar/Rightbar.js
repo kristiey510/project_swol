@@ -95,55 +95,57 @@ function Rightbar({ user }) {
       {scored?.length !== 0 && !rightbar && (
         <>
           <Text>Recommended:</Text>
-          <Text>{`${scored[0].name}: ${scored[0].score * 100}% match`}</Text>
+          <Text>{`${scored[0].name}: ${Math.round(
+            scored[0].score * 100
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Arms" && (
         <>
           <Text>Recommended for arms:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Shoulders" && (
         <>
           <Text>Recommended for shoulders:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Chest" && (
         <>
           <Text>Recommended for chest:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Back" && (
         <>
           <Text>Recommended for back:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Abdominals" && (
         <>
           <Text>Recommended for abdominals:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
       {scored?.length !== 0 && rightbar === "Legs" && (
         <>
           <Text>Recommended for legs:</Text>
-          <Text>{`${filtered[0].name}: ${
+          <Text>{`${filtered[0].name}: ${Math.round(
             filtered[0].score * 100
-          }% match`}</Text>
+          )}% match`}</Text>
         </>
       )}
     </Box>

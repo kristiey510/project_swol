@@ -14,7 +14,9 @@ import {
   TabPanel,
   TabPanels,
   Text,
-  Container
+  Image,
+  HStack,
+  Button
 } from "@chakra-ui/react";
 import {
   db,
@@ -29,26 +31,30 @@ import {
   getStorage,
   getDownloadURL,
   ref,
-  getDoc
+  getDoc,
+    arrayRemove
 } from "../firebase/firebase";
 
 export default function Followers({ user }) {
   const [followers, setFollowers] = useState([]);
-
-  const [friends, setFriends] = useState([]);
 
   useEffect(async () => {
     await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
         var new_obj = {}; 
         const currUser = docSnap.data();  
         await currUser.following?.forEach(async (u) => {
-          await getDoc(doc(db, "Profile", u)).then(async (docSnap) => {
+           getDoc(doc(db, "Profile", u)).then((docSnap) => {
             const storage = getStorage();
-            const pathReference = ref(storage, docSnap.data().Picture_id);
-            getDownloadURL(pathReference).then((url) => {
-              new_obj = { uid: u,  name: docSnap.data().Name , imgUrl: url};  
+            const info = docSnap.data();  
+            try{
+              const pathReference = ref(storage, info.Picture_id)
+              getDownloadURL(pathReference).then((url) => {
+              new_obj = { uid: u,  name: info.Name , imgUrl: url};  
               setFollowers(prev => [...prev, new_obj]);
             });
+            }catch (error){
+              console.log(error);
+            }
           });
       });
     });
@@ -81,7 +87,7 @@ export default function Followers({ user }) {
                 <TabPanel>
                     <Flex wrap = "wrap" justify = "space-evenly" mt = "-30px">
                    {followers.map((item, index) => (
-                    <Friend key = {index} user = {user} uid = {item.uid} name = {item.name} image = {item.imgUrl} />
+                   <Friend key = {index} user = {user} uid = {item.uid} name = {item.name} image = {item.imgUrl}/>
                    ))}
                     </Flex>
                 </TabPanel>

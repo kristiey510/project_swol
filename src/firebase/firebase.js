@@ -16,8 +16,10 @@ import {
   increment,
   arrayRemove,
   orderBy,
+  deleteDoc,
+
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -76,5 +78,7 @@ export {
   reauthenticateWithCredential,
   updatePassword,
   sendPasswordResetEmail,
-  deleteUser
+  deleteUser,
+  deleteDoc,
+  deleteObject
 };
