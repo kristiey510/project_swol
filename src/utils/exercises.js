@@ -72,7 +72,7 @@ const exerciseMuscles = {
   },
   "Shoulder press": {
     major: ["delts"],
-    minor: [],
+    minor: ["tris"],
   },
   "Shoulder raise": {
     major: ["delts"],

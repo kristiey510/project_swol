@@ -16,6 +16,13 @@ import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
 
 export default function Post({ post, user }) {
+  const bodyWtExercises = [
+    "Plank",
+    "Pull up/chin up",
+    "Sit up/crunch",
+    "Push up",
+  ];
+
   const handleLike = () => {
     // setLN("");
     var alreadyLiked = false;
@@ -90,10 +97,12 @@ export default function Post({ post, user }) {
             <MoreVert />
           </div>
         </div>
-        <div className="postCenter">
-          <span className="postText">{post?.desc}</span>
-          <img className="postImg" src={post?.imgUrl} alt="" />
-        </div>
+        {(post?.desc || post?.imgUrl) && (
+          <div className="postCenter">
+            <span className="postText">{post?.desc}</span>
+            <img className="postImg" src={post?.imgUrl} alt="" />
+          </div>
+        )}
 
         <hr className="postHr" />
 
@@ -101,24 +110,26 @@ export default function Post({ post, user }) {
           user?.Height_Ft &&
           user?.Height_In &&
           user?.Weight &&
-          post?.scale &&
+          (post?.scale || bodyWtExercises.includes(post?.type)) &&
           post?.quantity && (
             <>
               <Flex justify="space-around" align="center" mb="10px">
                 <Stack>
-                  <Text color="gray.300" fontSize="xs">
+                  <Text color="gray.400" fontSize="xs">
                     Exercise
                   </Text>
                   <Text>{post?.type}</Text>
                 </Stack>
                 <Stack>
-                  <Text>
-                    {post?.scale !== 1
-                      ? `${post?.scale} ${exerciseUnits[post?.type]?.scale}`
-                      : `${post?.scale} ${(exerciseUnits[
-                          post?.type
-                        ]?.scale).slice(0, -1)}`}
-                  </Text>
+                  {!bodyWtExercises.includes(post?.type) && (
+                    <Text>
+                      {post?.scale !== 1
+                        ? `${post?.scale} ${exerciseUnits[post?.type]?.scale}`
+                        : `${post?.scale} ${(exerciseUnits[
+                            post?.type
+                          ]?.scale).slice(0, -1)}`}
+                    </Text>
+                  )}
                   <Text>
                     {post?.quantity !== 1
                       ? `${post?.quantity} ${
@@ -129,18 +140,23 @@ export default function Post({ post, user }) {
                         ]?.quantity).slice(0, -1)}`}
                   </Text>
                 </Stack>
-                <Text>
-                  {`${Math.round(
-                    calories(
-                      post?.type,
-                      user?.Height_Ft,
-                      user?.Height_In,
-                      user?.Weight,
-                      post?.scale,
-                      post?.quantity
-                    )
-                  )} calories`}
-                </Text>
+                <Stack>
+                  <Text color="gray.400" fontSize="xs">
+                    Estimate
+                  </Text>
+                  <Text>
+                    {`${Math.round(
+                      calories(
+                        post?.type,
+                        Number(user?.Height_Ft),
+                        Number(user?.Height_In),
+                        Number(user?.Weight),
+                        post?.scale,
+                        post?.quantity
+                      )
+                    )} calories`}
+                  </Text>
+                </Stack>
               </Flex>
 
               <hr className="postHr" />

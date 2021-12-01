@@ -35,7 +35,6 @@ import {
   getStorage,
   ref,
   uploadBytes,
-  auth,
   getDownloadURL,
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
@@ -57,6 +56,12 @@ export default function Share({ user }) {
     onClose: onPhotoClose,
   } = useDisclosure();
   const CACHE_SIZE = 5;
+  const bodyWtExercises = [
+    "Plank",
+    "Pull up/chin up",
+    "Sit up/crunch",
+    "Push up",
+  ];
 
   const handleImage = () => {
     if (image != null) {
@@ -108,12 +113,6 @@ export default function Share({ user }) {
   };
 
   const handleMakePost = () => {
-    const bodyWtExercises = [
-      "Plank",
-      "Pull up/chin up",
-      "Sit up/crunch",
-      "Push up",
-    ];
     //check user
     //var user = auth.currentUser;
     //if no user
@@ -122,18 +121,18 @@ export default function Share({ user }) {
     }
 
     if (input.type === "") {
-      alert("Please select an exercise");
-      //setError("Please select an exercise")
+      // alert("Please select an exercise");
+      setError("Please select an exercise");
       return;
     } else if (bodyWtExercises.includes(input.type)) {
       if (input.quantity === "") {
-        alert("Please enter exercise details");
-        //setError("Please enter exercise details")
+        // alert("Please enter exercise details");
+        setError("Please enter exercise details");
         return;
       }
     } else if (input.scale === "" || input.quantity === "") {
-      alert("Please enter exercise details");
-      //setError("Please enter exercise details")
+      // alert("Please enter exercise details");
+      setError("Please enter exercise details");
       return;
     }
 
@@ -147,12 +146,12 @@ export default function Share({ user }) {
       const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
       if (!acceptedImageTypes.includes(image.type)) {
         console.log("wrong file type:", image.type);
-        //setError("Error: Not a JPG or PNG");
+        setError("Error: Not a JPG or PNG");
         return;
       }
     }
     //reset error on success
-    //setError("");
+    setError("");
 
     //default filename (sticks if empty)
     var filename = "no_image_provided";
@@ -328,9 +327,9 @@ export default function Share({ user }) {
 
         <hr className="shareHr" />
 
-        {/* <Text color="red" textAlign="center">
-        {Error}
-    </Text> */}
+        <Text color="red" textAlign="center">
+          {Error}
+        </Text>
 
         <div className="shareBottom">
           <div className="shareOptions">
