@@ -178,6 +178,8 @@ export default function Share({ user }) {
         //no likes for now
         likes: 0,
         id: newDocRef.id,
+        comments: [],
+        likers: [],
       }),
       updateDoc(userDocRef, {
         cache: updatedCache,
