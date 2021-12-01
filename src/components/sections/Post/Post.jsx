@@ -13,7 +13,8 @@ import {
   deleteDoc,
   getStorage,
   ref,
-  deleteObject
+  deleteObject,
+  setDoc,
 } from "../../../firebase/firebase";
 import { 
   Text, 
@@ -28,7 +29,20 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Button,
-  ButtonGroup
+  ButtonGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Box,
+  Textarea,
+  Input,
+  Spacer,
+  Divider
 } from "@chakra-ui/react";
 import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
@@ -41,6 +55,21 @@ export default function Post({ post, user }) {
     "Push up",
   ];
   const [isLiked,setIsLiked] = useState(0)
+  const {
+    isOpen: isCommentsOpen,
+    onOpen: onCommentsOpen,
+    onClose: onCommentsClose,
+  } = useDisclosure();
+  const [comment, setComment] = useState("");
+
+  const postComment = () => {
+    console.log("comment")
+    console.log(comment)
+    const docRef = doc(db, "test", post.id);
+    updateDoc(docRef, {
+        comments: arrayUnion({usr: user.Name, comment: comment})
+    })
+  };
 
   const handleDelete = (post) => {
     console.log("deleting")
@@ -246,10 +275,55 @@ export default function Post({ post, user }) {
             </span>
           </div>
           <div className="postBottomRight">
-            <span className="postCommentText">{post?.comment} comments</span>
+            <span 
+            className="postCommentText"
+            onClick={onCommentsOpen}
+            >{post?.comment} comments</span>
           </div>
         </div>
       </div>
+      <Modal isOpen={isCommentsOpen} onClose={onCommentsClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader color="primary.2350">Comments</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          {post.comments?.map((comment,index) => (
+            <Box key = {index}>
+              <Text>{comment.usr}: {comment.comment}</Text>
+            </Box>
+          ))}
+          <Divider orientation='horizontal'/>
+          <Input
+            value={comment}
+            onChange={(event) => setComment(event.target.value)}
+            placeholder="Make a Comment"
+            size="sm"
+          />
+          </ModalBody>
+          <ModalFooter>
+          <Button
+                bg="primary.3200"
+                color="primary.150"
+                fontWeight="bold"
+                fontSize="16"
+                onClick={postComment}
+              >
+                Post Comment
+              </Button>
+              <Button
+                bg="primary.3200"
+                color="primary.150"
+                fontWeight="bold"
+                fontSize="16"
+                onClick={onCommentsClose}
+              >
+                Done
+              </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
+    
   );
 }
