@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./Post.css";
-import { MoreVert, PostAddOutlined } from "@material-ui/icons";
+import { MoreVert, PostAddOutlined, ThumbUp } from "@material-ui/icons";
 import {
   doc,
   db,
@@ -106,7 +106,11 @@ export default function Post({ post, user }) {
             likers: arrayRemove(user.uid),
             likes: increment(-1),
           });
-          setIsLiked(-1)
+          setIsLiked(0)
+          var index = post.likers?.indexOf(user.uid);
+          if (index !== -1) {
+            post.likers?.splice(index, 1);
+          }
         }
       } else {
         console.log("No such document!");
@@ -222,18 +226,17 @@ export default function Post({ post, user }) {
 
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img
-              className="likeIcon"
-              src="assets/like.png"
-              onClick={handleLike}
-              alt=""
-            />
-            {/* <img
-              className="likeIcon"
-              src="assets/heart.png"
-              onClick={handleLike}
-              alt=""
-            /> */}
+          {post.likers?.includes(user.uid) || isLiked == 1 ? 
+            <ThumbUp
+            onClick={handleLike}
+            htmlColor="blue">
+            </ThumbUp>
+            :
+            <ThumbUp
+            onClick={handleLike}
+            htmlColor="grey">
+            </ThumbUp>
+            }
             <span className="postLikeCounter">
               {post?.likes === 1 ? (
                 <Text>{post?.likes + isLiked} like</Text>
