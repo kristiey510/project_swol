@@ -42,7 +42,8 @@ import {
   Textarea,
   Input,
   Spacer,
-  Divider
+  Divider,
+  HStack
 } from "@chakra-ui/react";
 import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
@@ -69,7 +70,12 @@ export default function Post({ post, user }) {
     updateDoc(docRef, {
         comments: arrayUnion({usr: user.Name, comment: comment})
     })
+    post.comments.push({usr: user.Name, comment: comment})
+
+    const comIn = document.getElementById("comment");
+    comIn.value = "";
   };
+
 
   const handleDelete = (post) => {
     console.log("deleting")
@@ -295,6 +301,7 @@ export default function Post({ post, user }) {
           ))}
           <Divider orientation='horizontal'/>
           <Input
+            id = "comment"
             value={comment}
             onChange={(event) => setComment(event.target.value)}
             placeholder="Make a Comment"
@@ -302,6 +309,7 @@ export default function Post({ post, user }) {
           />
           </ModalBody>
           <ModalFooter>
+          <HStack>
           <Button
                 bg="primary.3200"
                 color="primary.150"
@@ -320,6 +328,7 @@ export default function Post({ post, user }) {
               >
                 Done
               </Button>
+            </HStack>
           </ModalFooter>
         </ModalContent>
       </Modal>
