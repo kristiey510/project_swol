@@ -99,7 +99,6 @@ export default function Post({ post, user }) {
   };
 
   const handleLike = () => {
-    console.log("wtf")
     // setLN("");
     var alreadyLiked = false;
     var user = auth.currentUser;
@@ -164,16 +163,19 @@ export default function Post({ post, user }) {
             <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
             {/* <span className="postDate">{post?.type}</span> */}
+            {post.timestamp !== 'just now' ? 
             <span className="postDate">
               {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
                 .substring(0, 10) +
                 "\xa0" +
                 "@\xa0"}
-              {new Date(post?.timestamp.seconds * 1000)
+              {new Date(post?.timestamp?.seconds * 1000)
                 .toISOString()
                 .substring(11, 19)}
             </span>
+            : <span className="postDate">Just Now</span>
+            }
           </div>
           <div className="postTopRight">
           {user.uid == post.usr ? 

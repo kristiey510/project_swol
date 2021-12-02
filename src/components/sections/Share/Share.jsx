@@ -39,7 +39,7 @@ import {
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
 
-export default function Share({ user }) {
+export default function Share({ user, setPosts}) {
   const [input, setInput] = useState({
     title: "",
     type: "",
@@ -48,6 +48,7 @@ export default function Share({ user }) {
     quantity: "",
   });
   const [image, setImage] = useState(null);
+  const [profilepic, setProPic] = useState(null);
   const [Error, setError] = useState("");
   const [inputHeight, setInputHeight] = useState(1);
   const {
@@ -98,6 +99,7 @@ export default function Share({ user }) {
       //download, then set attribute to image tag in file
       getDownloadURL(pathReference).then((url) => {
         img.setAttribute("src", url);
+        setProPic(url)
       });
     }
     fetchProfile();
@@ -185,6 +187,24 @@ export default function Share({ user }) {
         cache: updatedCache,
       }),
     ]);
+
+    console.log(image)
+
+    setPosts((prev) => [ 
+      {title: input.title,
+      type: input.type,
+      desc: input.desc,
+      scale: Number(input.scale),
+      quantity: Number(input.quantity),
+      propic: profilepic,
+      usr: user.uid,
+      timestamp: 'just now',
+      //no likes for now
+      likes: 0,
+      username: user.Name,
+      id: newDocRef.id,
+      comments: [],
+      likers: []}, ...prev]);
 
     //clear field
     const descInput = document.getElementById("mainInput");
