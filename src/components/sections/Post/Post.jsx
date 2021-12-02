@@ -276,7 +276,7 @@ export default function Post({ post, user }) {
             </ThumbUp>
             }
             <span className="postLikeCounter">
-              {post?.likes === 1 ? (
+              {post?.likes + isLiked === 1 ? (
                 <Text>{post?.likes + isLiked} like</Text>
               ) : (
                 <Text> {post?.likes + isLiked} likes</Text>
