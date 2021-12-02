@@ -180,7 +180,7 @@ export default function Post({ post, user, setPosts }) {
             }
           </div>
           <div className="postTopRight">
-          {user.uid == post.usr ? 
+          {user.uid == post.usr && post.timestamp !== 'just now' ? 
           <Popover >
             <PopoverTrigger>
               <MoreVert />
