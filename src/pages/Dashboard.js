@@ -7,27 +7,14 @@ import Topbar from "../components/sections/Topbar/Topbar";
 import "./Dashboard.css";
 
 export default function Dashboard({ user }) {
-  const [userDoc, setUserDoc] = useState({});
-
-  useEffect(() => {
-    async function fetchUserDoc() {
-      const docSnap = await getDoc(doc(db, "Profile", user.uid));
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        data["uid"] = user.uid; //can add to here if need emailVerified, etc.
-        setUserDoc(data);
-      }
-    }
-    fetchUserDoc();
-  }, [user.uid]);
 
   return (
     <>
-      <Topbar user={userDoc} />
+      <Topbar user={user} />
       <div className="homeContainer">
-        <Sidebar user={userDoc} />
-        <Feed user={userDoc} />
-        <Rightbar user={userDoc} />
+        <Sidebar user={user} />
+        <Feed user={user} />
+        <Rightbar user={user} />
       </div>
     </>
   );

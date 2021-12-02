@@ -23,25 +23,13 @@ import {
 export default function Followers({ user }) {
   console.log(user.uid);
 
-  const [userDoc, setUserDoc] = useState({});
-
-  useEffect(() => {
-    async function fetchUserDoc(){
-      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-        const currUser = docSnap.data();  
-        currUser["uid"] = user.uid;
-        setUserDoc(currUser);
-      });
-    }
-    fetchUserDoc();
-  }, [user.uid]);
 
   return (
     <Flex width="100%" direction="column">
-      <Topbar user={userDoc} />
+      <Topbar user={user} />
       <Flex direction="row">
         <Box width="370px">
-          <Sidebar user={userDoc} />
+          <Sidebar user={user}/>
         </Box>
         <Box w="100%" mt="30px">
           <Heading

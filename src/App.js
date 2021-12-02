@@ -11,7 +11,7 @@ function App() {
     else setUser(null);
   });
 
-  return user ? <SignedIn user={user} /> : <NotSignedIn />;
+  return user ? <SignedIn userTemp={user} /> : <NotSignedIn />;
 }
 
 export default App;
