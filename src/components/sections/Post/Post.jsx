@@ -181,20 +181,24 @@ export default function Post({ post, user, setPosts }) {
           </div>
           <div className="postTopRight">
           {user.uid == post.usr ? 
-          <Popover>
+          <Popover >
             <PopoverTrigger>
               <MoreVert />
             </PopoverTrigger>
-          <PopoverContent>
+          <PopoverContent w = "130px" align = "center">
             <PopoverArrow />
             <PopoverCloseButton />
-            <PopoverHeader>Delete Post?</PopoverHeader>
-            <PopoverBody>
-              <ButtonGroup variant='outline' spacing='6'>
+            <PopoverBody justify = "center" >
+              <ButtonGroup spacing='6'>
               <Button 
+              size = "sm"
+              borderRadius = "10"
+              variant='outline' 
               onClick={() => handleDelete(post)}
-              colorScheme='red'>Delete</Button>
-              </ButtonGroup></PopoverBody>
+              colorScheme='red'>Delete
+              </Button>
+              </ButtonGroup>
+             </PopoverBody>
           </PopoverContent>
           </Popover>
           : null}
