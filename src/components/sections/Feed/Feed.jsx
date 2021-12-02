@@ -28,7 +28,6 @@ export default function Feed({ user }) {
         getDoc(doc(db, "Profile", u)).then((docSnap) => {
           username = docSnap.data().Name;
           propicID = docSnap.data().Picture_id;
-          console.log(username);
         }).catch((error) => {console.log(error);});
         //get all posts from users the user is following
         const postQuery = query(collection(db, "test"), where("usr", "==", u));
@@ -80,7 +79,7 @@ export default function Feed({ user }) {
       <div className="feedWrapper">
         <Share user={user} setPosts = {setPosts} />
         {posts.map((post, index) => (
-          <Post key={index} post={post} user={user} />
+          <Post key={index} post={post} user={user} setPosts = {setPosts}/>
         ))}
       </div>
     </div>

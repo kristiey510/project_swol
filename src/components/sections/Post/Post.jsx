@@ -49,7 +49,7 @@ import {
 import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
 
-export default function Post({ post, user }) {
+export default function Post({ post, user, setPosts }) {
   const bodyWtExercises = [
     "Plank",
     "Pull up/chin up",
@@ -91,10 +91,12 @@ export default function Post({ post, user }) {
       const deleteRef = ref(storage, post.img);
       deleteObject(deleteRef)
     }
-    console.log(post)
     //delete doc
     deleteDoc(doc(db, "test", post.id));
 
+    var thispost = post;
+
+    setPosts((prev) => prev.filter(post=>post!==thispost))
     //todo: handle cache?
   };
 
