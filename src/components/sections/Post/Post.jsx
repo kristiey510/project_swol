@@ -15,6 +15,7 @@ import {
   ref,
   deleteObject,
   setDoc,
+  serverTimestamp,
 } from "../../../firebase/firebase";
 import { 
   Text, 
@@ -67,13 +68,15 @@ export default function Post({ post, user }) {
     console.log("comment")
     console.log(comment)
     const docRef = doc(db, "test", post.id);
+    var currentTime = new Date(Date.now()).toISOString().substring(0, 10) + "\xa0" + "@\xa0" + new Date(Date.now()).toISOString().substring(11, 19);
     updateDoc(docRef, {
-        comments: arrayUnion({usr: user.Name, comment: comment})
+        comments: arrayUnion({usr: user.Name, comment: comment, time: currentTime})
     })
-    post.comments.push({usr: user.Name, comment: comment})
+    post.comments.push({usr: user.Name, comment: comment, time: currentTime})
 
     const comIn = document.getElementById("comment");
     comIn.value = "";
+    setComment("");
   };
 
 
@@ -288,18 +291,22 @@ export default function Post({ post, user }) {
           </div>
         </div>
       </div>
-      <Modal isOpen={isCommentsOpen} onClose={onCommentsClose}>
+      <Modal isOpen={isCommentsOpen} onClose={onCommentsClose} size='xl'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color="primary.2350">Comments</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          {post.comments?.map((comment,index) => (
-            <Box key = {index}>
-              <Text>{comment.usr}: {comment.comment}</Text>
+          {post.comments?.map((comment,index) => ( 
+            <Box key = {index} m ={2}>
+              <Text as='span'>
+               {comment.usr} 
+              : {comment.comment}
+                </Text>
+                <Text as='span' color='grey' fontSize='xs'>{comment?.time}</Text>
             </Box>
           ))}
-          <Divider orientation='horizontal'/>
+          <Divider orientation='horizontal' m={3}/>
           <Input
             id = "comment"
             value={comment}
