@@ -39,7 +39,7 @@ import {
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
 
-export default function Share({ user }) {
+export default function Share({ user, setPosts}) {
   const [input, setInput] = useState({
     title: "",
     type: "",
@@ -185,6 +185,21 @@ export default function Share({ user }) {
         cache: updatedCache,
       }),
     ]);
+
+    setPosts((prev) => [ 
+      {title: input.title,
+      type: input.type,
+      desc: input.desc,
+      scale: Number(input.scale),
+      quantity: Number(input.quantity),
+      img: filename,
+      usr: user.uid,
+      timestamp: 'just now',
+      //no likes for now
+      likes: 0,
+      id: newDocRef.id,
+      comments: [],
+      likers: []}, ...prev]);
 
     //clear field
     const descInput = document.getElementById("mainInput");

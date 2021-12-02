@@ -78,7 +78,7 @@ export default function Feed({ user }) {
   return (
     <div className="Feed">
       <div className="feedWrapper">
-        <Share user={user} />
+        <Share user={user} setPosts = {setPosts} />
         {posts.map((post, index) => (
           <Post key={index} post={post} user={user} />
         ))}
