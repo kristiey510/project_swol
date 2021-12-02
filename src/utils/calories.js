@@ -1,6 +1,6 @@
 //scaling factor
 const factor = {
-  //* 10 fudge factor because human body not 100% efficient
+  //*fudge factor because human body not 100% efficient
   Running: 0.0175,
   Biking: 0.0175 * (7 / 8),
   Elliptical: 0.0175 * (5 / 8),
@@ -9,18 +9,18 @@ const factor = {
   "Pull up/chin up": 10 * 9.8 * (5 / 12),
   "Sit up/crunch": 10 * 9.8 * (5 / 32) * 0.64,
   "Push up": 10 * 9.8 * (5 / 12) * 0.64,
-  Bench: 10 * 9.8 * (5 / 12),
-  Squat: 10 * 9.8 * (1 / 4),
-  Deadlift: 10 * 9.8 * (7 / 16),
-  "Bicep curl": 10 * 9.8 * (5 / 12),
-  "Shoulder press": 10 * 9.8 * (5 / 12),
-  "Shoulder raise": 10 * 9.8 * (5 / 12),
-  Rows: 10 * 9.8 * (5 / 12),
-  Lunges: 10 * 9.8 * (7 / 16),
-  Shrugs: 10 * 9.8 * (1 / 16),
-  "Hang clean": 10 * 9.8 * (3 / 8),
-  "Clean and jerk": 10 * 9.8 * (19 / 24),
-  Snatch: 10 * 9.8 * ((5 * Math.sqrt(2)) / 24 + 3 / 8),
+  Bench: 30 * 9.8 * (5 / 12),
+  Squat: 30 * 9.8 * (1 / 4),
+  Deadlift: 30 * 9.8 * (7 / 16),
+  "Bicep curl": 15 * 9.8 * (5 / 12),
+  "Shoulder press": 15 * 9.8 * (5 / 12),
+  "Shoulder raise": 15 * 9.8 * (5 / 12),
+  Rows: 15 * 9.8 * (5 / 12),
+  Lunges: 15 * 9.8 * (7 / 16),
+  Shrugs: 15 * 9.8 * (1 / 16),
+  "Hang clean": 30 * 9.8 * (3 / 8),
+  "Clean and jerk": 30 * 9.8 * (19 / 24),
+  Snatch: 30 * 9.8 * ((5 * Math.sqrt(2)) / 24 + 3 / 8),
 };
 
 //unit conversions
@@ -78,7 +78,7 @@ const plankCal = (weight, quantity) => {
 };
 const pullUpChinUpCal = (feet, inches, weight, quantity) => {
   return joulesToKcal(
-    factor["Pull up/Chin up"] *
+    factor["Pull up/chin up"] *
       heightToMeters(feet, inches) *
       weightToKg(weight) *
       quantity
