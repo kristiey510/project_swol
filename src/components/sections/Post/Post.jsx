@@ -101,7 +101,6 @@ export default function Post({ post, user, setPosts }) {
   };
 
   const handleLike = () => {
-    console.log("wtf")
     // setLN("");
     var alreadyLiked = false;
     var user = auth.currentUser;
@@ -166,18 +165,19 @@ export default function Post({ post, user, setPosts }) {
             <img className="postProfileImg" src={post?.propic} alt="" />
             <span className="postUsername">{post?.username}</span>
             {/* <span className="postDate">{post?.type}</span> */}
+            {post.timestamp !== 'just now' ? 
             <span className="postDate">
-              <Text mt = "3px" color = "#928E8B">
-                {new Date(post?.timestamp?.seconds * 1000)
-                  .toISOString()
-                  .substring(0, 10) +
-                  "\xa0" +
-                  "@\xa0"}
-                {new Date(post?.timestamp.seconds * 1000)
-                  .toISOString()
-                  .substring(11, 19)}
-               </Text>
+              {new Date(post?.timestamp?.seconds * 1000)
+                .toISOString()
+                .substring(0, 10) +
+                "\xa0" +
+                "@\xa0"}
+              {new Date(post?.timestamp?.seconds * 1000)
+                .toISOString()
+                .substring(11, 19)}
             </span>
+            : <span className="postDate">Just Now</span>
+            }
           </div>
           <div className="postTopRight">
           {user.uid == post.usr && post.timestamp !== 'just now' ? 
@@ -275,19 +275,19 @@ export default function Post({ post, user, setPosts }) {
           {post.likers?.includes(user.uid) || isLiked == 1 ? 
             <ThumbUp
             onClick={handleLike}
-            htmlColor="#FFC494">
+            htmlColor="blue">
             </ThumbUp>
             :
             <ThumbUp
             onClick={handleLike}
-            htmlColor="#D0CCCA">
+            htmlColor="grey">
             </ThumbUp>
             }
             <span className="postLikeCounter">
               {post?.likes + isLiked === 1 ? (
-                <Text mt = "2px" fontSize = "10pt" color = "#928E8B">{post?.likes + isLiked} like</Text>
+                <Text>{post?.likes + isLiked} like</Text>
               ) : (
-                <Text mt = "2px" fontSize = "10pt"  color = "#928E8B"> {post?.likes + isLiked} likes</Text>
+                <Text> {post?.likes + isLiked} likes</Text>
               )}
             </span>
           </div>
@@ -295,11 +295,7 @@ export default function Post({ post, user, setPosts }) {
             <span 
             className="postCommentText"
             onClick={onCommentsOpen}
-            >
-            <Text mt = "-25px" color = "#928E8B" fontSize = "10pt" as='u'>
-            {post?.comment} comments
-            </Text>
-            </span>
+            >{post?.comment} comments</span>
           </div>
         </div>
       </div>
