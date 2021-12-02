@@ -48,6 +48,7 @@ export default function Share({ user, setPosts}) {
     quantity: "",
   });
   const [image, setImage] = useState(null);
+  const [profilepic, setProPic] = useState(null);
   const [Error, setError] = useState("");
   const [inputHeight, setInputHeight] = useState(1);
   const {
@@ -98,6 +99,7 @@ export default function Share({ user, setPosts}) {
       //download, then set attribute to image tag in file
       getDownloadURL(pathReference).then((url) => {
         img.setAttribute("src", url);
+        setProPic(url)
       });
     }
     fetchProfile();
@@ -186,17 +188,20 @@ export default function Share({ user, setPosts}) {
       }),
     ]);
 
+    console.log(image)
+
     setPosts((prev) => [ 
       {title: input.title,
       type: input.type,
       desc: input.desc,
       scale: Number(input.scale),
       quantity: Number(input.quantity),
-      img: filename,
+      propic: profilepic,
       usr: user.uid,
       timestamp: 'just now',
       //no likes for now
       likes: 0,
+      username: user.Name,
       id: newDocRef.id,
       comments: [],
       likers: []}, ...prev]);
