@@ -18,8 +18,9 @@ import {
   getDocs,
 } from "../../../firebase/firebase";
 
-export default function Sidebar({ user }) {
+export default function Sidebar({ user, follows }) {
   const [friends, setFriends] = useState([]);
+
 
   useEffect(() => {
     async function fetchFriends() {
@@ -51,7 +52,7 @@ export default function Sidebar({ user }) {
         });
       });
     }
-    fetchFriends();
+  fetchFriends();
   }, [user.following]);
 
   return (
@@ -66,9 +67,16 @@ export default function Sidebar({ user }) {
           </li>
           <li className="sidebarListsItems">
             <Person className="sidebarIcon" />
-            <Link to="./followers">
+            {window.location.pathname == "/followers" && 
+            <Link to="./followers" onClick={() => {window.location = "./followers"}}>
               <span className="sidebarListItemNext">Follows</span>
             </Link>
+            }
+            {window.location.pathname !== "/followers" && 
+            <Link to="./followers" >
+              <span className="sidebarListItemNext">Follows</span>
+            </Link>
+            }
           </li>
           <li className="sidebarListsItems">
             <PostAddOutlined className="sidebarIcon" />
@@ -84,6 +92,7 @@ export default function Sidebar({ user }) {
           </li>
         </ul>
         <hr className="sidebarHr" />
+        {window.location.pathname !== "/followers" && 
         <ul className="sidebarFriendList">
           {friends.map((friend, index) => (
             <li className="sidebarFriend" key={index}>
@@ -96,7 +105,8 @@ export default function Sidebar({ user }) {
               <span className="sidebarFriendName">{friend.Name}</span>
             </li>
           ))}
-        </ul>
+        </ul>}
+        
       </div>
     </div>
   );
