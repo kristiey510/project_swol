@@ -18,13 +18,14 @@ import {
   getDocs,
 } from "../../../firebase/firebase";
 
-export default function Sidebar({ user, follows }) {
+export default function Sidebar({user}) {
   const [friends, setFriends] = useState([]);
 
 
   useEffect(() => {
     async function fetchFriends() {
       user.following?.forEach((u) => {
+       if (u != user.uid){
         const postQuery = query(
           collection(db, "Profile"),
           where("User_id", "==", u)
@@ -50,6 +51,7 @@ export default function Sidebar({ user, follows }) {
             }
           });
         });
+       }
       });
     }
   fetchFriends();

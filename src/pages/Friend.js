@@ -26,6 +26,7 @@ const [followers, setFollowers] = useState([]);
      async function fetchUserDoc(){
        var new_obj = {};
         await user.following?.forEach(async (u) => {
+          if(u != user.uid){
            getDoc(doc(db, "Profile", u)).then((docSnap) => {
             const storage = getStorage();
             const info = docSnap.data();  
@@ -34,13 +35,13 @@ const [followers, setFollowers] = useState([]);
               getDownloadURL(pathReference).then((url) => {
               new_obj = { uid: u,  name: info.Name , imgUrl: url};  
               setFollowers(prev => [...prev, new_obj]);
-            });
+              });
             }catch (error){
-              console.log(error);
             }
           });
+         }
       });
-   }
+    }
    fetchUserDoc();
   }, [user.following]);
 
