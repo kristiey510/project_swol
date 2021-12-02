@@ -13,57 +13,28 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Text,
-  Image,
-  HStack,
-  Button
 } from "@chakra-ui/react";
 import {
   db,
-  collection,
-  auth,
-  getDocs,
-  query,
-  orderBy,
-  updateDoc,
   doc,
-  arrayUnion,
-  getStorage,
-  getDownloadURL,
-  ref,
-  getDoc,
-    arrayRemove
+  getDoc
 } from "../firebase/firebase";
 
 export default function Followers({ user }) {
-  const [followers, setFollowers] = useState([]);
+  console.log(user.uid);
+
   const [userDoc, setUserDoc] = useState({});
 
-  useEffect(async () => {
+  useEffect(() => {
+    async function fetchUserDoc(){
       await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
-        var new_obj = {}; 
         const currUser = docSnap.data();  
         currUser["uid"] = user.uid;
         setUserDoc(currUser);
-        console.log(userDoc);
-        await currUser.following?.forEach(async (u) => {
-           getDoc(doc(db, "Profile", u)).then((docSnap) => {
-            const storage = getStorage();
-            const info = docSnap.data();  
-            try{
-              const pathReference = ref(storage, info.Picture_id)
-              getDownloadURL(pathReference).then((url) => {
-              new_obj = { uid: u,  name: info.Name , imgUrl: url};  
-              setFollowers(prev => [...prev, new_obj]);
-            });
-            }catch (error){
-              console.log(error);
-            }
-          });
       });
-    });
+    }
+    fetchUserDoc();
   }, [user.uid]);
-
 
   return (
     <Flex width="100%" direction="column">
@@ -89,11 +60,7 @@ export default function Followers({ user }) {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                    <Flex wrap = "wrap" justify = "space-evenly" mt = "-30px">
-                   {followers.map((item, index) => (
-                   <Friend key = {index} user = {user} uid = {item.uid} name = {item.name} image = {item.imgUrl}/>
-                   ))}
-                    </Flex>
+                    <Friend user = {user}/>
                 </TabPanel>
                 <TabPanel>
                   <Flex w = "600px" h = "300px" justify = "center" direction = "column" bg="#FDF2E9" borderRadius ="10" boxShadow = "lg">

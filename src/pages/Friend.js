@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Box,
@@ -12,31 +11,69 @@ import {
   db,
   updateDoc,
   doc,
+  getStorage,
+  getDownloadURL,
+  ref,
+  getDoc,
   arrayRemove
 } from "../firebase/firebase";
 
-export default function Friend({user, uid, name, image}) {
+export default function Friend({user}) {
 
-const unfollow = async () => {
-  console.log(user.uid);
+const [followers, setFollowers] = useState([]);
+
+  useEffect(() => {
+     async function fetchUserDoc(){
+      await getDoc(doc(db, "Profile", user.uid)).then(async (docSnap) => {
+        var new_obj = {}; 
+        const currUser = docSnap.data();  
+        await currUser.following?.forEach(async (u) => {
+           getDoc(doc(db, "Profile", u)).then((docSnap) => {
+            const storage = getStorage();
+            const info = docSnap.data();  
+            try{
+              const pathReference = ref(storage, info.Picture_id)
+              getDownloadURL(pathReference).then((url) => {
+              new_obj = { uid: u,  name: info.Name , imgUrl: url};  
+              setFollowers(prev => [...prev, new_obj]);
+            });
+            }catch (error){
+              console.log(error);
+            }
+          });
+      });
+    });
+   }
+   fetchUserDoc();
+  }, [user.uid]);
+
+  const unfollow = async (uid) => {
+    console.log(user.uid);
   await updateDoc(doc(db, "Profile", user.uid), {
       following: arrayRemove(uid)
     }).then(async () =>{
-      window.location.reload();
+     var obj = followers.filter(function(item, idx) {
+          return item.uid !== uid;
+      });
+      await setFollowers(obj);
     }
    )
 }
 
 
 return (
-  <Box bg="#FDF2E9" mt = "20px" mb = "20px" ml = "20px" mr = "20px" w = "250px" h = "150px" px = "20px" py = "15px" borderRadius= "10" boxShadow = "md">
-    <HStack spacing = {10}>
-    <Box>
-      <Image src = {image} w = "100px" h = "80px" borderRadius= "10"/>
-      <Text mt = "10px" fontSize = "sm" align = "center"> {name} </Text>
-    </Box>
-    <Button color = "white" bg = "primary.3200" p = "10px" size = "xs" onClick = {unfollow} fontSize = "6pt" fontWeight = "bold"> UNFOLLOW</Button>
-    </HStack>
-  </Box>
+    <Flex wrap = "wrap" justify = "space-evenly" mt = "-30px">
+     {followers.map((item, index) => (
+      <Box key = {index} bg="#FDF2E9" mt = "20px" mb = "20px" ml = "20px" mr = "20px" w = "250px" h = "150px" px = "20px" py = "15px" borderRadius= "10" boxShadow = "md">
+        <HStack spacing = {10}>
+        <Box>
+          <Image src = {item.imgUrl} w = "100px" h = "80px" borderRadius= "10"/>
+          <Text mt = "10px" fontSize = "sm" align = "center"> {item.name} </Text>
+        </Box>
+        <Button color = "white" bg = "primary.3200" p = "10px" size = "xs" onClick = {() => unfollow(item.uid)} fontSize = "6pt" fontWeight = "bold"> UNFOLLOW</Button>
+        </HStack>
+      </Box>
+     ))}
+    </Flex>
   );
 }

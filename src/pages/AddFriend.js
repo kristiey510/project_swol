@@ -12,7 +12,7 @@ import {
   useDisclosure,
   Image
 } from "@chakra-ui/react";
-import { Heading, Box, Flex, Button, Stack } from "@chakra-ui/react";
+import { Heading, Box, Flex, Button } from "@chakra-ui/react";
 import {
   db,
   collection,
@@ -25,9 +25,10 @@ import {
   arrayUnion,
   getStorage,
   getDownloadURL,
-  ref
+  ref,
+  where
 } from "../firebase/firebase";
-import { ArrowBackIcon, SearchIcon} from "@chakra-ui/icons";
+import { SearchIcon} from "@chakra-ui/icons";
 
 export default function AddFriend({user}) {
   const [options, setOptions] = useState({ value: "", label: "" });
@@ -41,15 +42,17 @@ export default function AddFriend({user}) {
         query(collection(db, "Profile"), orderBy("Name"))
       );
       querySnapshot.forEach(async (doc) => {
+        if (doc.data().User_id !== user.uid){
         console.log(doc.data().Name);
         const storage = getStorage();
         await getDownloadURL(ref(storage, doc.data().Picture_id))
           .then((url) => {
             optionVals.push({ value: doc.data().Name, id: doc.data().User_id, label: <Flex align = "center" direction = "row"><Image src={url} height="35px" width="40px" borderRadius= "10" mr = "10px"/>{doc.data().Name}</Flex>})
           });
+        }
       });
-      setOptions(optionVals);
-    }
+       setOptions(optionVals);
+     }
     fetchUsers();
   }, []);
 
