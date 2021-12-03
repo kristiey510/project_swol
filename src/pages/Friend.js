@@ -1,47 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, Box, Button, Flex, Image, HStack } from "@chakra-ui/react";
-import {
-  db,
-  updateDoc,
-  doc,
-  getStorage,
-  getDownloadURL,
-  ref,
-  getDoc,
-  arrayRemove,
-} from "../firebase/firebase";
+import { db, updateDoc, doc, arrayRemove } from "../firebase/firebase";
 
-export default function Friend({ user }) {
-  const [followers, setFollowers] = useState([]);
-
-  useEffect(() => {
-    async function fetchUserDoc() {
-      var new_obj = {};
-      await user.following?.forEach(async (u) => {
-        if (u !== user.uid) {
-          getDoc(doc(db, "Profile", u)).then((docSnap) => {
-            const storage = getStorage();
-            const info = docSnap.data();
-            try {
-              const pathReference = ref(storage, info.Picture_id);
-              getDownloadURL(pathReference).then((url) => {
-                new_obj = { uid: u, name: info.Name, imgUrl: url };
-                setFollowers((prev) => [...prev, new_obj]);
-              });
-            } catch (error) {}
-          });
-        }
-      });
-    }
-    fetchUserDoc();
-  }, [user.uid, user.following]);
-
+export default function Friend({ user, followers, setFollowers }) {
   const unfollow = async (uid) => {
-    console.log(user.uid);
     await updateDoc(doc(db, "Profile", user.uid), {
       following: arrayRemove(uid),
     }).then(async () => {
-      var obj = followers.filter(function (item, idx) {
+      var obj = followers.filter(function (item) {
         return item.uid !== uid;
       });
       setFollowers(obj);
