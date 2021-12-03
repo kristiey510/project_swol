@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { RightbarData } from "./RightbarData";
+import Recommendation from "./Recommendation";
 import "./Rightbar.css";
 import recommend from "../../../utils/recommend";
 
@@ -39,7 +40,7 @@ function Rightbar({ user }) {
     "Snatch",
   ];
 
-  const cardio = [];
+  const cardio = ["Running", "Biking", "Elliptical", "Stair climber"];
 
   useEffect(() => {
     user?.cache && setScored(recommend(user.cache));
@@ -66,6 +67,9 @@ function Rightbar({ user }) {
       case "Legs":
         list = legs;
         break;
+      case "Cardio":
+        list = cardio;
+        break;
       default:
         break;
     }
@@ -78,77 +82,96 @@ function Rightbar({ user }) {
   };
 
   return (
-    <Box mt="20px" flex="3.5" width="100%" gridGap="10px">
-      {RightbarData.map((item, index) => (
-        <Box
-          mb="20px"
-          key={index}
-          justify="flex-start"
-          onClick={() => handleClick(item.title)}
-        >
-          <Flex alignItems="center">
-            {item.icon}
-            <Text ml="5px">{item.title}</Text>
-          </Flex>
+    <div className="Rightbar">
+      <div className="rightbarWrapper">
+        <Box mt="5px" flex="2.5" width="100%" gridGap="10px">
+          {RightbarData.map((item, index) => (
+            <Box
+              p="15px"
+              key={index}
+              bg={`${item.title === rightbar ? "gray.100" : ""}`}
+              cursor="pointer"
+              justify="flex-start"
+              onClick={() => handleClick(item.title)}
+            >
+              <Flex alignItems="center">
+                {item.icon}
+                <Text ml="5px">{item.title}</Text>
+              </Flex>
+            </Box>
+          ))}
+          {scored?.length && (
+            <>
+              <hr className="sidebarHr" />
+              {rightbar ? (
+                <Recommendation
+                  category={rightbar || ""}
+                  topScored={filtered[0]}
+                />
+              ) : (
+                <Recommendation topScored={scored[0]} />
+              )}
+              {/* {rightbar === "Arms" && (
+                <>
+                  <Text>Recommended for arms:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Shoulders" && (
+                <>
+                  <Text>Recommended for shoulders:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Chest" && (
+                <>
+                  <Text>Recommended for chest:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Back" && (
+                <>
+                  <Text>Recommended for back:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Abdominals" && (
+                <>
+                  <Text>Recommended for abdominals:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Legs" && (
+                <>
+                  <Text>Recommended for legs:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )}
+              {rightbar === "Cardio" && (
+                <>
+                  <Text>Recommended for cardio:</Text>
+                  <Text>{`${filtered[0].name}: ${Math.round(
+                    filtered[0].score * 100
+                  )}% match`}</Text>
+                </>
+              )} */}
+            </>
+          )}
         </Box>
-      ))}
-      {scored?.length !== 0 && !rightbar && (
-        <>
-          <Text>Recommended:</Text>
-          <Text>{`${scored[0].name}: ${Math.round(
-            scored[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Arms" && (
-        <>
-          <Text>Recommended for arms:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Shoulders" && (
-        <>
-          <Text>Recommended for shoulders:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Chest" && (
-        <>
-          <Text>Recommended for chest:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Back" && (
-        <>
-          <Text>Recommended for back:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Abdominals" && (
-        <>
-          <Text>Recommended for abdominals:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-      {scored?.length !== 0 && rightbar === "Legs" && (
-        <>
-          <Text>Recommended for legs:</Text>
-          <Text>{`${filtered[0].name}: ${Math.round(
-            filtered[0].score * 100
-          )}% match`}</Text>
-        </>
-      )}
-    </Box>
+      </div>
+    </div>
   );
 }
 
