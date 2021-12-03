@@ -44,6 +44,12 @@ import {
   reauthenticateWithCredential,
   updatePassword,
   deleteUser,
+  query,
+  collection,
+  where,
+  getDocs,
+  deleteDoc,
+  deleteObject,
 } from "../firebase/firebase";
 import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
@@ -63,13 +69,37 @@ export default function ProfileEdit({ user }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const deactivateAccount = async () => {
-    await deleteUser(user)
-      .then(() => {
-        window.location = "./";
-      })
-      .catch((error) => {
-        console.log(error.code);
-      });
+    const storage = getStorage();
+    //get posts
+    const postsQuery = query(
+      collection(db, "test"),
+      where("usr", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(postsQuery);
+
+    //delete posts
+    querySnapshot.forEach(async (doc) => {
+      if (doc?.data()?.img !== "no_image_provided") {
+        //delete post images
+        const imgRef = ref(storage, doc.data().img);
+        await deleteObject(imgRef);
+      }
+      await deleteDoc(doc(db, "test", doc.id));
+    });
+
+    //get user doc
+    const userRef = doc(db, "Profile", user.uid);
+    if (user.Picture_id !== "default.png") {
+      //delete profile picture
+      const proPicRef = ref(storage, user.Picture_id);
+      await deleteObject(proPicRef);
+    }
+    //delete user doc
+    await deleteDoc(userRef);
+
+    //delete user
+    await deleteUser(auth.currentUser);
+    window.location = "./";
   };
 
   useEffect(() => {
@@ -187,6 +217,10 @@ export default function ProfileEdit({ user }) {
     var filename = uuidv4();
     const storage = getStorage();
     const imageRef = ref(storage, filename);
+    if (user.Picture_id !== "default.png") {
+      const proPicRef = ref(storage, user.Picture_id);
+      await deleteObject(proPicRef);
+    }
     await uploadBytes(imageRef, image);
     setImage(null);
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
