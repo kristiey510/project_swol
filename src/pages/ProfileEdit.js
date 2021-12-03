@@ -65,13 +65,14 @@ export default function ProfileEdit({ user }) {
   });
   const [image, setImage] = useState(null);
   const [password, setPassword] = useState({ old: "", new: "", confirm: "" });
+  const [delPassword, setDelPassword] = useState(null);
   const [error, setError] = useState({ currPass: "", newPass: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const deactivateAccount = async () => {
     let credential = Auth.EmailAuthProvider.credential(
       auth.currentUser.email,
-      password.old
+      delPassword
     );
     await reauthenticateWithCredential(auth.currentUser, credential);
     const storage = getStorage();
@@ -170,9 +171,12 @@ export default function ProfileEdit({ user }) {
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
+  const handleDelPass= (value) => {
+    setDelPassword((prev) => ({ ...prev, value }));
+  };
 
   const handleNewPass = (name, value) => {
-    setPassword((prev) => ({ ...prev, [name]: value }));
+    setPassword((prev) => ({ ...prev, [name]: value}));
   };
 
   const changePass = async () => {
@@ -207,6 +211,7 @@ export default function ProfileEdit({ user }) {
 
   const handleSubmit = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
+    try{
     if (!acceptedImageTypes.includes(image.type)) {
       setError("Error: Not a JPG or PNG");
       return;
@@ -219,14 +224,20 @@ export default function ProfileEdit({ user }) {
         Weight: input.weight,
       });
     }
+  }catch(error){
+    setError(error);
+  }
   };
 
   const handleUpload = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
+    try {
     if (!acceptedImageTypes.includes(image.type)) {
       setError("Error: Not a JPG or PNG");
       setImage(null);
       return;
+    }}catch (error){
+      setError(error);
     }
     var filename = uuidv4();
     const storage = getStorage();
@@ -304,45 +315,45 @@ export default function ProfileEdit({ user }) {
               Email:
             </Box>
             <Text fontSize="sm">{input.email}</Text>
-            <FormControl align="center">
-              <Flex justify="center">
+            <FormControl >
+              <Flex direction = "column" align = "center">
                 <FormLabel
                   mt="30px"
-                  ml="20px"
-                  pt="7px"
-                  pl="17px"
+                  ml = "10px"
+                  px= "3"
+                  py= "2"
                   bg="primary.3200"
                   color="white"
                   borderRadius="10px"
-                  w="175px"
-                  h="35px"
+                  size = "md"
                   htmlFor="getFile"
                   type="button"
                   fontWeight="bold"
-                  fontSize="10pt"
+                  fontSize="9pt"
                   variant="outline"
                 >
-                  Select {image ? "another file" : "Profile Picture"}
+                  {image ? "Choose another" : " Select Profile Picture"}
                 </FormLabel>
                 {image && (
                   <Button
-                    mt="30px"
+                    size = "md"
+                    mt="5px"
                     bg="primary.3200"
                     color="white"
                     borderRadius="10px"
-                    h="35px"
+                    p = "2"
                     type="button"
                     fontWeight="bold"
-                    fontSize="10pt"
+                    fontSize="8pt"
                     variant="outline"
                     onClick={handleUpload}
                   >
                     Upload {image.name}
                   </Button>
                 )}
-              </Flex>
-              <Box>
+                <Box>
                 <Button
+                  mt="10px"
                   variant="link"
                   color="red"
                   fontSize="xs"
@@ -352,6 +363,10 @@ export default function ProfileEdit({ user }) {
                   Deactivate Account{" "}
                 </Button>
               </Box>
+             
+
+              </Flex>
+              
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -361,6 +376,13 @@ export default function ProfileEdit({ user }) {
                   <ModalCloseButton />
                   <ModalBody>
                     Are you sure you want to delete account?
+                    <Input
+                      w="200px"
+                      placeholder="Type in old password"
+                      size="xs"
+                      type="password"
+                      onChange={(event) => handleDelPass(event.target.value)}
+                    />
                   </ModalBody>
                   <ModalFooter>
                     <Button
@@ -383,6 +405,7 @@ export default function ProfileEdit({ user }) {
                     >
                       Delete
                     </Button>
+
                   </ModalFooter>
                 </ModalContent>
               </Modal>
