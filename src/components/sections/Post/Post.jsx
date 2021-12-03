@@ -5,7 +5,6 @@ import {
   doc,
   db,
   getDoc,
-  auth,
   updateDoc,
   arrayUnion,
   increment,
@@ -46,12 +45,6 @@ import { calories } from "../../../utils/calories";
 
 export default function Post({ post, user, profiles, setPosts }) {
   const [image, setImage] = useState("");
-  const bodyWtExercises = [
-    "Plank",
-    "Pull up/chin up",
-    "Sit up/crunch",
-    "Push up",
-  ];
   const [isLiked, setIsLiked] = useState(0);
   const {
     isOpen: isCommentsOpen,
@@ -59,10 +52,14 @@ export default function Post({ post, user, profiles, setPosts }) {
     onClose: onCommentsClose,
   } = useDisclosure();
   const [comment, setComment] = useState("");
+  const bodyWtExercises = [
+    "Plank",
+    "Pull up/chin up",
+    "Sit up/crunch",
+    "Push up",
+  ];
 
   const postComment = () => {
-    console.log("comment");
-    console.log(comment);
     const docRef = doc(db, "test", post.id);
     var currentTime =
       new Date(Date.now()).toISOString().substring(0, 10) +
@@ -83,12 +80,8 @@ export default function Post({ post, user, profiles, setPosts }) {
   };
 
   const handleDelete = (post) => {
-    console.log("deleting");
-    console.log(post.id);
-
     //delete image
     if (post.img !== "no_image_provided") {
-      console.log("deleting image", post.img);
       const storage = getStorage();
       const deleteRef = ref(storage, post.img);
       deleteObject(deleteRef);
@@ -102,47 +95,30 @@ export default function Post({ post, user, profiles, setPosts }) {
   };
 
   const handleLike = () => {
-    console.log("wtf");
-    // setLN("");
     var alreadyLiked = false;
-    var user = auth.currentUser;
-    //if no user
     if (!user) {
-      console.log("No user");
       return;
     }
-    console.log("Searching for post to like:");
-    console.log(post.id);
 
     getDoc(doc(db, "test", post.id)).then((docSnap) => {
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
         const data = docSnap.data();
         //loop through array
         for (let i = 0; i < data.likes; i++) {
           //if the user has already liked it
           if (data.likers[i] === user.uid) {
-            console.log("already liked");
             alreadyLiked = true;
           }
         }
         const docRef = doc(db, "test", post.id);
 
-        console.log(alreadyLiked);
-        //like post
         if (alreadyLiked === false) {
-          console.log("like");
-          // setLN("Liked Post");
           updateDoc(docRef, {
             likers: arrayUnion(user.uid),
             likes: increment(1),
           });
           setIsLiked(1);
-        }
-        //unlike post
-        else {
-          console.log("unlike");
-          // setLN("Unliked Post");
+        } else {
           updateDoc(docRef, {
             likers: arrayRemove(user.uid),
             likes: increment(-1),
@@ -153,8 +129,6 @@ export default function Post({ post, user, profiles, setPosts }) {
             post.likers?.splice(index, 1);
           }
         }
-      } else {
-        console.log("No such document!");
       }
     });
   };
@@ -334,12 +308,15 @@ export default function Post({ post, user, profiles, setPosts }) {
           <ModalBody>
             {post.comments?.map((comment, index) => (
               <Box key={index} m={2}>
-                <Text as="span">
-                  {comment.usr}: {comment.comment}
+                <Text color="grey" fontSize="10px">
+                  {comment.usr}
                 </Text>
-                <Text as="span" color="grey" fontSize="xs">
-                  {comment?.time}
-                </Text>
+                <Flex justify="space-between">
+                  <Text>{comment.comment}</Text>
+                  <Text color="grey" fontSize="xs">
+                    {comment?.time}
+                  </Text>
+                </Flex>
               </Box>
             ))}
             <Divider orientation="horizontal" m={3} />
