@@ -7,6 +7,7 @@ import {
   Person,
 } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
 import {
   db,
   getDoc,
@@ -58,7 +59,14 @@ export default function Sidebar({ user }) {
     <div className="Sidebar">
       <div className="sidebarWrapper">
         <ul className="sidebarLists">
-          <li className="sidebarListsItems">
+          <Flex
+            bg={`${
+              window.location.pathname === "/dashboard" ? "gray.100" : ""
+            }`}
+            pt="10px"
+            pb="10px"
+            cursor="pointer"
+          >
             <RssFeed className="sidebarIcon" />
             {window.location.pathname === "/dashboard" ? (
               <div
@@ -73,8 +81,15 @@ export default function Sidebar({ user }) {
                 <span className="sidebarListItemNext">Feed</span>
               </Link>
             )}
-          </li>
-          <li className="sidebarListsItems">
+          </Flex>
+          <Flex
+            bg={`${
+              window.location.pathname === "/followers" ? "gray.100" : ""
+            }`}
+            pt="10px"
+            pb="10px"
+            cursor="pointer"
+          >
             <Person className="sidebarIcon" />
             {window.location.pathname === "/followers" ? (
               <div
@@ -89,8 +104,15 @@ export default function Sidebar({ user }) {
                 <span className="sidebarListItemNext">Follows</span>
               </Link>
             )}
-          </li>
-          <li className="sidebarListsItems">
+          </Flex>
+          <Flex
+            bg={`${
+              window.location.pathname === "/personal_log" ? "gray.100" : ""
+            }`}
+            pt="10px"
+            pb="10px"
+            cursor="pointer"
+          >
             <PostAddOutlined className="sidebarIcon" />
             {window.location.pathname === "/personal_log" ? (
               <div
@@ -105,8 +127,13 @@ export default function Sidebar({ user }) {
                 <span className="sidebarListItemNext">Personal log</span>
               </Link>
             )}
-          </li>
-          <li className="sidebarListsItems">
+          </Flex>
+          <Flex
+            bg={`${window.location.pathname === "/faq" ? "gray.100" : ""}`}
+            pt="10px"
+            pb="10px"
+            cursor="pointer"
+          >
             <HelpOutline className="sidebarIcon" />
             {window.location.pathname === "/faq" ? (
               <div
@@ -121,7 +148,7 @@ export default function Sidebar({ user }) {
                 <span className="sidebarListItemNext">FAQ</span>
               </Link>
             )}
-          </li>
+          </Flex>
         </ul>
         <hr className="sidebarHr" />
         {(window.location.pathname === "/dashboard" ||
