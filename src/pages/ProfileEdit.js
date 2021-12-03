@@ -210,23 +210,13 @@ export default function ProfileEdit({ user }) {
   };
 
   const handleSubmit = async () => {
-    const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
-    try{
-    if (!acceptedImageTypes.includes(image.type)) {
-      setError("Error: Not a JPG or PNG");
-      return;
-    } else {
-      await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
-        Name: input.name,
-        Height_Ft: input.height_ft,
-        Height_In: input.height_in,
-        Gender: input.gender,
-        Weight: input.weight,
-      });
-    }
-  }catch(error){
-    setError(error);
-  }
+    await updateDoc(doc(db, "Profile", user.uid), {
+      Name: input.name,
+      Height_Ft: input.height_ft,
+      Height_In: input.height_in,
+      Gender: input.gender,
+      Weight: input.weight,
+    });
   };
 
   const handleUpload = async () => {
