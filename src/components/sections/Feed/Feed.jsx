@@ -76,13 +76,13 @@ export default function Feed({ user, filter }) {
           );
           setProfiles((prev) => ({
             ...prev,
-            [followed]: { username: profile.data().Name, propic: downloadURL },
+            [followed]: { username: profile.data().Name, propic: downloadURL, feet: profile.data().Height_Ft, inches: profile.data().Height_In, weight: profile.data().Weight },
           }));
         } else {
           const downloadURL = await getDownloadURL(ref(storage, "default.png"));
           setProfiles((prev) => ({
             ...prev,
-            [followed]: { username: "[deleted user]", propic: downloadURL },
+            [followed]: { username: "[deleted user]", propic: downloadURL, feet: profile.data().Height_Ft, inches: profile.data().Height_In, weight: profile.data().Weight },
           }));
         }
       });
