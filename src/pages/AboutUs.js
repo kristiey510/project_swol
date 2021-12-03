@@ -5,8 +5,8 @@ import { Flex, Heading, Stack } from "@chakra-ui/react";
 
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   return (
-    <Flex direction="column" align="center"  m="0 auto">
-      <LandingHeader/>
+    <Flex direction="column" align="center" m="0 auto">
+      <LandingHeader />
       <Stack
         spacing={10}
         w={{ base: "10%", md: "120%" }}
@@ -50,5 +50,5 @@ AboutUs.defaultProps = {
   title: "About Us",
   subtitle:
     "SWOL is a project created by 7 Emory students, with the goal of encouraging our users to devote time to staying fit and healthy",
-  subtitle2: "You can reach us at <placeholder>@<placeholder.com>",
+  subtitle2: "You can reach us at: https://forms.gle/1jESpBitqYy5bSHX9",
 };
