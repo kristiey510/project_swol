@@ -39,6 +39,7 @@
 }
 
 .postCenter {
+  padding: 2px 2%;
   margin: 10px 0;
 }
 
@@ -68,6 +69,7 @@
 }
 
 .postLikeCounter {
+  margin-left: 5px;
   font-size: 15px;
 }
 

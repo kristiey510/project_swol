@@ -228,25 +228,23 @@ export default function Post({ post, user, profiles, setPosts }) {
                   </Text>
                   <Text>{post?.type}</Text>
                 </Stack>
-                <Stack>
-                  {!bodyWtExercises.includes(post?.type) && (
-                    <Text>
-                      {post?.scale !== 1
-                        ? `${post?.scale} ${exerciseUnits[post?.type]?.scale}`
-                        : `${post?.scale} ${(exerciseUnits[
-                            post?.type
-                          ]?.scale).slice(0, -1)}`}
+                {!bodyWtExercises.includes(post?.type) && (
+                  <Stack>
+                    <Text color="gray.400" fontSize="xs">
+                      {exerciseUnits[post?.type]?.scale.replace(/./, (c) =>
+                        c.toUpperCase()
+                      )}
                     </Text>
-                  )}
-                  <Text>
-                    {post?.quantity !== 1
-                      ? `${post?.quantity} ${
-                          exerciseUnits[post?.type]?.quantity
-                        }`
-                      : `${post?.quantity} ${(exerciseUnits[
-                          post?.type
-                        ]?.quantity).slice(0, -1)}`}
+                    <Text>{post?.scale}</Text>
+                  </Stack>
+                )}
+                <Stack>
+                  <Text color="gray.400" fontSize="xs">
+                    {exerciseUnits[post?.type]?.quantity.replace(/./, (c) =>
+                      c.toUpperCase()
+                    )}
                   </Text>
+                  <Text>{post?.quantity}</Text>
                 </Stack>
                 <Stack>
                   <Text color="gray.400" fontSize="xs">
@@ -285,7 +283,6 @@ export default function Post({ post, user, profiles, setPosts }) {
                 </Text>
               ) : (
                 <Text mt="2px" fontSize="10pt" color="#928E8B">
-                  {" "}
                   {post?.likes + isLiked} likes
                 </Text>
               )}
