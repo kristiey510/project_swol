@@ -212,15 +212,16 @@ export default function Post({ post, user, profiles, setPosts }) {
           </div>
         )}
 
-        <hr className="postHr" />
 
-        {post?.type &&
+
+        {(post?.type &&
           profiles[post?.usr]?.feet &&
           profiles[post?.usr]?.inches &&
           profiles[post?.usr]?.weight &&
           (post?.scale || bodyWtExercises.includes(post?.type)) &&
-          post?.quantity && (
-            <>
+          post?.quantity) ? (
+            <Box bg = "rgba(0, 0, 0, 0.04)">
+              <hr className="postHr" />
               <Flex justify="space-around" align="center" mb="10px">
                 <Stack>
                   <Text color="gray.400" fontSize="xs">
@@ -266,7 +267,9 @@ export default function Post({ post, user, profiles, setPosts }) {
               </Flex>
 
               <hr className="postHr" />
-            </>
+            </Box>
+          ) : (
+            <hr className="postHr" />
           )}
 
         <div className="postBottom">
