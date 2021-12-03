@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Sidebar from "../components/sections/Sidebar/Sidebar";
 import Topbar from "../components/sections/Topbar/Topbar";
 import AddFriend from "./AddFriend";
@@ -15,11 +15,7 @@ import {
   TabPanel,
   TabPanels,
 } from "@chakra-ui/react";
-import {
-  db,
-  doc,
-  getDoc
-} from "../firebase/firebase";
+
 
 export default function Followers({ user }) {
   console.log(user.uid);
@@ -40,7 +36,7 @@ export default function Followers({ user }) {
           >
             Follows
           </Heading>
-          <Box align="center" mt="50px" >
+          <Box align="center" mt="50px">
             <Tabs isLazy isFitted colorScheme="grey" variant="enclosed" border = "30pt" borderColor = "gray.50" spacing = "10px">
               <TabList mb="3em">
                 <Tab bg="#FDF2E9" color="primary.2350" fontWeight = "bold" fontSize = "xs">FOLLOWING</Tab>

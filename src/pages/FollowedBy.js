@@ -14,12 +14,10 @@ import {
   getStorage,
   getDownloadURL,
   ref,
-  getDoc,
   arrayRemove, 
   getDocs,
   query,
   collection,
-  orderBy,
   where
 } from "../firebase/firebase";
 
@@ -30,7 +28,6 @@ const [follows, setFollows] = useState([]);
 
   useEffect(() => {
      async function fetchFollowedBy(){
-       const optionVals = [];
        var new_obj = {};
        const querySnapshot = await getDocs(
         query(collection(db, "Profile"), where("following", "array-contains", user.uid))
@@ -51,7 +48,7 @@ const [follows, setFollows] = useState([]);
        });
      }
    fetchFollowedBy();
-  }, []);
+  }, [user.uid]);
 
   const unfollow = async (uid) => {
      await updateDoc(doc(db, "Profile", uid), {

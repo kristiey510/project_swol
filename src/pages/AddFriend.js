@@ -25,8 +25,7 @@ import {
   arrayUnion,
   getStorage,
   getDownloadURL,
-  ref,
-  where
+  ref
 } from "../firebase/firebase";
 import { SearchIcon} from "@chakra-ui/icons";
 
@@ -54,7 +53,7 @@ export default function AddFriend({user}) {
        setOptions(optionVals);
      }
     fetchUsers();
-  }, []);
+  }, [user.uid]);
 
   const addFriend = (val) => {
     if (val != null){

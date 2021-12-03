@@ -17,7 +17,6 @@ import {
   IconButton,
   ButtonGroup,
   InputGroup,
-  Checkbox,
   Text,
   Select,
   Modal,
