@@ -496,14 +496,6 @@ export default function ProfileEdit({ user }) {
                   onClick={handleSubmit}
                 />
               </InputGroup>
-              <Stack spacing="10px">
-                <Checkbox size="sm" defaultIsChecked>
-                  Follow requests
-                </Checkbox>
-                <Checkbox size="sm">
-                  Automatically accept follow requests
-                </Checkbox>
-              </Stack>
             </Stack>
             <Stack px="50px">
               <Heading
