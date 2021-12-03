@@ -69,7 +69,24 @@ export default function ProfileEdit({ user }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const deactivateAccount = async () => {
+    let credential = Auth.EmailAuthProvider.credential(
+      auth.currentUser.email,
+      password.old
+    );
+    await reauthenticateWithCredential(auth.currentUser, credential);
     const storage = getStorage();
+    const userAuth = auth.currentUser;
+    async function deletePosts(querySnapshot) {
+      querySnapshot.forEach(async (docSnap) => {
+        if (docSnap?.data()?.img !== "no_image_provided") {
+          //delete post images
+          const imgRef = ref(storage, docSnap.data().img);
+          await deleteObject(imgRef);
+        }
+        await deleteDoc(doc(db, "test", docSnap.id));
+      });
+    }
+
     //get posts
     const postsQuery = query(
       collection(db, "test"),
@@ -78,18 +95,10 @@ export default function ProfileEdit({ user }) {
     const querySnapshot = await getDocs(postsQuery);
 
     //delete posts
-    querySnapshot.forEach(async (doc) => {
-      if (doc?.data()?.img !== "no_image_provided") {
-        //delete post images
-        const imgRef = ref(storage, doc.data().img);
-        await deleteObject(imgRef);
-      }
-      await deleteDoc(doc(db, "test", doc.id));
-    });
-
+    await deletePosts(querySnapshot);
     //get user doc
     const userRef = doc(db, "Profile", user.uid);
-    if (user.Picture_id !== "default.png") {
+    if (user?.Picture_id !== "default.png") {
       //delete profile picture
       const proPicRef = ref(storage, user.Picture_id);
       await deleteObject(proPicRef);
@@ -98,8 +107,13 @@ export default function ProfileEdit({ user }) {
     await deleteDoc(userRef);
 
     //delete user
-    await deleteUser(auth.currentUser);
-    window.location = "./";
+    try {
+      await deleteUser(userAuth);
+      window.location = "./";
+    } catch (err) {
+      if (err.code === "auth/requires-recent-login") {
+      }
+    }
   };
 
   useEffect(() => {
