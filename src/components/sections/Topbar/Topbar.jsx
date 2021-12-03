@@ -18,7 +18,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-export default function Topbar({ user }) {
+export default function Topbar({ user, handleFilter }) {
   const exit = async () => {
     try {
       await auth.signOut();
@@ -32,14 +32,11 @@ export default function Topbar({ user }) {
   useEffect(() => {
     async function getPic() {
       const storage = getStorage();
-      await getDownloadURL(ref(storage, user.Picture_id))
-        .then((url) => {
-          const img = document.getElementById("myimg");
-          img.setAttribute("src", url);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const url = await getDownloadURL(ref(storage, user.Picture_id)).catch(
+        () => {}
+      );
+      const img = document.getElementById("myimg");
+      img.setAttribute("src", url);
     }
     getPic();
   }, [user.Picture_id]);
@@ -47,15 +44,26 @@ export default function Topbar({ user }) {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <Link to="./dashboard">
-          <Logo />
-        </Link>
+        {window.location.pathname === "/dashboard" ? (
+          <div
+            onClick={() => {
+              window.location = "./dashboard";
+            }}
+          >
+            <Logo />
+          </div>
+        ) : (
+          <Link to="./dashboard">
+            <Logo />
+          </Link>
+        )}
       </div>
       <div className="topbarCenter">
         <div className="searchbar">
           <Search className="searchIcon" />
           <input
-            placeholder="Search for friends, posts, or videos"
+            onChange={handleFilter}
+            placeholder="Search for posts"
             className="searchInput"
           />
         </div>

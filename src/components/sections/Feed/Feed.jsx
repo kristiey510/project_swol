@@ -17,9 +17,9 @@ import {
   limit,
   startAfter,
 } from "../../../firebase/firebase";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text, Spinner } from "@chakra-ui/react";
 
-export default function Feed({ user }) {
+export default function Feed({ user, filter }) {
   const [fetching, setFetching] = useState(true);
   const [posts, setPosts] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
@@ -110,34 +110,36 @@ export default function Feed({ user }) {
     <div className="Feed">
       <div className="feedWrapper">
         <Share user={user} setPosts={setPosts} />
-        {posts.map((post, index) => {
-          if (index + 1 === posts.length) {
-            return (
-              <div ref={lastPostRef} key={index}>
+        {posts
+          .filter((post) => post.desc.includes(filter))
+          .map((post, index) => {
+            if (index + 1 === posts.length) {
+              return (
+                <div ref={lastPostRef} key={index}>
+                  <Post
+                    post={post}
+                    user={user}
+                    profiles={profiles}
+                    setPosts={setPosts}
+                  />
+                </div>
+              );
+            } else {
+              return (
                 <Post
+                  key={index}
                   post={post}
                   user={user}
                   profiles={profiles}
                   setPosts={setPosts}
                 />
-              </div>
-            );
-          } else {
-            return (
-              <Post
-                key={index}
-                post={post}
-                user={user}
-                profiles={profiles}
-                setPosts={setPosts}
-              />
-            );
-          }
-        })}
+              );
+            }
+          })}
         {!fetchedAll ? (
           <Flex justify="space-around" mt="25px">
             {fetching ? (
-              <Button>Loading more...</Button>
+              <Spinner />
             ) : (
               <Button onClick={fetchMorePosts}>Load more posts</Button>
             )}

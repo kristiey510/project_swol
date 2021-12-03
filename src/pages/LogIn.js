@@ -30,14 +30,12 @@ export default function LogIn({
   ...rest
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
-  //const [val, setValue] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState(null);
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
-  const handleChange = (name, value, e) => {
+  const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
-    //setValue((prev) => ({ ...prev, [name]: e}));
   };
 
   const handleLogin = async () => {
@@ -53,27 +51,6 @@ export default function LogIn({
         });
     }
   };
-
-  /* const handleLogin2 = async (e) => {
-    e.preventDefault();
-    if (val.email.length === 0 || val.password.length === 0) {
-      setErrs("Missing required fields");
-    } else {
-      await logIn(auth, val.email, val.password)
-        .then(async (e) => {
-          window.location = "./dashboard";
-        })
-        .catch((error) => {
-          setErrs(errors[error.code]);
-        });
-    }
-  }; */
-
-  /* const handleKeyPress = e => {
-    if(e.keyCode === 13) {
-      handleLogin2();
-    }
-  }; */
 
   return (
     <Flex direction="column" m="0 auto" align="center">
@@ -181,8 +158,8 @@ export default function LogIn({
                     h="32px"
                     lineHeight="1"
                     size="md"
+                    type="submit"
                     onClick={handleLogin}
-                    //onKeyPress={(e) => e.key === 'Enter' && handleKeyPress()}
                   >
                     {ctaTextLogIn}
                   </Button>

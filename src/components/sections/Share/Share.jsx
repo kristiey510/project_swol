@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Share.css";
 import PropTypes from "prop-types";
-import { PermMedia, AddCircleOutline, AccessTime } from "@material-ui/icons";
+import { PermMedia } from "@material-ui/icons";
 import { v4 as uuidv4 } from "uuid";
 import {
   Modal,
@@ -39,7 +39,7 @@ import {
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
 
-export default function Share({ user, setPosts}) {
+export default function Share({ user, setPosts }) {
   const [input, setInput] = useState({
     title: "",
     type: "",
@@ -48,6 +48,7 @@ export default function Share({ user, setPosts}) {
     quantity: "",
   });
   const [image, setImage] = useState(null);
+  const [filename, setFilename] = useState("");
   const [profilepic, setProPic] = useState(null);
   const [Error, setError] = useState("");
   const [inputHeight, setInputHeight] = useState(1);
@@ -79,6 +80,7 @@ export default function Share({ user, setPosts}) {
         return;
       } else {
         setError("");
+        setFilename(image?.name);
         onPhotoClose();
         return;
       }
@@ -97,10 +99,12 @@ export default function Share({ user, setPosts}) {
       const pathReference = ref(storage, user.Picture_id);
 
       //download, then set attribute to image tag in file
-      getDownloadURL(pathReference).then((url) => {
-        img.setAttribute("src", url);
-        setProPic(url)
-      });
+      getDownloadURL(pathReference)
+        .then((url) => {
+          img.setAttribute("src", url);
+          setProPic(url);
+        })
+        .catch(() => {});
     }
     fetchProfile();
   }, [user.Picture_id]);
@@ -115,25 +119,19 @@ export default function Share({ user, setPosts}) {
   };
 
   const handleMakePost = () => {
-    //check user
-    //var user = auth.currentUser;
-    //if no user
     if (!user) {
       return;
     }
 
     if (input.type === "") {
-      // alert("Please select an exercise");
       setError("Please select an exercise");
       return;
     } else if (bodyWtExercises.includes(input.type)) {
       if (input.quantity === "") {
-        // alert("Please enter exercise details");
         setError("Please enter exercise details");
         return;
       }
     } else if (input.scale === "" || input.quantity === "") {
-      // alert("Please enter exercise details");
       setError("Please enter exercise details");
       return;
     }
@@ -141,13 +139,12 @@ export default function Share({ user, setPosts}) {
     //validate image size
     if (image != null) {
       if (image.size > 5000000) {
-        //setError("Error: File too large");
+        setError("Error: File too large");
         return;
       }
       //validate image filetype
       const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
       if (!acceptedImageTypes.includes(image.type)) {
-        console.log("wrong file type:", image.type);
         setError("Error: Not a JPG or PNG");
         return;
       }
@@ -177,7 +174,6 @@ export default function Share({ user, setPosts}) {
         timestamp: serverTimestamp(),
         img: filename,
         usr: user.uid,
-        //no likes for now
         likes: 0,
         id: newDocRef.id,
         comments: [],
@@ -188,23 +184,24 @@ export default function Share({ user, setPosts}) {
       }),
     ]);
 
-    console.log(image)
-
-    setPosts((prev) => [ 
-      {title: input.title,
-      type: input.type,
-      desc: input.desc,
-      scale: Number(input.scale),
-      quantity: Number(input.quantity),
-      propic: profilepic,
-      usr: user.uid,
-      timestamp: 'just now',
-      //no likes for now
-      likes: 0,
-      username: user.Name,
-      id: newDocRef.id,
-      comments: [],
-      likers: []}, ...prev]);
+    setPosts((prev) => [
+      {
+        title: input.title,
+        type: input.type,
+        desc: input.desc,
+        scale: Number(input.scale),
+        quantity: Number(input.quantity),
+        propic: profilepic,
+        usr: user.uid,
+        timestamp: "just now",
+        likes: 0,
+        username: user.Name,
+        id: newDocRef.id,
+        comments: [],
+        likers: [],
+      },
+      ...prev,
+    ]);
 
     //clear field
     const descInput = document.getElementById("mainInput");
@@ -215,24 +212,13 @@ export default function Share({ user, setPosts}) {
 
     //no image log
     if (image == null) {
-      console.log("no image provided");
+      setError("Image upload error");
       return;
-    }
-    else {
-
-      //size in bytes
-      console.log("size:", image.size);
-
-      //image type
-      console.log("type:", image.type);
-
+    } else {
       //upload file
       const storage = getStorage();
       const imageRef = ref(storage, filename);
-      uploadBytes(imageRef, image).then((snapshot) => {
-        console.log("Uploaded a blob or file!");
-        //clear field?
-      });
+      uploadBytes(imageRef, image);
     }
   };
 
@@ -363,14 +349,7 @@ export default function Share({ user, setPosts}) {
                 Add Photo
               </span>
             </div>
-            {/* <div className="shareOption">
-              <AddCircleOutline htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Choose Activity</span>
-            </div>
-            <div className="shareOption">
-              <AccessTime htmlColor="black" className="shareIcon" />
-              <span className="shareOptionText">Workout Details</span>
-            </div> */}
+            {filename && <span className="shareOptionText">{filename}</span>}
           </div>
           <button className="shareButton" onClick={handleMakePost}>
             Share
