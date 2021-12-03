@@ -17,9 +17,16 @@ import {
   arrayRemove,
   orderBy,
   deleteDoc,
-
+  limit,
+  startAfter,
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -31,7 +38,7 @@ import {
   reauthenticateWithCredential,
   updatePassword,
   sendPasswordResetEmail,
-  deleteUser
+  deleteUser,
 } from "firebase/auth";
 
 initializeApp({
@@ -69,6 +76,8 @@ export {
   getDownloadURL,
   arrayUnion,
   query,
+  limit,
+  startAfter,
   where,
   increment,
   arrayRemove,
@@ -80,5 +89,5 @@ export {
   sendPasswordResetEmail,
   deleteUser,
   deleteDoc,
-  deleteObject
+  deleteObject,
 };

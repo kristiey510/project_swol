@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import "./Post.css";
-import { MoreVert, PostAddOutlined, ThumbUp } from "@material-ui/icons";
+import { MoreVert, ThumbUp } from "@material-ui/icons";
 import {
   doc,
   db,
@@ -9,24 +9,21 @@ import {
   updateDoc,
   arrayUnion,
   increment,
+  getDownloadURL,
   arrayRemove,
   deleteDoc,
   getStorage,
   ref,
   deleteObject,
-  setDoc,
-  serverTimestamp,
 } from "../../../firebase/firebase";
-import { 
-  Text, 
-  Flex, 
-  Stack, 
+import {
+  Text,
+  Flex,
+  Stack,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
   Button,
@@ -40,23 +37,22 @@ import {
   ModalCloseButton,
   useDisclosure,
   Box,
-  Textarea,
   Input,
-  Spacer,
   Divider,
-  HStack
+  HStack,
 } from "@chakra-ui/react";
 import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
 
-export default function Post({ post, user, setPosts }) {
+export default function Post({ post, user, profiles, setPosts }) {
+  const [image, setImage] = useState("");
   const bodyWtExercises = [
     "Plank",
     "Pull up/chin up",
     "Sit up/crunch",
     "Push up",
   ];
-  const [isLiked,setIsLiked] = useState(0)
+  const [isLiked, setIsLiked] = useState(0);
   const {
     isOpen: isCommentsOpen,
     onOpen: onCommentsOpen,
@@ -65,43 +61,48 @@ export default function Post({ post, user, setPosts }) {
   const [comment, setComment] = useState("");
 
   const postComment = () => {
-    console.log("comment")
-    console.log(comment)
+    console.log("comment");
+    console.log(comment);
     const docRef = doc(db, "test", post.id);
-    var currentTime = new Date(Date.now()).toISOString().substring(0, 10) + "\xa0" + "@\xa0" + new Date(Date.now()).toISOString().substring(11, 19);
+    var currentTime =
+      new Date(Date.now()).toISOString().substring(0, 10) +
+      "\xa0@\xa0" +
+      new Date(Date.now()).toISOString().substring(11, 19);
     updateDoc(docRef, {
-        comments: arrayUnion({usr: user.Name, comment: comment, time: currentTime})
-    })
-    post.comments.push({usr: user.Name, comment: comment, time: currentTime})
+      comments: arrayUnion({
+        usr: user.Name,
+        comment: comment,
+        time: currentTime,
+      }),
+    });
+    post.comments.push({ usr: user.Name, comment: comment, time: currentTime });
 
     const comIn = document.getElementById("comment");
     comIn.value = "";
     setComment("");
   };
 
-
   const handleDelete = (post) => {
-    console.log("deleting")
-    console.log(post.id)
+    console.log("deleting");
+    console.log(post.id);
 
-    //delete image 
-    if(post.img != 'no_image_provided'){
-      console.log('deleting image',post.img)
+    //delete image
+    if (post.img !== "no_image_provided") {
+      console.log("deleting image", post.img);
       const storage = getStorage();
       const deleteRef = ref(storage, post.img);
-      deleteObject(deleteRef)
+      deleteObject(deleteRef);
     }
     //delete doc
     deleteDoc(doc(db, "test", post.id));
 
     var thispost = post;
 
-    setPosts((prev) => prev.filter(post=>post!==thispost))
-    //todo: handle cache?
+    setPosts((prev) => prev.filter((post) => post !== thispost));
   };
 
   const handleLike = () => {
-    console.log("wtf")
+    console.log("wtf");
     // setLN("");
     var alreadyLiked = false;
     var user = auth.currentUser;
@@ -136,7 +137,7 @@ export default function Post({ post, user, setPosts }) {
             likers: arrayUnion(user.uid),
             likes: increment(1),
           });
-          setIsLiked(1)
+          setIsLiked(1);
         }
         //unlike post
         else {
@@ -146,7 +147,7 @@ export default function Post({ post, user, setPosts }) {
             likers: arrayRemove(user.uid),
             likes: increment(-1),
           });
-          setIsLiked(0)
+          setIsLiked(0);
           var index = post.likers?.indexOf(user.uid);
           if (index !== -1) {
             post.likers?.splice(index, 1);
@@ -158,59 +159,82 @@ export default function Post({ post, user, setPosts }) {
     });
   };
 
+  useEffect(() => {
+    const storage = getStorage();
+    async function fetchImage() {
+      if (post?.img !== "no_image_provided") {
+        const downloadURL = await getDownloadURL(ref(storage, post.img));
+        setImage(downloadURL);
+      }
+    }
+    fetchImage();
+  }, [post.img]);
+
   return (
     <div className="post">
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <img className="postProfileImg" src={post?.propic} alt="" />
-            <span className="postUsername">{post?.username}</span>
-            {/* <span className="postDate">{post?.type}</span> */}
-            {post.timestamp !== 'just now' ? 
-            <span className="postDate">
-              <Text mt = "3px" color = "#928E8B">
-                {new Date(post?.timestamp?.seconds * 1000)
-                  .toISOString()
-                  .substring(0, 10) +
-                  "\xa0" +
-                  "@\xa0"}
-                {new Date(post?.timestamp.seconds * 1000)
-                  .toISOString()
-                  .substring(11, 19)}
-               </Text>
+            <img
+              className="postProfileImg"
+              src={profiles[post?.usr]?.propic}
+              alt=""
+            />
+            <span className="postUsername">
+              {profiles[post?.usr]?.username}
             </span>
-            : <span className="postDate"><Text mt = "3px" color = "#928E8B">Just Now</Text></span>
-          }
+            {post.timestamp !== "just now" ? (
+              <span className="postDate">
+                <Text mt="3px" color="#928E8B">
+                  {new Date(post?.timestamp?.seconds * 1000)
+                    .toISOString()
+                    .substring(0, 10) + "\xa0@\xa0"}
+                  {new Date(post?.timestamp.seconds * 1000)
+                    .toISOString()
+                    .substring(11, 19)}
+                </Text>
+              </span>
+            ) : (
+              <span className="postDate">
+                <Text mt="3px" color="#928E8B">
+                  Just Now
+                </Text>
+              </span>
+            )}
           </div>
           <div className="postTopRight">
-          {user.uid == post.usr && post.timestamp !== 'just now' ? 
-          <Popover >
-            <PopoverTrigger>
-              <MoreVert />
-            </PopoverTrigger>
-          <PopoverContent w = "130px" align = "center">
-            <PopoverArrow />
-            <PopoverCloseButton />
-            <PopoverBody justify = "center" >
-              <ButtonGroup spacing='6'>
-              <Button 
-              size = "sm"
-              borderRadius = "10"
-              variant='outline' 
-              onClick={() => handleDelete(post)}
-              colorScheme='red'>Delete
-              </Button>
-              </ButtonGroup>
-             </PopoverBody>
-          </PopoverContent>
-          </Popover>
-          : null}
+            {user.uid === post.usr && post.timestamp !== "just now" ? (
+              <Popover>
+                <PopoverTrigger>
+                  <MoreVert />
+                </PopoverTrigger>
+                <PopoverContent w="130px" align="center">
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverBody justify="center">
+                    <ButtonGroup spacing="6">
+                      <Button
+                        size="sm"
+                        borderRadius="10"
+                        variant="outline"
+                        onClick={() => handleDelete(post)}
+                        colorScheme="red"
+                      >
+                        Delete
+                      </Button>
+                    </ButtonGroup>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            ) : null}
           </div>
         </div>
-        {(post?.desc || post?.imgUrl) && (
+        {(post?.desc || (post?.img && image)) && (
           <div className="postCenter">
-            <span className="postText">{post?.desc}</span>
-            <img className="postImg" src={post?.imgUrl} alt="" />
+            {post?.desc && <span className="postText">{post?.desc}</span>}
+            {post?.img && image && (
+              <img className="postImg" src={image} alt="" />
+            )}
           </div>
         )}
 
@@ -275,64 +299,61 @@ export default function Post({ post, user, setPosts }) {
 
         <div className="postBottom">
           <div className="postBottomLeft">
-          {post.likers?.includes(user.uid) || isLiked == 1 ? 
-            <ThumbUp
-            onClick={handleLike}
-            htmlColor="#FFC494">
-            </ThumbUp>
-            :
-            <ThumbUp
-            onClick={handleLike}
-            htmlColor="#D0CCCA">
-            </ThumbUp>
-            }
+            {post.likers?.includes(user.uid) || isLiked === 1 ? (
+              <ThumbUp onClick={handleLike} htmlColor="#FFC494"></ThumbUp>
+            ) : (
+              <ThumbUp onClick={handleLike} htmlColor="#D0CCCA"></ThumbUp>
+            )}
             <span className="postLikeCounter">
               {post?.likes + isLiked === 1 ? (
-                <Text mt = "2px" fontSize = "10pt" color = "#928E8B">{post?.likes + isLiked} like</Text>
+                <Text mt="2px" fontSize="10pt" color="#928E8B">
+                  {post?.likes + isLiked} like
+                </Text>
               ) : (
-                <Text mt = "2px" fontSize = "10pt"  color = "#928E8B"> {post?.likes + isLiked} likes</Text>
+                <Text mt="2px" fontSize="10pt" color="#928E8B">
+                  {" "}
+                  {post?.likes + isLiked} likes
+                </Text>
               )}
             </span>
           </div>
           <div className="postBottomRight">
-            <span 
-            className="postCommentText"
-            onClick={onCommentsOpen}
-            >
-            <Text mt = "-25px" color = "#928E8B" fontSize = "10pt" as='u'>
-            {post?.comment} comments
-            </Text>
+            <span className="postCommentText" onClick={onCommentsOpen}>
+              <Text mt="-25px" color="#928E8B" fontSize="10pt" as="u">
+                {post?.comment} comments
+              </Text>
             </span>
           </div>
         </div>
       </div>
-      <Modal isOpen={isCommentsOpen} onClose={onCommentsClose} size='xl'>
+      <Modal isOpen={isCommentsOpen} onClose={onCommentsClose} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color="primary.2350">Comments</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          {post.comments?.map((comment,index) => ( 
-            <Box key = {index} m ={2}>
-              <Text as='span'>
-               {comment.usr} 
-              : {comment.comment}
+            {post.comments?.map((comment, index) => (
+              <Box key={index} m={2}>
+                <Text as="span">
+                  {comment.usr}: {comment.comment}
                 </Text>
-                <Text as='span' color='grey' fontSize='xs'>{comment?.time}</Text>
-            </Box>
-          ))}
-          <Divider orientation='horizontal' m={3}/>
-          <Input
-            id = "comment"
-            value={comment}
-            onChange={(event) => setComment(event.target.value)}
-            placeholder="Make a Comment"
-            size="sm"
-          />
+                <Text as="span" color="grey" fontSize="xs">
+                  {comment?.time}
+                </Text>
+              </Box>
+            ))}
+            <Divider orientation="horizontal" m={3} />
+            <Input
+              id="comment"
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              placeholder="Make a Comment"
+              size="sm"
+            />
           </ModalBody>
           <ModalFooter>
-          <HStack>
-          <Button
+            <HStack>
+              <Button
                 bg="primary.3200"
                 color="primary.150"
                 fontWeight="bold"
@@ -355,6 +376,5 @@ export default function Post({ post, user, setPosts }) {
         </ModalContent>
       </Modal>
     </div>
-    
   );
 }

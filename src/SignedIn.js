@@ -1,25 +1,18 @@
 import "./App.css";
-import React ,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AboutUs from "./pages/AboutUs";
 import Dashboard from "./pages/Dashboard";
-import TestPost from "./pages/TestPost";
 import ProfileCreate from "./pages/ProfileCreate";
 import ProfileEdit from "./pages/ProfileEdit";
 import Faq from "./pages/Faq";
-import CreateAccount from "./pages/CreateAccount";
 import PersonalLog from "./pages/PersonalLog";
 import Followers from "./pages/Followers";
 import ErrorPage from "./errorPage";
 
-import {
-  db,
-  getDoc, 
-  doc
-} from "./firebase/firebase";
+import { db, getDoc, doc } from "./firebase/firebase";
 
 function SignedIn({ userTemp }) {
-
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -60,9 +53,6 @@ function SignedIn({ userTemp }) {
         </Route>
         <Route path="/faq">
           <Faq user={user} />
-        </Route>
-        <Route path="/signup">
-          <CreateAccount />
         </Route>
         <Route path="*">
           <ErrorPage />
