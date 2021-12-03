@@ -68,7 +68,7 @@ export default function PersonalLog({ user }) {
     async function fetchProfile() {
       const storage = getStorage();
       const downloadURL = await getDownloadURL(ref(storage, user.Picture_id));
-      setProfile({ [user.uid]: { username: user.Name, propic: downloadURL } });
+      setProfile({ [user.uid]: { username: user.Name, propic: downloadURL, feet: user.Height_Ft, inches: user.Height_In, weight: user.Weight } });
     }
     async function fetchPosts() {
       const postQuery = query(
