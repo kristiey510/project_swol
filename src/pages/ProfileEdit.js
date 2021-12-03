@@ -44,7 +44,7 @@ import {
   Auth,
   reauthenticateWithCredential,
   updatePassword,
-  deleteUser
+  deleteUser,
 } from "../firebase/firebase";
 import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
@@ -63,14 +63,16 @@ export default function ProfileEdit({ user }) {
   const [error, setError] = useState({ currPass: "", newPass: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const deactivateAccount = async() =>{
-    await deleteUser(user).then(() => {
-       console.log("User is deleted");
-       window.location = "./"
-    }).catch((error) => {
-       console.log(error.code);
-    });
-  }
+  const deactivateAccount = async () => {
+    await deleteUser(user)
+      .then(() => {
+        console.log("User is deleted");
+        window.location = "./";
+      })
+      .catch((error) => {
+        console.log(error.code);
+      });
+  };
 
   useEffect(() => {
     async function getUser() {
@@ -135,7 +137,7 @@ export default function ProfileEdit({ user }) {
   };
 
   const changePass = async () => {
-    let credential = await Auth.EmailAuthProvider.credential(
+    let credential = Auth.EmailAuthProvider.credential(
       auth.currentUser.email,
       password.old
     );
@@ -200,6 +202,7 @@ export default function ProfileEdit({ user }) {
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
       Picture_id: filename,
     });
+    window.location = "/profile";
   };
 
   const handleImage = async (event) => {
@@ -238,7 +241,7 @@ export default function ProfileEdit({ user }) {
                 fontSize="xs"
                 textTransform="uppercase"
               >
-                Name :
+                Name:
               </Box>
             </Box>
             <Text fontSize="sm">{input.name}</Text>
@@ -302,37 +305,49 @@ export default function ProfileEdit({ user }) {
                 )}
               </Flex>
               <Box>
-                <Button variant = "link" color = "red" fontSize = "xs" onClick = {onOpen}> Deactivate Account </Button>
+                <Button
+                  variant="link"
+                  color="red"
+                  fontSize="xs"
+                  onClick={onOpen}
+                >
+                  {" "}
+                  Deactivate Account{" "}
+                </Button>
               </Box>
-               <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader color="primary.2350">Deactivate Account</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>Are you sure you want to delete account?</ModalBody>
-                    <ModalFooter>
-                      <Button
-                        bg="primary.3200"
-                        color="primary.150"
-                        fontWeight="bold"
-                        fontSize="16"
-                        onClick={onClose}
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        ml="5"
-                        variant="ghost"
-                        bg="primary.3200"
-                        color="primary.150"
-                        fontWeight="bold"
-                        fontSize="16"
-                        onClick = {deactivateAccount}
-                      >
-                        Delete
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader color="primary.2350">
+                    Deactivate Account
+                  </ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    Are you sure you want to delete account?
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      bg="primary.3200"
+                      color="primary.150"
+                      fontWeight="bold"
+                      fontSize="16"
+                      onClick={onClose}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      ml="5"
+                      variant="ghost"
+                      bg="primary.3200"
+                      color="primary.150"
+                      fontWeight="bold"
+                      fontSize="16"
+                      onClick={deactivateAccount}
+                    >
+                      Delete
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
               </Modal>
               <Input
                 border="transparent"
@@ -472,7 +487,7 @@ export default function ProfileEdit({ user }) {
               </InputGroup>
               <InputGroup py="5px">
                 <FormLabel mt="5px" fontSize="10pt" w="125px">
-                  Gender :
+                  Gender:
                 </FormLabel>
                 <Select
                   w="100px"
@@ -517,7 +532,7 @@ export default function ProfileEdit({ user }) {
                 Settings
               </Heading>
               <FormLabel py="5px" fontSize="9pt">
-                Old Password :
+                Old Password:
               </FormLabel>
               <Input
                 w="200px"
@@ -530,7 +545,7 @@ export default function ProfileEdit({ user }) {
                 {error.currPass}
               </Text>
               <FormLabel py="5px" fontSize="9pt">
-                New Password :
+                New Password:
               </FormLabel>
               <Input
                 placeholder="New password"
@@ -539,7 +554,7 @@ export default function ProfileEdit({ user }) {
                 onChange={(event) => handleNewPass("new", event.target.value)}
               />
               <FormLabel py="5px" fontSize="9pt">
-                Confirm New Password :
+                Confirm New Password:
               </FormLabel>
               <Input
                 type="password"

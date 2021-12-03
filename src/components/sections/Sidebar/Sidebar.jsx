@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Sidebar.css";
 import {
   RssFeed,
@@ -9,53 +9,50 @@ import {
 import { Link } from "react-router-dom";
 import {
   db,
-  collection,
+  getDoc,
+  doc,
   getStorage,
   ref,
   getDownloadURL,
-  query,
-  where,
-  getDocs,
+  updateDoc,
+  arrayRemove,
 } from "../../../firebase/firebase";
 
-export default function Sidebar({user}) {
+export default function Sidebar({ user }) {
   const [friends, setFriends] = useState([]);
 
+  const unfollow = useCallback(
+    async (uid) => {
+      await updateDoc(doc(db, "Profile", user.uid), {
+        following: arrayRemove(uid),
+      });
+    },
+    [user.uid]
+  );
 
   useEffect(() => {
+    const storage = getStorage();
     async function fetchFriends() {
-      user.following?.forEach((u) => {
-       if (u != user.uid){
-        const postQuery = query(
-          collection(db, "Profile"),
-          where("User_id", "==", u)
-        );
-        getDocs(postQuery).then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
+      user.following?.forEach(async (u) => {
+        if (u !== user.uid) {
+          const docSnap = await getDoc(doc(db, "Profile", u));
+          if (docSnap.data()) {
             var new_obj = {};
-            //console.log("friend: ",doc.data())
-            if (doc.data().img !== "no_image_provided") {
-              //get image ref
-              const storage = getStorage();
-              const pathReference = ref(storage, doc.data().Picture_id);
-
-              //download, then set attribute to image tag in file
-              getDownloadURL(pathReference).then((url) => {
-                //console.log("url",url)
-                new_obj = { ...doc.data(), imgUrl: url };
-                setFriends((prev) => [...prev, new_obj]);
-              });
-            } else {
-              new_obj = { ...doc.data(), imgUrl: null };
+            const pathReference = ref(storage, docSnap.data().Picture_id);
+            getDownloadURL(pathReference).then((url) => {
+              new_obj = { ...docSnap.data(), imgUrl: url };
               setFriends((prev) => [...prev, new_obj]);
-            }
-          });
-        });
-       }
+            });
+          } else {
+            //remove from following if user has been deleted
+            await unfollow(u);
+            alert("One the people you follow has deactivated their account");
+          }
+        }
       });
     }
-  fetchFriends();
-  }, [user.following]);
+    fetchFriends();
+  }, [user.following, user.uid, unfollow]);
 
   return (
     <div className="Sidebar">
@@ -63,52 +60,86 @@ export default function Sidebar({user}) {
         <ul className="sidebarLists">
           <li className="sidebarListsItems">
             <RssFeed className="sidebarIcon" />
-            <Link to="./dashboard">
-              <span className="sidebarListItemNext">Feed</span>
-            </Link>
+            {window.location.pathname === "/dashboard" ? (
+              <div
+                onClick={() => {
+                  window.location = "./dashboard";
+                }}
+              >
+                <span className="sidebarListItemNext">Feed</span>
+              </div>
+            ) : (
+              <Link to="./dashboard">
+                <span className="sidebarListItemNext">Feed</span>
+              </Link>
+            )}
           </li>
           <li className="sidebarListsItems">
             <Person className="sidebarIcon" />
-            {window.location.pathname == "/followers" && 
-            <Link to="./followers" onClick={() => {window.location = "./followers"}}>
-              <span className="sidebarListItemNext">Follows</span>
-            </Link>
-            }
-            {window.location.pathname !== "/followers" && 
-            <Link to="./followers" >
-              <span className="sidebarListItemNext">Follows</span>
-            </Link>
-            }
+            {window.location.pathname === "/followers" ? (
+              <div
+                onClick={() => {
+                  window.location = "./followers";
+                }}
+              >
+                <span className="sidebarListItemNext">Follows</span>
+              </div>
+            ) : (
+              <Link to="./followers">
+                <span className="sidebarListItemNext">Follows</span>
+              </Link>
+            )}
           </li>
           <li className="sidebarListsItems">
             <PostAddOutlined className="sidebarIcon" />
-            <Link to="./personal_log">
-              <span className="sidebarListItemNext">Personal log</span>
-            </Link>
+            {window.location.pathname === "/personal_log" ? (
+              <div
+                onClick={() => {
+                  window.location = "./personal_log";
+                }}
+              >
+                <span className="sidebarListItemNext">Personal log</span>
+              </div>
+            ) : (
+              <Link to="./personal_log">
+                <span className="sidebarListItemNext">Personal log</span>
+              </Link>
+            )}
           </li>
           <li className="sidebarListsItems">
             <HelpOutline className="sidebarIcon" />
-            <Link to="./faq">
-              <span className="sidebarListItemNext">Questions</span>
-            </Link>
+            {window.location.pathname === "/faq" ? (
+              <div
+                onClick={() => {
+                  window.location = "./faq";
+                }}
+              >
+                <span className="sidebarListItemNext">FAQ</span>
+              </div>
+            ) : (
+              <Link to="./faq">
+                <span className="sidebarListItemNext">FAQ</span>
+              </Link>
+            )}
           </li>
         </ul>
         <hr className="sidebarHr" />
-        {window.location.pathname !== "/followers" && 
-        <ul className="sidebarFriendList">
-          {friends.map((friend, index) => (
-            <li className="sidebarFriend" key={index}>
-              <img
-                className="sidebarFriendImg"
-                id="proPic"
-                src={friend.imgUrl}
-                alt=""
-              />
-              <span className="sidebarFriendName">{friend.Name}</span>
-            </li>
-          ))}
-        </ul>}
-        
+        {(window.location.pathname === "/dashboard" ||
+          window.location.pathname === "/") && (
+          <ul className="sidebarFriendList">
+            {friends.map((friend, index) => (
+              <li className="sidebarFriend" key={index}>
+                <img
+                  className="sidebarFriendImg"
+                  id="proPic"
+                  src={friend.imgUrl}
+                  alt=""
+                />
+                <span className="sidebarFriendName">{friend.Name}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

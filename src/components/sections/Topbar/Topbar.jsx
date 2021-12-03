@@ -47,9 +47,19 @@ export default function Topbar({ user }) {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <Link to="./dashboard">
-          <Logo />
-        </Link>
+        {window.location.pathname === "/dashboard" ? (
+          <div
+            onClick={() => {
+              window.location = "./dashboard";
+            }}
+          >
+            <Logo />
+          </div>
+        ) : (
+          <Link to="./dashboard">
+            <Logo />
+          </Link>
+        )}
       </div>
       <div className="topbarCenter">
         <div className="searchbar">

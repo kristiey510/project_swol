@@ -17,7 +17,7 @@ import {
   limit,
   startAfter,
 } from "../../../firebase/firebase";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text, Spinner } from "@chakra-ui/react";
 
 export default function Feed({ user }) {
   const [fetching, setFetching] = useState(true);
@@ -137,7 +137,7 @@ export default function Feed({ user }) {
         {!fetchedAll ? (
           <Flex justify="space-around" mt="25px">
             {fetching ? (
-              <Button>Loading more...</Button>
+              <Spinner />
             ) : (
               <Button onClick={fetchMorePosts}>Load more posts</Button>
             )}
