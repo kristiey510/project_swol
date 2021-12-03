@@ -99,10 +99,12 @@ export default function Share({ user, setPosts }) {
       const pathReference = ref(storage, user.Picture_id);
 
       //download, then set attribute to image tag in file
-      getDownloadURL(pathReference).then((url) => {
-        img.setAttribute("src", url);
-        setProPic(url);
-      });
+      getDownloadURL(pathReference)
+        .then((url) => {
+          img.setAttribute("src", url);
+          setProPic(url);
+        })
+        .catch(() => {});
     }
     fetchProfile();
   }, [user.Picture_id]);
