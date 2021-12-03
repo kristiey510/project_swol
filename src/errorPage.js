@@ -16,7 +16,7 @@ function ErrorPage() {
   return (
     <Box mt="10%" w="100%" align="center">
       {fakeLoading ? (
-        <Spinner size="lg" />
+        <Spinner size="xl" />
       ) : (
         <>
           <WarningIcon />

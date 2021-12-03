@@ -122,7 +122,6 @@ export default function Share({ user, setPosts }) {
     }
 
     if (input.type === "") {
-      // alert("Please select an exercise");
       setError("Please select an exercise");
       return;
     } else if (bodyWtExercises.includes(input.type)) {
@@ -144,7 +143,6 @@ export default function Share({ user, setPosts }) {
       //validate image filetype
       const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
       if (!acceptedImageTypes.includes(image.type)) {
-        console.log("wrong file type:", image.type);
         setError("Error: Not a JPG or PNG");
         return;
       }
