@@ -215,9 +215,9 @@ export default function Post({ post, user, profiles, setPosts }) {
         <hr className="postHr" />
 
         {post?.type &&
-          user?.Height_Ft &&
-          user?.Height_In &&
-          user?.Weight &&
+          profiles[post?.usr]?.feet &&
+          profiles[post?.usr]?.inches &&
+          profiles[post?.usr]?.weight &&
           (post?.scale || bodyWtExercises.includes(post?.type)) &&
           post?.quantity && (
             <>
@@ -254,9 +254,9 @@ export default function Post({ post, user, profiles, setPosts }) {
                     {`${Math.round(
                       calories(
                         post?.type,
-                        Number(user?.Height_Ft),
-                        Number(user?.Height_In),
-                        Number(user?.Weight),
+                        Number(profiles[post?.usr]?.feet),
+                        Number(profiles[post?.usr]?.inches),
+                        Number(profiles[post?.usr]?.weight),
                         post?.scale,
                         post?.quantity
                       )
