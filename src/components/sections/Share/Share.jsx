@@ -211,10 +211,7 @@ export default function Share({ user, setPosts }) {
     setInput({ title: "", type: "", desc: "" });
 
     //no image log
-    if (image == null) {
-      setError("Image upload error");
-      return;
-    } else {
+    if (image != null) {
       //upload file
       const storage = getStorage();
       const imageRef = ref(storage, filename);

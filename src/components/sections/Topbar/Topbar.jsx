@@ -55,16 +55,21 @@ export default function Topbar({ user, handleFilter }) {
           <Logo />
         )}
       </div>
-      <div className="topbarCenter">
-        <div className="searchbar">
-          <Search className="searchIcon" />
-          <input
-            onChange={handleFilter}
-            placeholder="Search for posts"
-            className="searchInput"
-          />
+
+      {(window.location.pathname === "/dashboard" ||
+        window.location.pathname === "/") && (
+        <div className="topbarCenter">
+          <div className="searchbar">
+            <Search className="searchIcon" />
+            <input
+              onChange={handleFilter}
+              placeholder="Search for posts"
+              className="searchInput"
+            />
+          </div>
         </div>
-      </div>
+      )}
+
       <div className="topbarRight">
         <Menu>
           <MenuButton as={Button} colorScheme="transparent" w="55px" p="0">
