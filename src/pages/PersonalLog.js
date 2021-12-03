@@ -1,41 +1,150 @@
-import React from "react";
-import { Flex,
-Box,
-HStack,
-VStack } from "@chakra-ui/react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Flex, Box, Spinner, Text, Button } from "@chakra-ui/react";
 import Topbar from "../components/sections/Topbar/Topbar";
 import Sidebar from "../components/sections/Sidebar/Sidebar";
-import Feed from "../components/sections/Feed/Feed";
+import Post from "../components/sections/Post/Post";
+import {
+  getStorage,
+  query,
+  ref,
+  getDownloadURL,
+  startAfter,
+  orderBy,
+  limit,
+  collection,
+  where,
+  db,
+  getDocs,
+} from "../firebase/firebase";
+import "./PersonalLog.css";
 
-export default function PersonalLog({user}) {
-    return (
-        <flex><Topbar user={user}/>
-        <Box bg="orange" w="75%" p={10} color="white" textAlign="center">
-  Sunday, November 7, 2021: Distance: 4 miles, type: run
-</Box>
-<Box bg="white" w="75%" p={10} color="black" textAlign="center">
-  Monday, November 8, 2021: Day off. 
-</Box>
-<Box bg="orange" w="75%" p={10} color="white" textAlign="center">
-  Tuesday, November 9, 2021: Distance: 6 miles, type: bike
-</Box>
-<Box bg="white" w="75%" p={10} color="black" textAlign="center">
-  Wednesday, November 10, 2021: Distance: 3 miles, type: run
-</Box>
-<Box bg="orange" w="75%" p={10} color="white" textAlign="center">
-  Thursday, November 11, 2021: Distance: 0, type: lift
-</Box>
-<Box bg="white" w="75%" p={10} color="black" textAlign="center">
-  Friday, November 12, 2021: Distance: 1.5 miles, type: swim
-</Box>
-<Box bg="orange" w="75%" p={10} color="white" textAlign="center">
-  Saturday, November 13, 2021: Day off. 
-</Box>
-<Box bg="white" w="75%" p={10} color="black" textAlign="center">
-  Totals: 5 activities, 14.5 miles of types bike, run, and swim. Great work!
-</Box>
+export default function PersonalLog({ user }) {
+  const [fetching, setFetching] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [fetchedAll, setFetchedAll] = useState(false);
+  const [profile, setProfile] = useState({});
+  const observer = useRef();
+  const QUERY_LIMIT = 10;
 
+  const transformData = (snap) => {
+    const posts = [];
+    snap.forEach((post) => posts.push({ ...post.data() }));
+    return posts;
+  };
 
-</flex>
+  const fetchMorePosts = useCallback(async () => {
+    setFetching(true);
+    const postQuery = query(
+      collection(db, "test"),
+      where("usr", "==", user?.uid),
+      orderBy("timestamp", "desc"),
+      startAfter(lastVisible),
+      limit(QUERY_LIMIT)
     );
-  }
+    const querySnapshot = await getDocs(postQuery);
+    if (querySnapshot.docs.length < QUERY_LIMIT) setFetchedAll(true);
+    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+    const next = transformData(querySnapshot);
+    setPosts((prev) => prev.concat(next));
+    setFetching(false);
+  }, [user?.uid, lastVisible]);
+
+  const lastPostRef = useCallback(
+    (node) => {
+      if (fetching) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !fetchedAll) {
+          fetchMorePosts();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [fetching, fetchedAll, fetchMorePosts]
+  );
+
+  useEffect(() => {
+    async function fetchProfile() {
+      const storage = getStorage();
+      const downloadURL = await getDownloadURL(ref(storage, user.Picture_id));
+      setProfile({ [user.uid]: { username: user.Name, propic: downloadURL } });
+    }
+    async function fetchPosts() {
+      const postQuery = query(
+        collection(db, "test"),
+        where("usr", "==", user?.uid),
+        orderBy("timestamp", "desc"),
+        limit(QUERY_LIMIT)
+      );
+      const querySnapshot = await getDocs(postQuery);
+      if (querySnapshot.docs.length < QUERY_LIMIT) setFetchedAll(true);
+      setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      setPosts(transformData(querySnapshot));
+    }
+    user?.uid &&
+      Promise.all([fetchProfile(), fetchPosts()]).then(() => {
+        setFetching(false);
+      });
+  }, [user.Name, user.Picture_id, user?.uid]);
+
+  return (
+    <Flex width="100%" direction="column">
+      <Topbar user={user} />
+      <Flex direction="row">
+        <Box width="370px">
+          <Sidebar user={user} />
+        </Box>
+        <div className="Log">
+          <div className="logWrapper">
+            {posts.map((post, index) => {
+              if (index + 1 === posts.length) {
+                return (
+                  <div ref={lastPostRef} key={index}>
+                    <Post
+                      post={post}
+                      user={user}
+                      profiles={profile}
+                      setPosts={setPosts}
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <Post
+                    key={index}
+                    post={post}
+                    user={user}
+                    profiles={profile}
+                    setPosts={setPosts}
+                  />
+                );
+              }
+            })}
+            {!fetchedAll ? (
+              <Flex justify="space-around" mt="25px">
+                {fetching ? (
+                  <Spinner />
+                ) : (
+                  <Button onClick={fetchMorePosts}>Load more posts</Button>
+                )}
+              </Flex>
+            ) : (
+              <Flex justify="space-around" mt="25px">
+                {posts.length ? (
+                  <Text fontSize="sm" color="gray.400">
+                    All posts loaded!
+                  </Text>
+                ) : (
+                  <Text fontSize="sm" color="gray.400">
+                    Your own posts will appear here!
+                  </Text>
+                )}
+              </Flex>
+            )}
+          </div>
+        </div>
+      </Flex>
+    </Flex>
+  );
+}

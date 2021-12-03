@@ -1,72 +1,64 @@
 .Sidebar {
-    flex: 3;
-    height: calc(100vh - 50px);
-    overflow-y: scroll;
-    position: sticky;
-    top: 50px;
-  }
+  flex: 2.5;
+  height: calc(100vh - 50px);
+  overflow-y: scroll;
+  position: sticky;
+  top: 50px;
+}
 
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: rgb(179, 179, 179);
-  }
-  
-  .sidebarWrapper {
-    padding: 20px;
-  }
-  
-  .sidebarLists {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-  
-  .sidebarListsItems {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+}
 
-  .sidebarIcon{
-      margin-right: 15px;
-  }
+.sidebarWrapper {
+  padding: 20px;
+}
 
-  .sidebarButton {
-    width: 150px;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgb(210, 210, 210);
-    font-weight: 500;
-  }
+.sidebarLists {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
 
-  .sidebarHr {
-      margin: 20px 0;
-  }
+.sidebarIcon {
+  margin-right: 15px;
+}
 
-  .sidebarFriendList {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
+.sidebarButton {
+  width: 150px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(210, 210, 210);
+  font-weight: 500;
+}
 
-  .sidebarFriend {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-  }
+.sidebarHr {
+  margin: 20px 0;
+}
 
-  .sidebarFriendImg{
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-  }
-  
+.sidebarFriendList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebarFriend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sidebarFriendImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}

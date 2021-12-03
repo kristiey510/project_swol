@@ -120,7 +120,7 @@ export default function ProfileCreate() {
             color="primary.2350"
             textAlign="center"
           >
-            <Text> Welcome !</Text>
+            <Text> Welcome!</Text>
           </Heading>
         </Stack>
 

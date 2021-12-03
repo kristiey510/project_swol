@@ -1,42 +1,45 @@
-import React from 'react';
-import * as GiIcons from 'react-icons/gi';
+import React from "react";
+import * as GiIcons from "react-icons/gi";
 
-export const RightbarData = [
-
+const RightbarData = [
   {
-    title: 'Arms',
-    path: '/arms exercise',
+    title: "Arms",
     icon: <GiIcons.GiForearm />,
-    cName: 'nav-text'
   },
   {
-    title: 'Shoulders',
-    path: '/shoulders exercise',
+    title: "Shoulders",
     icon: <GiIcons.GiShoulderArmor />,
-    cName: 'nav-text'
   },
   {
-    title: 'Chest',
-    path: '/chest exercise',
+    title: "Chest",
     icon: <GiIcons.GiChestArmor />,
-    cName: 'nav-text'
   },
   {
-    title: 'Back',
-    path: '/back exercise',
+    title: "Back",
     icon: <GiIcons.GiMuscleUp />,
-    cName: 'nav-text'
   },
   {
-    title: 'Abdominals',
-    path: '/abdomials exercise',
+    title: "Abdominals",
     icon: <GiIcons.GiAbdominalArmor />,
-    cName: 'nav-text'
   },
   {
-    title: 'Legs',
-    path: '/legs exercise',
+    title: "Legs",
     icon: <GiIcons.GiLegArmor />,
-    cName: 'nav-text'
-  }
+  },
+  {
+    title: "Cardio",
+    icon: <GiIcons.GiHearts />,
+  },
 ];
+
+const RightbarIcons = {
+  Arms: <GiIcons.GiForearm size="100px" />,
+  Shoulders: <GiIcons.GiShoulderArmor size="100px" />,
+  Chest: <GiIcons.GiChestArmor size="100px" />,
+  Back: <GiIcons.GiMuscleUp size="100px" />,
+  Abdominals: <GiIcons.GiAbdominalArmor size="100px" />,
+  Legs: <GiIcons.GiLegArmor size="100px" />,
+  Cardio: <GiIcons.GiHearts size="100px" />,
+};
+
+export { RightbarData, RightbarIcons };
