@@ -25,9 +25,9 @@ import {
 } from "@chakra-ui/react";
 
 export default function Followers({ user }) {
-  const [followers, setFollowers] = useState([]);
+  const [followed, setFollowed] = useState([]);
   useEffect(() => {
-    async function fetchUserDoc() {
+    async function fetchFollowed() {
       var new_obj = {};
       await user.following?.forEach(async (u) => {
         if (u !== user.uid) {
@@ -38,13 +38,13 @@ export default function Followers({ user }) {
             const pathReference = ref(storage, info.Picture_id);
             getDownloadURL(pathReference).then((url) => {
               new_obj = { uid: u, name: info.Name, imgUrl: url };
-              setFollowers((prev) => [...prev, new_obj]);
+              setFollowed((prev) => [...prev, new_obj]);
             });
           } catch (error) {}
         }
       });
     }
-    fetchUserDoc();
+    fetchFollowed();
   }, [user.uid, user.following]);
 
   return (
@@ -104,7 +104,11 @@ export default function Followers({ user }) {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <Following user={user} />
+                  <Following
+                    user={user}
+                    followed={followed}
+                    setFollowed={setFollowed}
+                  />
                 </TabPanel>
                 <TabPanel>
                   <FollowedBy user={user} />
@@ -119,7 +123,7 @@ export default function Followers({ user }) {
                     borderRadius="10"
                     boxShadow="lg"
                   >
-                    <AddFriend user={user} setFollowers={setFollowers} />
+                    <AddFriend user={user} setFollowed={setFollowed} />
                   </Flex>
                 </TabPanel>
               </TabPanels>

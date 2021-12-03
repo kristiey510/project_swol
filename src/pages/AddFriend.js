@@ -30,7 +30,7 @@ import {
 } from "../firebase/firebase";
 import { SearchIcon } from "@chakra-ui/icons";
 
-export default function AddFriend({ user, setFollowers }) {
+export default function AddFriend({ user, setFollowed }) {
   const [options, setOptions] = useState({ value: "", label: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchUser, setSearchUser] = useState({
@@ -96,7 +96,7 @@ export default function AddFriend({ user, setFollowers }) {
       const pathReference = ref(storage, info.Picture_id);
       getDownloadURL(pathReference).then((url) => {
         new_obj = { uid: searchUser.id, name: info.Name, imgUrl: url };
-        setFollowers((prev) => [...prev, new_obj]);
+        setFollowed((prev) => [...prev, new_obj]);
       });
     } catch (error) {}
     onClose();

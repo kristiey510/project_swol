@@ -52,9 +52,7 @@ export default function Topbar({ user, handleFilter }) {
             <Logo />
           </div>
         ) : (
-          <Link to="./dashboard">
-            <Logo />
-          </Link>
+          <Logo />
         )}
       </div>
       <div className="topbarCenter">
