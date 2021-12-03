@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/sections/Sidebar/Sidebar";
 import Topbar from "../components/sections/Topbar/Topbar";
 import AddFriend from "./AddFriend";
-import Friend from "./Friend";
+import Following from "./Following";
+import FollowedBy from "./FollowedBy";
 import "./Dashboard.css";
 import {
   db,
@@ -66,7 +67,7 @@ export default function Followers({ user }) {
             <Tabs
               isLazy
               isFitted
-              colorScheme="white"
+              colorScheme="grey"
               variant="enclosed"
               border="30pt"
               borderColor="gray.50"
@@ -83,6 +84,15 @@ export default function Followers({ user }) {
                 </Tab>
                 <Tab
                   ml="5px"
+                  bg="#FDF2E9"
+                  color="primary.2350"
+                  fontWeight="bold"
+                  fontSize="xs"
+                >
+                  FOLLOWERS
+                </Tab>
+                <Tab
+                  ml="5px"
                   mr="5px"
                   bg="#FDF2E9"
                   color="primary.2350"
@@ -94,11 +104,10 @@ export default function Followers({ user }) {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <Friend
-                    user={user}
-                    followers={followers}
-                    setFollowers={setFollowers}
-                  />
+                  <Following user={user} />
+                </TabPanel>
+                <TabPanel>
+                  <FollowedBy user={user} />
                 </TabPanel>
                 <TabPanel>
                   <Flex

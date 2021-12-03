@@ -8,7 +8,7 @@ export default function LandingHeader() {
   return (
     <div className="LandingHeaderContainer">
       <div className="LandingHeaderLeft">
-        <Logo />
+        <Logo/>
       </div>
       <div className="LandingHeaderCenter"></div>
       <div className="LandingHeaderRight">
