@@ -9,7 +9,7 @@ import {
   Input,
   Stack,
   Text,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { auth, sendPasswordResetEmail } from "../firebase/firebase";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -30,7 +30,7 @@ export default function ForgotPassword(
     setEmail(value);
   };
 
-  const resetPass = async() => {
+  const resetPass = async () => {
     await sendPasswordResetEmail(auth, email)
       .then(() => {
         setError("Reset email sent!");
@@ -41,11 +41,7 @@ export default function ForgotPassword(
   };
 
   return (
-    <Flex
-      minH={"100vh"}
-      // align={"center"}
-      justify={"center"}
-    >
+    <Flex minH={"100vh"} justify={"center"}>
       <Stack
         spacing={4}
         w={"full"}
@@ -107,10 +103,10 @@ export default function ForgotPassword(
           >
             Request Reset
           </Button>
-          <Box >
-          <Text color="red" fontSize="xs">
-            {error}
-          </Text>
+          <Box>
+            <Text color="red" fontSize="xs">
+              {error}
+            </Text>
           </Box>
         </Stack>
       </Stack>

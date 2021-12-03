@@ -22,7 +22,6 @@ export default function Topbar({ user, handleFilter }) {
   const exit = async () => {
     try {
       await auth.signOut();
-      alert("You are signed out.");
       window.location = "/";
     } catch (err) {
       console.log("err", err);

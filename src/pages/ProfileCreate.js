@@ -56,7 +56,8 @@ export default function ProfileCreate() {
       !input.Weight ||
       !input.Height_In
     ) {
-      alert("You forgot to upload information");
+      setError("You forgot to upload information");
+      return;
     } else {
       await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
         Height_Ft: input.Height_Ft,
@@ -64,7 +65,6 @@ export default function ProfileCreate() {
         Gender: input.Gender,
         Weight: input.Weight,
       });
-      alert("User information added to database");
       window.location = "./dashboard";
     }
   };
@@ -72,7 +72,6 @@ export default function ProfileCreate() {
   const handleUpload = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!acceptedImageTypes.includes(image.type)) {
-      console.log("wrong file type:", image.type);
       setError("Error: Not a JPG or PNG");
       setImage(null);
       return;
@@ -81,7 +80,6 @@ export default function ProfileCreate() {
     const storage = getStorage();
     const imageRef = ref(storage, filename);
     await uploadBytes(imageRef, image).then(() => {
-      console.log("Uploaded a blob or file!");
       setImage(null);
     });
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
@@ -90,7 +88,6 @@ export default function ProfileCreate() {
   };
 
   const handleImage = async (event) => {
-    console.log(event.target.files[0]);
     setImage(event.target.files[0]);
   };
 
@@ -105,9 +102,6 @@ export default function ProfileCreate() {
         bg="#FDF2E9"
         rounded={"xl"}
       >
-        {/*     <Link to = "./signup"> 
-       <Button color = "primary.2350" ml = "10px" mt = "5px" size = "xs" bg = "transparent" variant = "link">  <ArrowBackIcon /> BACK</Button>
-       </Link>*/}
         <Stack spacing="30px" mt="10" mb="10" align="center">
           <Heading
             as="h1"
@@ -195,7 +189,7 @@ export default function ProfileCreate() {
                 color="primary.2350"
                 mb="5"
               >
-                Gender :
+                Gender:
               </FormLabel>
               <RadioGroup color="gray.500">
                 <HStack spacing="100px">

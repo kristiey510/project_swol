@@ -66,7 +66,6 @@ export default function ProfileEdit({ user }) {
   const deactivateAccount = async () => {
     await deleteUser(user)
       .then(() => {
-        console.log("User is deleted");
         window.location = "./";
       })
       .catch((error) => {
@@ -95,10 +94,7 @@ export default function ProfileEdit({ user }) {
                 const img = document.getElementById("profile_pic");
                 img.setAttribute("src", url);
               })
-              .catch((error) => {
-                console.log(error);
-              });
-            console.log("Done with data update");
+              .catch(() => {});
           }
         }
       );
@@ -163,14 +159,12 @@ export default function ProfileEdit({ user }) {
       })
       .catch(async (error) => {
         setError((prev) => ({ ...prev, currPass: "Incorrect Password" }));
-        console.log(error);
       });
   };
 
   const handleSubmit = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!acceptedImageTypes.includes(image.type)) {
-      console.log("wrong file type:", image.type);
       setError("Error: Not a JPG or PNG");
       return;
     } else {
@@ -187,7 +181,6 @@ export default function ProfileEdit({ user }) {
   const handleUpload = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!acceptedImageTypes.includes(image.type)) {
-      console.log("wrong file type:", image.type);
       setError("Error: Not a JPG or PNG");
       setImage(null);
       return;
@@ -195,10 +188,8 @@ export default function ProfileEdit({ user }) {
     var filename = uuidv4();
     const storage = getStorage();
     const imageRef = ref(storage, filename);
-    await uploadBytes(imageRef, image).then(() => {
-      console.log("Uploaded a blob or file!");
-      setImage(null);
-    });
+    await uploadBytes(imageRef, image);
+    setImage(null);
     await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
       Picture_id: filename,
     });
@@ -206,7 +197,6 @@ export default function ProfileEdit({ user }) {
   };
 
   const handleImage = async (event) => {
-    console.log(event.target.files[0]);
     setImage(event.target.files[0]);
   };
 
