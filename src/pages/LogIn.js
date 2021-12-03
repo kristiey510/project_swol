@@ -31,24 +31,26 @@ export default function LogIn({
 }) {
   const [input, setInput] = useState({ email: "", password: "" });
   const [errs, setErrs] = useState(null);
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     if (input.email.length === 0 || input.password.length === 0) {
       setErrs("Missing required fields");
+      return;
     } else {
-      await logIn(auth, input.email, input.password)
-        .then(async () => {
-          window.location = "./dashboard";
-        })
-        .catch((error) => {
-          setErrs(errors[error.code]);
-        });
+      try {
+        await logIn(auth, input.email, input.password);
+        window.location = "./dashboard";
+      } catch (error) {
+        setErrs(errors[error.code]);
+        return;
+      }
     }
   };
 
@@ -98,7 +100,7 @@ export default function LogIn({
             {subtitle}
           </Heading>
           <Box w="300px" h="300px" align="center">
-            <form>
+            <form onSubmit={(e) => handleLogin(e)}>
               <FormControl>
                 <Stack spacing={3} align="center">
                   <Input
@@ -159,7 +161,7 @@ export default function LogIn({
                     lineHeight="1"
                     size="md"
                     type="submit"
-                    onClick={handleLogin}
+                    // onClick={handleLogin}
                   >
                     {ctaTextLogIn}
                   </Button>

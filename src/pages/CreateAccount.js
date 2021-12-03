@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
@@ -34,21 +34,21 @@ export default function CreateAccount({
   ...rest
 }) {
   const [input, setInput] = useState({
-    firstName: "",
-    lastName: "",
+    username: "",
     dob: "",
     email: "",
     password: "",
     confirmPass: "",
   });
-
   const [errs, setErrs] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (name, value) => {
+    setErrs(null);
     setInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMakeUser = async () => {
+  const handleMakeUser = useCallback(async () => {
     const following = [];
     following[0] = auth.currentUser.uid;
     await setDoc(doc(db, "Profile", auth.currentUser.uid), {
@@ -60,52 +60,72 @@ export default function CreateAccount({
       following: following,
       cache: [],
     });
-  };
+  }, [input.dob]);
 
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  const [showConfirm, setShowConfirm] = React.useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const handleClickConfirm = () => setShowConfirm(!showConfirm);
 
-  const validate = async () => {
+  const validate = () => {
     const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
     if (
-      input.firstName.length === 0 ||
-      input.lastName.length === 0 ||
+      input.username.length === 0 ||
       input.dob.length === 0 ||
       input.email.length === 0 ||
       input.password.length === 0 ||
       input.confirmPass.length === 0
     ) {
       setErrs("Missing required fields");
+      return;
     } else if (!regex.test(input.dob)) {
       setErrs("Check format of dob (MM/DD/YYYY)");
+      return;
     } else if (input.password.length < 8) {
       setErrs("Passwords length too short");
+      return;
     } else if (input.password.length !== input.confirmPass.length) {
       setErrs("Passwords don't match");
+      return;
     }
+    setSubmitting(true);
   };
 
-  const onSubmit = async () => {
-    await validate();
-    await createUser(auth, input.email, input.password)
-      .then(async (userCred) => {
-        var name = input.firstName.concat(" ", input.lastName);
-        await sendEmailVerification(userCred.user);
-        await updateProfile(auth.currentUser, { displayName: name });
-        await handleMakeUser();
-        var state = auth.onAuthStateChanged(async (user) => {
-          if (state) state();
-          if (user) {
-            window.location = "/profile_info";
-          }
-        });
-      })
-      .catch((error) => {
-        setErrs(error.code);
-      });
+  const handleSubmit = () => {
+    validate();
   };
+
+  useEffect(() => {
+    async function onSubmit() {
+      await createUser(auth, input.email, input.password)
+        .then(async (userCred) => {
+          var name = input.username;
+          await sendEmailVerification(userCred.user);
+          await updateProfile(auth.currentUser, { displayName: name });
+          await handleMakeUser();
+          var state = auth.onAuthStateChanged(async (user) => {
+            if (state) state();
+            if (user) {
+              window.location = "/profile_info";
+            }
+          });
+        })
+        .catch((error) => {
+          setErrs(error.code);
+        });
+    }
+    if (submitting) {
+      if (errs) return;
+      onSubmit();
+    }
+  }, [
+    errs,
+    handleMakeUser,
+    input.email,
+    input.password,
+    input.username,
+    submitting,
+  ]);
 
   return (
     <Flex direction="column" m="0 auto" align="center">
@@ -158,24 +178,13 @@ export default function CreateAccount({
                 <FormControl>
                   <Input
                     mb="5"
-                    id="firstName"
+                    id="username"
                     size="sm"
-                    placeholder="First Name"
+                    placeholder="Username"
                     bg="gray.50"
                     rounded="md"
                     onChange={(event) =>
-                      handleChange("firstName", event.target.value)
-                    }
-                  />
-                  <Input
-                    mb="5"
-                    bg="gray.50"
-                    rounded="md"
-                    id="lastName"
-                    size="sm"
-                    placeholder="Last Name"
-                    onChange={(event) =>
-                      handleChange("lastName", event.target.value)
+                      handleChange("username", event.target.value)
                     }
                   />
                   <Input
@@ -281,7 +290,7 @@ export default function CreateAccount({
                   h="32px"
                   lineHeight="1"
                   size="md"
-                  onClick={onSubmit}
+                  onClick={handleSubmit}
                 >
                   {ctaTextCreate}
                 </Button>
