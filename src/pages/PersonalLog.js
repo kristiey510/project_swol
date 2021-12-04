@@ -68,7 +68,15 @@ export default function PersonalLog({ user }) {
     async function fetchProfile() {
       const storage = getStorage();
       const downloadURL = await getDownloadURL(ref(storage, user.Picture_id));
-      setProfile({ [user.uid]: { username: user.Name, propic: downloadURL, feet: user.Height_Ft, inches: user.Height_In, weight: user.Weight } });
+      setProfile({
+        [user.uid]: {
+          username: user.Name,
+          propic: downloadURL,
+          feet: user.Height_Ft,
+          inches: user.Height_In,
+          weight: user.Weight,
+        },
+      });
     }
     async function fetchPosts() {
       const postQuery = query(
@@ -86,7 +94,14 @@ export default function PersonalLog({ user }) {
       Promise.all([fetchProfile(), fetchPosts()]).then(() => {
         setFetching(false);
       });
-  }, [user.Name, user.Picture_id, user?.uid]);
+  }, [
+    user.Height_Ft,
+    user.Height_In,
+    user.Name,
+    user.Picture_id,
+    user.Weight,
+    user.uid,
+  ]);
 
   return (
     <Flex width="100%" direction="column">

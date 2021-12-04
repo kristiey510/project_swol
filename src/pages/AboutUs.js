@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
-import { Flex, Heading, Stack } from "@chakra-ui/react";
+import { Flex, Heading, Stack, Link } from "@chakra-ui/react";
 
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   return (
@@ -33,7 +33,11 @@ export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
         >
           {subtitle}
           <br></br>
-          {subtitle2}
+          You can reach us{" "}
+          <Link color="teal.500" href="https://forms.gle/1jESpBitqYy5bSHX9">
+            here
+          </Link>
+          !
         </Heading>
       </Stack>
     </Flex>
@@ -49,6 +53,5 @@ AboutUs.propTypes = {
 AboutUs.defaultProps = {
   title: "About Us",
   subtitle:
-    "SWOL is a project created by 7 Emory students, with the goal of encouraging our users to devote time to staying fit and healthy",
-  subtitle2: "You can reach us at: https://forms.gle/1jESpBitqYy5bSHX9",
+    "SWOL is a project created by 7 Emory students, with the goal of encouraging our users to devote time to staying fit and healthy!",
 };

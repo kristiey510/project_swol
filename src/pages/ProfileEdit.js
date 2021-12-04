@@ -65,7 +65,7 @@ export default function ProfileEdit({ user }) {
   });
   const [image, setImage] = useState(null);
   const [password, setPassword] = useState({ old: "", new: "", confirm: "" });
-  const [delPassword, setDelPassword] = useState(null);
+  const [delPassword, setDelPassword] = useState("");
   const [error, setError] = useState({ currPass: "", newPass: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -111,10 +111,7 @@ export default function ProfileEdit({ user }) {
     try {
       await deleteUser(userAuth);
       window.location = "./";
-    } catch (err) {
-      if (err.code === "auth/requires-recent-login") {
-      }
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -171,12 +168,12 @@ export default function ProfileEdit({ user }) {
   const handleChange = (name, value) => {
     setInput((prev) => ({ ...prev, [name]: value }));
   };
-  const handleDelPass= (value) => {
-    setDelPassword((prev) => ({ ...prev, value }));
+  const handleDelPass = (value) => {
+    setDelPassword(value);
   };
 
   const handleNewPass = (name, value) => {
-    setPassword((prev) => ({ ...prev, [name]: value}));
+    setPassword((prev) => ({ ...prev, [name]: value }));
   };
 
   const changePass = async () => {
@@ -222,11 +219,12 @@ export default function ProfileEdit({ user }) {
   const handleUpload = async () => {
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     try {
-    if (!acceptedImageTypes.includes(image.type)) {
-      setError("Error: Not a JPG or PNG");
-      setImage(null);
-      return;
-    }}catch (error){
+      if (!acceptedImageTypes.includes(image.type)) {
+        setError("Error: Not a JPG or PNG");
+        setImage(null);
+        return;
+      }
+    } catch (error) {
       setError(error);
     }
     var filename = uuidv4();
@@ -305,17 +303,17 @@ export default function ProfileEdit({ user }) {
               Email:
             </Box>
             <Text fontSize="sm">{input.email}</Text>
-            <FormControl >
-              <Flex direction = "column" align = "center">
+            <FormControl>
+              <Flex direction="column" align="center">
                 <FormLabel
                   mt="30px"
-                  ml = "10px"
-                  px= "3"
-                  py= "2"
+                  ml="10px"
+                  px="3"
+                  py="2"
                   bg="primary.3200"
                   color="white"
                   borderRadius="10px"
-                  size = "md"
+                  size="md"
                   htmlFor="getFile"
                   type="button"
                   fontWeight="bold"
@@ -326,12 +324,12 @@ export default function ProfileEdit({ user }) {
                 </FormLabel>
                 {image && (
                   <Button
-                    size = "md"
+                    size="md"
                     mt="5px"
                     bg="primary.3200"
                     color="white"
                     borderRadius="10px"
-                    p = "2"
+                    p="2"
                     type="button"
                     fontWeight="bold"
                     fontSize="8pt"
@@ -342,21 +340,19 @@ export default function ProfileEdit({ user }) {
                   </Button>
                 )}
                 <Box>
-                <Button
-                  mt="10px"
-                  variant="link"
-                  color="red"
-                  fontSize="xs"
-                  onClick={onOpen}
-                >
-                  {" "}
-                  Deactivate Account{" "}
-                </Button>
-              </Box>
-             
-
+                  <Button
+                    mt="10px"
+                    variant="link"
+                    color="red"
+                    fontSize="xs"
+                    onClick={onOpen}
+                  >
+                    {" "}
+                    Deactivate Account{" "}
+                  </Button>
+                </Box>
               </Flex>
-              
+
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -365,11 +361,11 @@ export default function ProfileEdit({ user }) {
                   </ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
-                    Are you sure you want to delete account?
+                    Are you sure you want to delete your account?
                     <Input
-                      w="200px"
-                      placeholder="Type in old password"
-                      size="xs"
+                      w="300px"
+                      placeholder="Type in your password to confirm"
+                      size="sm"
                       type="password"
                       onChange={(event) => handleDelPass(event.target.value)}
                     />
@@ -395,7 +391,6 @@ export default function ProfileEdit({ user }) {
                     >
                       Delete
                     </Button>
-
                   </ModalFooter>
                 </ModalContent>
               </Modal>

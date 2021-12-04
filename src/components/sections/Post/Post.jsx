@@ -212,65 +212,63 @@ export default function Post({ post, user, profiles, setPosts }) {
           </div>
         )}
 
-
-
-        {(post?.type &&
-          profiles[post?.usr]?.feet &&
-          profiles[post?.usr]?.inches &&
-          profiles[post?.usr]?.weight &&
-          (post?.scale || bodyWtExercises.includes(post?.type)) &&
-          post?.quantity) ? (
-            <Box bg = "rgba(0, 0, 0, 0.04)">
-              <hr className="postHr" />
-              <Flex justify="space-around" align="center" mb="10px">
+        {post?.type &&
+        profiles[post?.usr]?.feet &&
+        profiles[post?.usr]?.inches &&
+        profiles[post?.usr]?.weight &&
+        (post?.scale || bodyWtExercises.includes(post?.type)) &&
+        post?.quantity ? (
+          <Box bg="rgba(0, 0, 0, 0.04)">
+            <hr className="postHr" />
+            <Flex justify="space-around" align="center" mb="10px">
+              <Stack>
+                <Text color="gray.400" fontSize="xs">
+                  Exercise
+                </Text>
+                <Text>{post?.type}</Text>
+              </Stack>
+              {!bodyWtExercises.includes(post?.type) && (
                 <Stack>
                   <Text color="gray.400" fontSize="xs">
-                    Exercise
-                  </Text>
-                  <Text>{post?.type}</Text>
-                </Stack>
-                {!bodyWtExercises.includes(post?.type) && (
-                  <Stack>
-                    <Text color="gray.400" fontSize="xs">
-                      {exerciseUnits[post?.type]?.scale.replace(/./, (c) =>
-                        c.toUpperCase()
-                      )}
-                    </Text>
-                    <Text>{post?.scale}</Text>
-                  </Stack>
-                )}
-                <Stack>
-                  <Text color="gray.400" fontSize="xs">
-                    {exerciseUnits[post?.type]?.quantity.replace(/./, (c) =>
+                    {exerciseUnits[post?.type]?.scale.replace(/./, (c) =>
                       c.toUpperCase()
                     )}
                   </Text>
-                  <Text>{post?.quantity}</Text>
+                  <Text>{post?.scale}</Text>
                 </Stack>
-                <Stack>
-                  <Text color="gray.400" fontSize="xs">
-                    Estimate
-                  </Text>
-                  <Text>
-                    {`${Math.round(
-                      calories(
-                        post?.type,
-                        Number(profiles[post?.usr]?.feet),
-                        Number(profiles[post?.usr]?.inches),
-                        Number(profiles[post?.usr]?.weight),
-                        post?.scale,
-                        post?.quantity
-                      )
-                    )} calories`}
-                  </Text>
-                </Stack>
-              </Flex>
+              )}
+              <Stack>
+                <Text color="gray.400" fontSize="xs">
+                  {exerciseUnits[post?.type]?.quantity.replace(/./, (c) =>
+                    c.toUpperCase()
+                  )}
+                </Text>
+                <Text>{post?.quantity}</Text>
+              </Stack>
+              <Stack>
+                <Text color="gray.400" fontSize="xs">
+                  Estimate
+                </Text>
+                <Text>
+                  {`${Math.round(
+                    calories(
+                      post?.type,
+                      Number(profiles[post?.usr]?.feet),
+                      Number(profiles[post?.usr]?.inches),
+                      Number(profiles[post?.usr]?.weight),
+                      post?.scale,
+                      post?.quantity
+                    )
+                  )} calories`}
+                </Text>
+              </Stack>
+            </Flex>
 
-              <hr className="postHr" />
-            </Box>
-          ) : (
             <hr className="postHr" />
-          )}
+          </Box>
+        ) : (
+          <hr className="postHr" />
+        )}
 
         <div className="postBottom">
           <div className="postBottomLeft">

@@ -11,6 +11,7 @@ import {
   AccordionIcon,
   Box,
   Heading,
+  Link,
 } from "@chakra-ui/react";
 
 export default function Faq({ user }) {
@@ -113,8 +114,14 @@ export default function Faq({ user }) {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  Send your questions or feedback via
-                  https://forms.gle/1jESpBitqYy5bSHX9.
+                  Send your questions or feedback via{" "}
+                  <Link
+                    color="teal.500"
+                    href="https://forms.gle/1jESpBitqYy5bSHX9"
+                  >
+                    this form
+                  </Link>
+                  .
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
