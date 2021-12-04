@@ -213,9 +213,10 @@ export default function Post({ post, user, profiles, setPosts }) {
         )}
 
         {post?.type &&
-        profiles[post?.usr]?.feet &&
-        profiles[post?.usr]?.inches &&
-        profiles[post?.usr]?.weight &&
+        (post?.cals ||
+          (profiles[post?.usr]?.feet &&
+            profiles[post?.usr]?.inches &&
+            profiles[post?.usr]?.weight)) &&
         (post?.scale || bodyWtExercises.includes(post?.type)) &&
         post?.quantity ? (
           <Box bg="rgba(0, 0, 0, 0.04)">
@@ -250,16 +251,18 @@ export default function Post({ post, user, profiles, setPosts }) {
                   Estimate
                 </Text>
                 <Text>
-                  {`${Math.round(
-                    calories(
-                      post?.type,
-                      Number(profiles[post?.usr]?.feet),
-                      Number(profiles[post?.usr]?.inches),
-                      Number(profiles[post?.usr]?.weight),
-                      post?.scale,
-                      post?.quantity
-                    )
-                  )} calories`}
+                  {post?.cals
+                    ? `${Math.round(post.cals)} calories`
+                    : `${Math.round(
+                        calories(
+                          post?.type,
+                          Number(profiles[post?.usr]?.feet),
+                          Number(profiles[post?.usr]?.inches),
+                          Number(profiles[post?.usr]?.weight),
+                          post?.scale,
+                          post?.quantity
+                        )
+                      )} calories`}
                 </Text>
               </Stack>
             </Flex>

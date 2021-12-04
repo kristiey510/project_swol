@@ -38,6 +38,7 @@ import {
   getDownloadURL,
 } from "../../../firebase/firebase";
 import { exerciseUnits } from "../../../utils/exercises";
+import { calories } from "../../../utils/calories";
 
 export default function Share({ user, setPosts }) {
   const [input, setInput] = useState({
@@ -157,9 +158,17 @@ export default function Share({ user, setPosts }) {
     if (image != null) {
       filename = uuidv4();
     }
+    const cals = calories(
+      input.type,
+      Number(user.Height_Ft),
+      Number(user.Height_In),
+      Number(user.Weight),
+      Number(input.scale),
+      Number(input.quantity)
+    );
 
     var updatedCache = user.cache;
-    updatedCache.unshift(input.type);
+    updatedCache.unshift({ type: input.type, cals: cals });
     if (updatedCache.length > CACHE_SIZE) updatedCache.pop();
 
     const newDocRef = doc(collection(db, "test"));
@@ -176,6 +185,7 @@ export default function Share({ user, setPosts }) {
         usr: user.uid,
         likes: 0,
         id: newDocRef.id,
+        cals: cals,
         comments: [],
         likers: [],
       }),
@@ -197,6 +207,7 @@ export default function Share({ user, setPosts }) {
         likes: 0,
         username: user.Name,
         id: newDocRef.id,
+        cals: cals,
         comments: [],
         likers: [],
       },

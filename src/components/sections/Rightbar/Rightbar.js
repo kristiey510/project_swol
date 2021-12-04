@@ -43,8 +43,8 @@ function Rightbar({ user }) {
   const cardio = ["Running", "Biking", "Elliptical", "Stair climber"];
 
   useEffect(() => {
-    user?.cache && setScored(recommend(user.cache));
-  }, [user.cache]);
+    user && setScored(recommend(user));
+  }, [user]);
 
   const handleClick = (item) => {
     let list;
