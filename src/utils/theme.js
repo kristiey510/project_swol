@@ -5,7 +5,7 @@ const colors = {
     //gray 50
     150: "#F7FAFC",
     //gray 100
-    1100: "#EDF2F7", 
+    1100: "#EDF2F7",
     //gray 600
     1600: "#4A5568",
     //gray 900 - basically black
@@ -24,7 +24,7 @@ const colors = {
     2400: "#ED8936",
     //orange 500
     2500: "#DD6B20",
-    //coral 
+    //coral
     2600: "#F89880",
     //blue 50
     350: "#EBF8FF",
@@ -35,34 +35,33 @@ const colors = {
     //cornflower blue
     3300: "#6495ED",
     //green 50
-    450: "#F0FFF4", 
+    450: "#F0FFF4",
     //green 100
-    4100: "#C6F6D5", 
+    4100: "#C6F6D5",
     //green 200
-    4200: "#9AE6B4", 
+    4200: "#9AE6B4",
     //teal 400
-    5400: "#38B2AC", 
+    5400: "#38B2AC",
   },
   myblue: {
-
-  50: "#90CDF4",
-  100: "#90CDF4",
-  200: "#90CDF4",
-  300: "#90CDF4",
-  400: "#90CDF4",
-  500: "#90CDF4",
-  600: "#90CDF4",
-  700: "#90CDF4",
-  800: "#90CDF4",
-  900: "#90CDF4",
-  }
+    50: "#90CDF4",
+    100: "#90CDF4",
+    200: "#90CDF4",
+    300: "#90CDF4",
+    400: "#90CDF4",
+    500: "#90CDF4",
+    600: "#90CDF4",
+    700: "#90CDF4",
+    800: "#90CDF4",
+    900: "#90CDF4",
+  },
 };
 const fonts = {
   body: "noto serif",
   heading: "noto serif",
-  logo: "pacifico"
-  };
+  logo: "pacifico",
+};
 
-const customTheme = extendTheme({ colors, fonts});
+const customTheme = extendTheme({ colors, fonts });
 
 export default customTheme;

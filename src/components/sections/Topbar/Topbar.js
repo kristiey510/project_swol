@@ -72,7 +72,7 @@ export default function Topbar({ user, handleFilter }) {
 
       <div className="topbarRight">
         <Menu>
-          <MenuButton as={Button} mr = "5px" colorScheme="transparent" p="0">
+          <MenuButton as={Button} mr="5px" colorScheme="transparent" p="0">
             <Image borderRadius="50%" h="40px" w="40px" id="myimg" />
           </MenuButton>
           <MenuList bg="#FDEBD0" color="primary.2500" minW="150px" maxW="150px">

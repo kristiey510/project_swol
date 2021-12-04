@@ -347,8 +347,7 @@ export default function ProfileEdit({ user }) {
                     fontSize="xs"
                     onClick={onOpen}
                   >
-                    {" "}
-                    Deactivate Account{" "}
+                    Deactivate Account
                   </Button>
                 </Box>
               </Flex>

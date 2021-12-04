@@ -35,8 +35,7 @@ export default function Following({ user, followed, setFollowed }) {
             <Box>
               <Image src={item.imgUrl} w="100px" h="80px" borderRadius="10" />
               <Text mt="10px" fontSize="sm" align="center">
-                {" "}
-                {item.name}{" "}
+                {item.name}
               </Text>
             </Box>
             <Button
@@ -48,7 +47,6 @@ export default function Following({ user, followed, setFollowed }) {
               fontSize="6pt"
               fontWeight="bold"
             >
-              {" "}
               UNFOLLOW
             </Button>
           </HStack>

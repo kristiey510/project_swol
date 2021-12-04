@@ -5,7 +5,7 @@ import StartingPage from "../components/sections/StartingPage";
 
 export default function Landing() {
   return (
-    <Flex direction="column" m="0 auto" align = "center" >
+    <Flex direction="column" m="0 auto" align="center">
       <LandingHeader />
       <StartingPage />
     </Flex>

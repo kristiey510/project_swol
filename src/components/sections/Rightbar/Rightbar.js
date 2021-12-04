@@ -111,62 +111,6 @@ function Rightbar({ user }) {
               ) : (
                 <Recommendation topScored={scored[0]} />
               )}
-              {/* {rightbar === "Arms" && (
-                <>
-                  <Text>Recommended for arms:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Shoulders" && (
-                <>
-                  <Text>Recommended for shoulders:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Chest" && (
-                <>
-                  <Text>Recommended for chest:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Back" && (
-                <>
-                  <Text>Recommended for back:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Abdominals" && (
-                <>
-                  <Text>Recommended for abdominals:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Legs" && (
-                <>
-                  <Text>Recommended for legs:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )}
-              {rightbar === "Cardio" && (
-                <>
-                  <Text>Recommended for cardio:</Text>
-                  <Text>{`${filtered[0].name}: ${Math.round(
-                    filtered[0].score * 100
-                  )}% match`}</Text>
-                </>
-              )} */}
             </>
           )}
         </Box>
