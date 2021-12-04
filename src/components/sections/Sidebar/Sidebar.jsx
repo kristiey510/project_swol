@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Graph from "../Graph";
 import "./Sidebar.css";
 import {
   RssFeed,
@@ -167,6 +168,7 @@ export default function Sidebar({ user }) {
             ))}
           </ul>
         )}
+        {window.location.pathname === "/personal_log" && <Graph user={user} />}
       </div>
     </div>
   );

@@ -40,6 +40,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^5.1.0",
     "react-select-search": "^3.0.8",
+    "recharts": "^2.1.6",
     "request": "^2.79.0",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.1.2",

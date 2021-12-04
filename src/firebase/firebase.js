@@ -18,7 +18,8 @@ import {
   orderBy,
   deleteDoc,
   limit,
-  startAfter
+  startAfter,
+  Timestamp,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -78,6 +79,7 @@ export {
   query,
   limit,
   startAfter,
+  Timestamp,
   where,
   increment,
   arrayRemove,
@@ -89,5 +91,5 @@ export {
   sendPasswordResetEmail,
   deleteUser,
   deleteDoc,
-  deleteObject
+  deleteObject,
 };
