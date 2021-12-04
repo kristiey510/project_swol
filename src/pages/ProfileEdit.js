@@ -66,7 +66,7 @@ export default function ProfileEdit({ user }) {
   const [image, setImage] = useState(null);
   const [password, setPassword] = useState({ old: "", new: "", confirm: "" });
   const [delPassword, setDelPassword] = useState("");
-  const [error, setError] = useState({ currPass: "", newPass: "" });
+  const [error, setError] = useState({ deactivate: "", currPass: "", newPass: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const deactivateAccount = async () => {
@@ -74,44 +74,51 @@ export default function ProfileEdit({ user }) {
       auth.currentUser.email,
       delPassword
     );
-    await reauthenticateWithCredential(auth.currentUser, credential);
-    const storage = getStorage();
-    const userAuth = auth.currentUser;
-    async function deletePosts(querySnapshot) {
-      querySnapshot.forEach(async (docSnap) => {
-        if (docSnap?.data()?.img !== "no_image_provided") {
-          //delete post images
-          const imgRef = ref(storage, docSnap.data().img);
-          await deleteObject(imgRef);
-        }
-        await deleteDoc(doc(db, "test", docSnap.id));
-      });
-    }
+    await reauthenticateWithCredential(auth.currentUser, credential).then(async function(){
+      const storage = getStorage();
+      const userAuth = auth.currentUser;
+      async function deletePosts(querySnapshot) {
+        querySnapshot.forEach(async (docSnap) => {
+          if (docSnap?.data()?.img !== "no_image_provided") {
+            //delete post images
+            const imgRef = ref(storage, docSnap.data().img);
+            await deleteObject(imgRef);
+          }
+          await deleteDoc(doc(db, "test", docSnap.id));
+        });
+      }
 
-    //get posts
-    const postsQuery = query(
-      collection(db, "test"),
-      where("usr", "==", user.uid)
-    );
-    const querySnapshot = await getDocs(postsQuery);
+      //get posts
+      const postsQuery = query(
+        collection(db, "test"),
+        where("usr", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(postsQuery);
 
-    //delete posts
-    await deletePosts(querySnapshot);
-    //get user doc
-    const userRef = doc(db, "Profile", user.uid);
-    if (user?.Picture_id !== "default.png") {
-      //delete profile picture
-      const proPicRef = ref(storage, user.Picture_id);
-      await deleteObject(proPicRef);
-    }
-    //delete user doc
-    await deleteDoc(userRef);
+      //delete posts
+      await deletePosts(querySnapshot);
+      //get user doc
+      const userRef = doc(db, "Profile", user.uid);
+      if (user?.Picture_id !== "default.png") {
+        //delete profile picture
+        const proPicRef = ref(storage, user.Picture_id);
+        await deleteObject(proPicRef);
+      }
+      //delete user doc
+      await deleteDoc(userRef);
 
-    //delete user
-    try {
-      await deleteUser(userAuth);
-      window.location = "./";
-    } catch (err) {}
+      //delete user
+      try {
+        await deleteUser(userAuth);
+        window.location = "./";
+      } catch (err) {}
+    }).catch((error) =>{
+      setError((prev) => ({
+        ...prev,
+        deactivate: error.code,
+      }));
+    });
+    
   };
 
   useEffect(() => {
@@ -246,6 +253,11 @@ export default function ProfileEdit({ user }) {
     setImage(event.target.files[0]);
   };
 
+  const resetErrors = async () => {
+    setError((prev) => ({...prev, deactivate: ""}));
+    onClose();
+  };
+
   return (
     <Flex direction="column" align="center" m="auto">
       <Topbar user={user} />
@@ -277,7 +289,7 @@ export default function ProfileEdit({ user }) {
                 fontSize="xs"
                 textTransform="uppercase"
               >
-                Name:
+                Username:
               </Box>
             </Box>
             <Text fontSize="sm">{input.name}</Text>
@@ -362,12 +374,18 @@ export default function ProfileEdit({ user }) {
                   <ModalBody>
                     Are you sure you want to delete your account?
                     <Input
+                      mt = "20px"
+                      mb = "5px"
                       w="300px"
                       placeholder="Type in your password to confirm"
                       size="sm"
                       type="password"
                       onChange={(event) => handleDelPass(event.target.value)}
                     />
+                    <Text color = "red" fontSize = "xs"> 
+                    {""}
+                    {error.deactivate} {""}
+                    </Text>
                   </ModalBody>
                   <ModalFooter>
                     <Button
@@ -375,7 +393,7 @@ export default function ProfileEdit({ user }) {
                       color="primary.150"
                       fontWeight="bold"
                       fontSize="16"
-                      onClick={onClose}
+                      onClick={resetErrors}
                     >
                       Back
                     </Button>

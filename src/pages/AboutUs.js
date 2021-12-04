@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
-import { Flex, Heading, Stack, Link } from "@chakra-ui/react";
+import { Flex, Heading, Stack, Link, Box, HStack, Image, Text} from "@chakra-ui/react";
 
 export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
+  const [follows] = useState([]);
+
+
+  follows.push({name: "Anderson Shew", img : "assets/user/guy_3.png", email: "ashew@emory.edu"});
+  follows.push({name: "David Chen", img : "assets/user/guy_3.png", email: "dche242@emory.edu"});
+  follows.push({name: "Kristie Yip", img : "assets/user/girl_4.png", email: "kyip3@emory.edu"});
+  follows.push({name: "Ryan Lo", img : "assets/user/guy_3.png", email: "ylo9@emory.edu"});
+  follows.push({name: "Prince Xian", img : "assets/user/guy_3.png", email: "xqian3@emory.edu"});
+  follows.push({name: "Jon Marcus", img : "assets/user/guy_3.png", email: "jdmarcu@emory.edu"});
+  follows.push({name: "Daeho Kim", img : "assets/user/guy_3.png", email: "dkim598@emory.edu"});
   return (
     <Flex direction="column" align="center" m="0 auto">
       <LandingHeader />
@@ -39,6 +49,38 @@ export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
           </Link>
           !
         </Heading>
+        <Flex wrap="wrap" justify="space-evenly" mt="-30px" width = "1300px">
+          {follows.map((item, index) => (
+            <Box
+              key={index}
+              bg="#FDF2E9"
+              mt="20px"
+              mb="20px"
+              ml="20px"
+              mr="20px"
+              w="250px"
+              h="165px"
+              px="20px"
+              py="15px"
+              borderRadius="10"
+              boxShadow="md"
+            >
+              <HStack spacing={10} >
+                <Box >
+                  <Image src={item.img} w="100px" h="110px" borderRadius="10" />
+                  <Text mt="10px" fontSize="xs" align="center">
+                    {item.email}
+                  </Text>
+                </Box>
+                <Box ml = "-10px" align = "center">
+                  <Text fontSize = "xs"> 
+                    {item.name}
+                  </Text>
+                </Box>
+              </HStack>
+            </Box>
+          ))}
+        </Flex>
       </Stack>
     </Flex>
   );

@@ -192,7 +192,7 @@ export default function CreateAccount({
                     rounded="md"
                     mb="5"
                     type="text"
-                    placeholder="Date of Birth MM/DD/YY"
+                    placeholder="Date of Birth MM/DD/YYYY"
                     size="sm"
                     onChange={(event) =>
                       handleChange("dob", event.target.value)
