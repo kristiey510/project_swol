@@ -44,7 +44,6 @@ import { exerciseUnits } from "../../../utils/exercises";
 import { calories } from "../../../utils/calories";
 
 export default function Post({ post, user, profiles, setPosts }) {
-  const [image, setImage] = useState("");
   const [isLiked, setIsLiked] = useState(0);
   const {
     isOpen: isCommentsOpen,
@@ -138,11 +137,11 @@ export default function Post({ post, user, profiles, setPosts }) {
     async function fetchImage() {
       if (post?.img !== "no_image_provided") {
         const downloadURL = await getDownloadURL(ref(storage, post.img));
-        post.imgsrc = downloadURL
+        post.imgsrc = downloadURL;
       }
     }
     fetchImage();
-  }, [post.img]);
+  }, [post, post.img]);
 
   return (
     <div className="post">

@@ -92,6 +92,13 @@ export default function Share({ user, setPosts }) {
     }
   };
 
+  const handleClose = () => {
+    setFilename("");
+    setImage(null);
+    setError("");
+    onPhotoClose();
+  };
+
   useEffect(() => {
     async function fetchProfile() {
       const img = document.getElementById("profilePicture");
@@ -228,8 +235,8 @@ export default function Share({ user, setPosts }) {
       const imageRef = ref(storage, filename);
       uploadBytes(imageRef, image);
     }
-    setImage(null)
-    setFilename("")
+    setImage(null);
+    setFilename("");
   };
 
   return (
@@ -400,9 +407,9 @@ export default function Share({ user, setPosts }) {
                 color="primary.150"
                 fontWeight="bold"
                 fontSize="16"
-                onClick={onPhotoClose}
+                onClick={handleClose}
               >
-                Done
+                Cancel
               </Button>
             </HStack>
           </ModalFooter>
