@@ -15,11 +15,10 @@ export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   follows.push({name: "Jon Marcus", img : "assets/Staff/Jon_Marcus.JPG", email: "jdmarcu@emory.edu"});
   follows.push({name: "Daeho Kim", img : "assets/Staff/Daeho_Kim.PNG", email: "dkim598@emory.edu"});
   return (
-    <Flex direction="column" align="center" m="0 auto">
+    <Flex direction="column" m="0 auto" align="center" w = "full">
       <LandingHeader />
       <Stack
         spacing={10}
-        w={{ base: "10%", md: "120%" }}
         mt="10"
         align="center"
       >
