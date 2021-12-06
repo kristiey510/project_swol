@@ -138,7 +138,8 @@ export default function Post({ post, user, profiles, setPosts }) {
     async function fetchImage() {
       if (post?.img !== "no_image_provided") {
         const downloadURL = await getDownloadURL(ref(storage, post.img));
-        setImage(downloadURL);
+        post.imgsrc = downloadURL
+        console.log(post)
       }
     }
     fetchImage();
@@ -203,11 +204,11 @@ export default function Post({ post, user, profiles, setPosts }) {
             ) : null}
           </div>
         </div>
-        {(post?.desc || (post?.img && image)) && (
+        {(post?.desc || (post?.img && post.imgsrc)) && (
           <div className="postCenter">
             {post?.desc && <span className="postText">{post?.desc}</span>}
-            {post?.img && image && (
-              <img className="postImg" src={image} alt="" />
+            {post?.img && post.imgsrc && (
+              <img className="postImg" src={post?.imgsrc} alt="" />
             )}
           </div>
         )}
