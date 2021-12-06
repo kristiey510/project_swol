@@ -139,7 +139,6 @@ export default function Post({ post, user, profiles, setPosts }) {
       if (post?.img !== "no_image_provided") {
         const downloadURL = await getDownloadURL(ref(storage, post.img));
         post.imgsrc = downloadURL
-        console.log(post)
       }
     }
     fetchImage();
