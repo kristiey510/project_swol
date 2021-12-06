@@ -7,13 +7,13 @@ export default function AboutUs({ title, subtitle, subtitle2, ...rest }) {
   const [follows] = useState([]);
 
 
-  follows.push({name: "Anderson Shew", img : "assets/user/guy_3.png", email: "ashew@emory.edu"});
-  follows.push({name: "David Chen", img : "assets/user/guy_3.png", email: "dche242@emory.edu"});
-  follows.push({name: "Kristie Yip", img : "assets/user/girl_4.png", email: "kyip3@emory.edu"});
-  follows.push({name: "Ryan Lo", img : "assets/user/guy_3.png", email: "ylo9@emory.edu"});
-  follows.push({name: "Prince Xian", img : "assets/user/guy_3.png", email: "xqian3@emory.edu"});
-  follows.push({name: "Jon Marcus", img : "assets/user/guy_3.png", email: "jdmarcu@emory.edu"});
-  follows.push({name: "Daeho Kim", img : "assets/user/guy_3.png", email: "dkim598@emory.edu"});
+  follows.push({name: "Anderson Shew", img : "assets/Staff/Andy_Shew.JPG", email: "ashew@emory.edu"});
+  follows.push({name: "David Chen", img : "assets/Staff/David_Chen.JPG", email: "dche242@emory.edu"});
+  follows.push({name: "Kristie Yip", img : "assets/Staff/Kristie_Yip.JPG", email: "kyip3@emory.edu"});
+  follows.push({name: "Ryan Lo", img : "assets/Staff/Ryan_Lo.JPG", email: "ylo9@emory.edu"});
+  follows.push({name: "Prince Xian", img : "assets/Staff/Prince_Qian.JPG", email: "xqian3@emory.edu"});
+  follows.push({name: "Jon Marcus", img : "assets/Staff/Jon_Marcus.JPG", email: "jdmarcu@emory.edu"});
+  follows.push({name: "Daeho Kim", img : "assets/Staff/Daeho_Kim.PNG", email: "dkim598@emory.edu"});
   return (
     <Flex direction="column" align="center" m="0 auto">
       <LandingHeader />
