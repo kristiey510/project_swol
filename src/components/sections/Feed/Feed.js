@@ -91,9 +91,6 @@ export default function Feed({ user, filter }) {
             [followed]: {
               username: "[deleted user]",
               propic: downloadURL,
-              feet: profile.data().Height_Ft,
-              inches: profile.data().Height_In,
-              weight: profile.data().Weight,
             },
           }));
         }

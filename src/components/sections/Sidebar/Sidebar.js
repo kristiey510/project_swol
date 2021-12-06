@@ -48,7 +48,6 @@ export default function Sidebar({ user }) {
           } else {
             //remove from following if user has been deleted
             await unfollow(u);
-            alert("One the people you follow has deactivated their account");
           }
         }
       });
