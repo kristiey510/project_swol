@@ -228,6 +228,8 @@ export default function Share({ user, setPosts }) {
       const imageRef = ref(storage, filename);
       uploadBytes(imageRef, image);
     }
+    setImage(null)
+    setFilename("")
   };
 
   return (
