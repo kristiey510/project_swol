@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import LandingHeader from "../components/sections/LandingHeader/LandingHeader";
 import {
   Box,
@@ -45,10 +44,6 @@ export default function ProfileCreate() {
 
   const { handleSubmit } = useForm();
 
-  const toDash = async () => {
-    window.location = "/dashboard";
-  };
-
   const handleMakeUser = async () => {
     if (
       !input.Height_Ft ||
@@ -67,6 +62,16 @@ export default function ProfileCreate() {
       });
       window.location = "./dashboard";
     }
+  };
+
+  const skipped = async () => {
+      await updateDoc(doc(db, "Profile", auth.currentUser.uid), {
+        Height_Ft: "",
+        Height_In: "",
+        Gender: "",
+        Weight: ""
+      });
+      window.location = "./dashboard";
   };
 
   const handleUpload = async () => {
@@ -288,9 +293,8 @@ export default function ProfileCreate() {
                 </Button>
               </Stack>
             </Box>
-            <Link to="/dashboard">
               <Button
-                onClick={toDash}
+                onClick= {skipped}
                 size="xs"
                 variant="link"
                 color="#89CFF0"
@@ -299,7 +303,6 @@ export default function ProfileCreate() {
               >
                 Skip for now
               </Button>
-            </Link>
           </FormControl>
         </form>
       </Box>
